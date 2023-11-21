@@ -1,0 +1,17 @@
+<div class="container mt-4">
+    <div class="spinner-container" *ngIf="loading$ | async ">
+        <mat-spinner class="spinner mb-3" color="primary"></mat-spinner>
+        <h3>Loading...</h3>
+        <h3>MECHE</h3>
+    </div>
+    <div class="" *ngIf="!(loading$ | async )">
+       <button mat-icon-button> <i class="fa-solid fa-file-excel"></i></button>
+        <button (click)="onGo()"  mat-raised-button color="accent">START</button>
+        <button (click)="onAlert()"  mat-raised-button color="accent">ALERT</button>
+        <button (click)="onDialog()"  mat-raised-button color="accent">DIALOG</button>
+    </div>
+    <div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis recusandae, quasi laboriosam nihil assumenda asperiores voluptatum. In nemo, similique voluptas, ad nostrum nobis possimus nam maxime distinctio quidem eveniet ullam.</p>
+    </div>
+</div>
+

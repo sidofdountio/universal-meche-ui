@@ -1,0 +1,167 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <div><button (click)="onAlert()" mat-raised-button color="accent">ALERT</button>
+    <button (click)="onDialog()" mat-raised-button color="accent">DIALOG</button>
+  </div>
+  <!--  -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="m-b-20">FACTURE TOTAL</h6>
+            <h2 class="text-end t"><mat-icon class="icon f-left">receipt_long</mat-icon><span>486</span></h2>
+            <p class="m-b-0">FACTURE TOTAL JOUR<span class="f-right">351</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="m-b-20">ACHAT TOTAL</h6>
+          <h2 class="text-end"><mat-icon class="icon f-left">shopping_cart</mat-icon><span>486</span></h2>
+          <p class="m-b-0">ACHAT TOTAL JOUR<span class="f-right">351</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+
+      <div class="card">
+        <div class="card-body">
+          <h6 class="m-b-20">COMMANDE TOTAL</h6>
+          <h2 class="text-end"><mat-icon class="icon f-left">shopping_cart_checkout<span
+                class="material-symbols-outlined">
+                order_approve
+              </span></mat-icon><span>486</span></h2>
+          <p class="m-b-0">COMMANDE TOTAL JOUR<span class="f-right">351</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+
+      <div class="card">
+        <div class="card-body">
+          <h6 class="m-b-20">VENTE TOTAL</h6>
+          <h2 class="text-end"><mat-icon class="icon f-left">sell</mat-icon><span>486</span></h2>
+          <p class="m-b-0">VENTE TOTAL JOUR<span class="f-right">351</span></p>
+        </div>
+      </div>
+    </div>
+  </div><!--  -->
+  <!--  -->
+  <div class="row mb-3">
+    <!--  Start row Recent-->
+    <div class="col-md-8">
+      <h3>Activitée récentes</h3>
+      <mat-card class="recent">
+        <!-- Tab start -->
+        <mat-card-content>
+          <mat-tab-group>
+            <mat-tab label="Les Ventes">
+              <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="invoiceId">
+                    <th mat-header-cell *matHeaderCellDef> INVOICE ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.invoice.invoiceId}} </td>
+                  </ng-container>
+
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="createAt">
+                    <th mat-header-cell *matHeaderCellDef> Create At </th>
+                    <td mat-cell *matCellDef="let element"> {{element.createAt | date}} </td>
+                  </ng-container>
+
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
+                  </ng-container>
+
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef> Amount </th>
+                    <td mat-cell *matCellDef="let element"> {{element.payment.amount | currency}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="paymentStatus">
+                    <th mat-header-cell *matHeaderCellDef> Payment status </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span [ngClass]="paymentStatus.PAID === element.status ? 'badge-success': 'badge-danger' ">
+                        {{element.payment.paymentStatus}}</span>
+
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </mat-tab>
+            <mat-tab label="Les achats"> Les achat </mat-tab>
+            <mat-tab label="Etat du stock"> Content 3 </mat-tab>
+          </mat-tab-group> <!-- Tab end -->
+        </mat-card-content>
+      </mat-card>
+    </div><!--  End row Recent-->
+    <div class="col-md-4">
+      <mat-card class="up-comming-card">
+        <mat-card-content>
+          <h2 class="example-h2">Annalyse</h2>
+          <!-- Montant des vente -->
+          <div class="example-section">
+            <p class="text-end "><small class="icon f-left">Montant Vendu</small><span
+                [ngClass]="sellAmount > 0 ? 'number' : 'negative' ">{{ sellAmount | currency }}</span></p>
+            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
+              [value]="sellAmount"></mat-progress-bar>
+          </div>
+          <!-- Montant des achats -->
+          <div class="example-section">
+            <p class="text-end "><small class="icon f-left">Montant Des Achats</small><span
+                [ngClass]="purchaseAmount > 0 ? 'number' : 'negative' ">{{ purchaseAmount | currency }}</span></p>
+            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
+              [value]="purchaseAmount"></mat-progress-bar>
+          </div>
+          <!-- Charge divers -->
+          <div class="example-section">
+            <p class="text-end "><small class="icon f-left">Montant Des Charges Divers</small><span
+                [ngClass]="miscellaneousLoad > 0 ? 'number' : 'negative' ">{{ miscellaneousLoad | currency }}</span></p>
+            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
+              [value]="miscellaneousLoad"></mat-progress-bar>
+          </div>
+          <!-- Gain possible -->
+          <div class="example-section">
+            <p class="text-end "><small class="icon f-left">Gain Possible</small><span
+                [ngClass]="receiveAmount > 0 ? 'number' : 'negative' ">{{ receiveAmount | currency }}</span></p>
+            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
+              [value]="receiveAmount"></mat-progress-bar>
+          </div>
+          <!--  -->
+          <div class="example-section">
+            <p class="text-end "><small class="icon f-left">Facture Annuler</small><span
+                [ngClass]="invoiceCancel > 0 ? 'number' : 'negative' ">{{ invoiceCancel }}</span></p>
+            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
+              [value]="invoiceCancel"></mat-progress-bar>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div><!--  -->
+  <!--  -->
+  <div class="row">
+    <div class="col-sm-4">
+      <mat-card>
+        <mat-card-content>
+          <canvas id="stock" style="height: 230px; width: 230px;"></canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <!--  -->
+</div>

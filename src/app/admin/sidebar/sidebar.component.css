@@ -1,0 +1,38 @@
+
+.sidenav-container {
+  height: 100%;
+  font-family: Roboto, Archivo, "Helvetica Neue", sans-serif;
+
+}
+
+.sidenav {
+  width: 200px;
+  /* border: 1px solid rgb(27, 81, 219); */
+  box-shadow: 0px 0px 10px #333; 
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+mat-toolbar {
+
+  /* border: 1px solid #eee;
+  box-shadow: 0px 0px 10px #333; */
+  box-shadow: 0px 0px 0px 0px, rgba(0, 0, 0, 0.3) 0px 4px 4px 0px
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+mat-nav-list mat-icon,a{
+ color: #333;
+}
+
+
+.spacer{
+  flex: 1
+}

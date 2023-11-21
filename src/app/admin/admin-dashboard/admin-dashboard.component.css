@@ -1,0 +1,97 @@
+.grid-container {
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+
+}
+
+.card {
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: whitesmoke;
+  box-shadow: 5px 5px 10px #333;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  border: 1px solid rgb(14, 140, 199);
+  box-shadow: none;
+}
+
+.card .card-body {
+  padding: 25px;
+}
+
+
+.f-left {
+  float: left;
+}
+
+.f-right {
+  float: right;
+}
+
+.badge-success {
+  color: white;
+  background-color: rgb(13, 102, 32);
+}
+
+.badge-danger {
+  color: white;
+  background-color: #f44336;
+  font-weight: 500;
+}
+
+.up-comming-card {
+  top: 50px;
+}
+
+.number {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-weight: bold;
+  color: #555;
+  text-align: right;
+}
+
+.negative {
+  color: #c0392b;
+  /* Dark red */
+}
+
+.decimal {
+  color: #3498db;
+  /* Blue */
+}
+
+.up-comming-card {
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 0px 0px, rgba(0, 0, 0, 0.3) 0px 4px 4px 0px;
+  /* box-shadow: 0px 0px 10px #333;  */
+}
+
+.recent{
+  border: 1px solid #eee;
+}

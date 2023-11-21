@@ -1,0 +1,18 @@
+/* .grid-container{
+    margin-left: 20px;
+} */
+
+.error{
+    border: 1px solid #eee;
+    background-color: whitesmoke;
+    box-shadow: 5px 5px 10px  #333;
+}
+
+
+.message-box h1 {
+    color: #252932;
+    font-size: 98px;
+    font-weight: 700;
+    line-height: 98px;
+    text-shadow: rgba(61, 61, 61, 0.3) 1px 1px, rgba(61, 61, 61, 0.2) 2px 2px, rgba(61, 61, 61, 0.3) 3px 3px;
+}
