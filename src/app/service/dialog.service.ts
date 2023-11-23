@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogData } from '../model/dialog-data';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DialogMessageComponent } from '../message/dialog-message/dialog-message.component';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { DialogMessageComponent } from '../message/dialog-message/dialog-message
 })
 export class DialogService {
 
-  data:DialogData={
+  data: DialogData = {
     message: '',
     discase: false
   }
@@ -20,21 +20,31 @@ export class DialogService {
     this.openDialog(message)
   }
 
-  openDialog(message: string): void {
+  private openDialog(message: string): void {
     this.data.message = message;
     const dialogRef = this.dialog.open(DialogMessageComponent, {
-      height: '400px',
+      height: '200px',
       width: '600px',
       enterAnimationDuration: "0ms",
       exitAnimationDuration: "0ms",
-      
-      data: this.data,
+      data: this.data
     });
 
+    // Get output after it's close
+    dialogRef.afterClosed().subscribe(
+      (response:DialogData)=>{
+        this.discase.next(response.discase);
+      }
+    );
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-
-    });
+// Observable That chech the values of this Discase: true | false
+// Then Allown process if it's true and cancel it if it' False.
+  checkDiscaseValue(): Observable<boolean> {
+    return this.discase.asObservable();
+   }
+  
+   updateValue() {
+    this.discase.next(false);
   }
 }

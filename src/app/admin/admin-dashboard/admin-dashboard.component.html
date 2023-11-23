@@ -1,9 +1,7 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <div><button (click)="onAlert()" mat-raised-button color="accent">ALERT</button>
-    <button (click)="onDialog()" mat-raised-button color="accent">DIALOG</button>
-  </div>
-  <!--  -->
+ 
+  <!--  Global stats-->
   <div class="row mb-4">
     <div class="col-md-3">
       <div class="card">
@@ -60,7 +58,7 @@
           <mat-tab-group>
             <mat-tab label="Les Ventes">
               <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource">
+                <table mat-table [dataSource]="dataSource" matSort>
 
                   <!-- Position Column -->
                   <ng-container matColumnDef="invoiceId">
@@ -70,7 +68,7 @@
 
                   <!-- Name Column -->
                   <ng-container matColumnDef="createAt">
-                    <th mat-header-cell *matHeaderCellDef> Create At </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Create At </th>
                     <td mat-cell *matCellDef="let element"> {{element.createAt | date}} </td>
                   </ng-container>
 

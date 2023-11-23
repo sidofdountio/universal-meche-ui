@@ -5,6 +5,8 @@ import { PurchaseComponent } from './purchase/purchase.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { authGuard } from '../auth/auth.guard';
+import { CategoryComponent } from './category/category.component';
+import { SuppliersComponent } from './supplier/suppliers/suppliers.component';
 
 const routes: Routes = [{
   path: 'admin',
@@ -21,6 +23,18 @@ const routes: Routes = [{
         {
           path: 'product',
           component: ProductListComponent
+        },
+        {
+          path: 'category',
+          component: CategoryComponent
+        },
+        {
+          path: 'supplier',
+          component: SuppliersComponent
+        },
+        {
+          path: 'purchase',
+          component: PurchaseComponent
         },
         {
           path: '',

@@ -1,5 +1,5 @@
-<h1 mat-dialog-title> Ajour D'un Nouveau Produit</h1>
-<div mat-dialog-content [formGroup]="productToSave" >
+<h1 mat-dialog-title> Editer ce Produit</h1>
+<div mat-dialog-content [formGroup]="productToUpdate">
     <p>
         <mat-form-field appearance="outline">
             <mat-label>Nom De La Meche</mat-label>
@@ -19,7 +19,7 @@
         <mat-form-field appearance="outline">
             <mat-label>Prix Unitaire </mat-label>
             <input matInput formControlName="price">
-            <span matTextPrefix>$&nbsp;</span>
+            <span matTextPrefix>FCFA&nbsp;</span>
             <span matTextSuffix>.00</span>
             
         </mat-form-field>
@@ -43,17 +43,10 @@
             <mat-hint>Entrer La Taille De La Meche</mat-hint>
         </mat-form-field>
     </p>
-    <div formGroupName="categoryTypeForm">
-        <mat-form-field appearance="outline">
-            <mat-label>Selectioner La </mat-label>
-            <mat-select formControlName="id">
-                <mat-option *ngFor="let type  of productCategorys" [value]="type.id">{{ type.name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
+    
 </div>
 <div mat-dialog-actions>
     <button mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
-    <button mat-raised-button [disabled]="!productToSave.valid" cdkFocusInitial color="primary"
-        (click)="onSaveProduct()">ENREGISTRER</button>
+    <button mat-raised-button [disabled]="!productToUpdate.valid" cdkFocusInitial color="primary"
+        (click)="onUpdateProduct()">ENREGISTRER LA MODIFICATION</button>
 </div>

@@ -25,7 +25,6 @@ import { DialogMessageComponent } from './message/dialog-message/dialog-message.
 import { SnackbarErrorComponent } from './message/snackbar-error/snackbar-error.component';
 import { AuthModule } from './auth/auth.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 @NgModule({
   declarations: [
     
@@ -47,12 +46,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserModule,
     MatToolbarModule,
     MatSidenavModule,
+    FontAwesomeModule,
     MatIconModule,
     MatListModule,
     AuthModule,
     AdminModule,
     AppRoutingModule,
-    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

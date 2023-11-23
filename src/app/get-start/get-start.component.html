@@ -5,13 +5,21 @@
         <h3>MECHE</h3>
     </div>
     <div class="" *ngIf="!(loading$ | async )">
-       <button mat-icon-button> <i class="fa-solid fa-file-excel"></i></button>
-        <button (click)="onGo()"  mat-raised-button color="accent">START</button>
-        <button (click)="onAlert()"  mat-raised-button color="accent">ALERT</button>
-        <button (click)="onDialog()"  mat-raised-button color="accent">DIALOG</button>
+        <button mat-icon-button> <i class="fa-solid fa-file-excel"></i></button>
+        <button (click)="onGo()" mat-raised-button color="accent">START</button>
+        <button (click)="onAlert()" mat-raised-button color="accent">ALERT</button>
+        <button (click)="onDialog()" mat-raised-button color="accent">DIALOG</button>
     </div>
-    <div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis recusandae, quasi laboriosam nihil assumenda asperiores voluptatum. In nemo, similique voluptas, ad nostrum nobis possimus nam maxime distinctio quidem eveniet ullam.</p>
+    <div *ngIf="!(loading$ | async )">
+        <h2>Origine des Mèches de Cheveux | LUDIS</h2>
+        <h3>Le savier vous</h3>
+        <p>
+            <i class="fa-solid fa-quote-left"></i> 
+            <i class="fal fa-quote-right" style="color: #4e9a06;"></i>
+            Selon Nazaire Gnanhoue, les mèches de cheveux naturels et synthétiques sont largement utilisées dans le
+            monde entier. Les naturels sont fabriqués à partir de vrais cheveux humains, comme leur nom l'indique.
+            L'Inde est la source de ces cheveux pour la plupart.</p>
+            <span><i class="fa-solid fa-quote-right"></i></span>
     </div>
-</div>
 
+</div>
