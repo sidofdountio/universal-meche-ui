@@ -4,9 +4,13 @@ import { Supplier } from "./supplier";
 export interface Purchase {
     id?:number;
     price:number;
-    quantity:any;
+    salePrice:number;
+    quantity:number;
     amount: number;
     purchaseAt: string | Date;
     supplier:Supplier;
     product:Product;
+    month?:string;
+    year?:string;
+
 }

@@ -10,43 +10,20 @@ import { Purchase } from 'src/app/model/purchase';
 })
 export class EditPurchaseComponent {
   formPurchase!: FormGroup;
-  purchaseToEdite: Purchase = {
-    price: 0,
-    quantity: 0,
-    amount: 0,
-    purchaseAt: '',
-    supplier: {
-      name: '',
-      address: '',
-      phone: ''
-    },
-    product: {
-      name: '',
-      price: 0,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: '',
-        categoryType: {
-          name: ''
-        }
-      }
-    }
-  };
-
+ 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Purchase,
     public dialogRef: MatDialogRef<EditPurchaseComponent>,
     private fb: FormBuilder) {
       this.formPurchase = this.fb.group({
-        quantity: [data.quantity,Validators.nullValidator],
-        price: [data.price,Validators.nullValidator]
+        quantity: [data.quantity,[Validators.required,Validators.pattern(/^[1-9]\d*$/)]],
+        price: [data.price,[Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+        salePrice: [data.salePrice,[Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
 
       })
 
   }
   onEditPurchase() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.formPurchase.value);
   }
   onClose() {
     this.dialogRef.close();

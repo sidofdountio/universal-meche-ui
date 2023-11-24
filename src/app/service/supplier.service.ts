@@ -21,6 +21,14 @@ export class SupplierService {
       )
   }
 
+  getSupplierById(id:number): Observable<Supplier> {
+    return this.http.get<Supplier>(`${this.URL}/${id}`)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
+
   addSupplier(supplierToAdd: Supplier): Observable<Supplier> {
     return this.http.post<Supplier>(`${this.URL}/addSupplier`, supplierToAdd)
       .pipe(
@@ -30,8 +38,8 @@ export class SupplierService {
   }
 
 
-  deleteSupplier(supplierId: any) {
-    return this.http.delete(`${this.URL}/delete`, supplierId)
+  deleteSupplier(supplierId: number) {
+    return this.http.delete(`${this.URL}/delete/${supplierId}`)
       .pipe(
         tap(console.log)
       );

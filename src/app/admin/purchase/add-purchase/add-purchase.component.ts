@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Product } from 'src/app/model/product';
 import { Purchase } from 'src/app/model/purchase';
+import { PurchaseRequest } from 'src/app/model/purchase-request';
 import { Supplier } from 'src/app/model/supplier';
 
 @Component({
@@ -12,45 +13,23 @@ import { Supplier } from 'src/app/model/supplier';
 })
 export class AddPurchaseComponent implements OnInit {
 
-  purchaseToAdd: Purchase = {
-    price: 0,
-    quantity: 0,
-    amount: 0,
-    purchaseAt: '',
-    supplier: {
-      name: '',
-      address: '',
-      phone: ''
-    },
-    product: {
-      name: '',
-      price: 0,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: '',
-        categoryType: {
-          name: ''
-        }
-      }
-    }
-  }
+
   formPurchase = this.fb.group({
-    price: [this.data.price, [Validators.required]],
-    quantity: [, [Validators.required]],
+    price: ['', [Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+    salePrice: ['', [Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+    quantity: ['', [Validators.required,Validators.pattern(/^[1-9]\d*$/)]],
     formSupplier: this.fb.group({
-      id: [, [Validators.required]]
+      id: ['', [Validators.required]]
     }),
     formProduct: this.fb.group({
-      id: [this.data.id]
+      id: ['',[Validators.required]]
     })
   });
   suppliers: Supplier[] = [];
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddPurchaseComponent>,
     private fb: FormBuilder) {
-    
+
   }
 
   ngOnInit(): void {
@@ -58,7 +37,7 @@ export class AddPurchaseComponent implements OnInit {
   }
 
   onPurchaseProduct() {
-    this.dialogRef.close(this.formPurchase.value as Purchase)
+    this.dialogRef.close(this.formPurchase.value as PurchaseRequest);
   }
   onClose() {
     this.dialogRef.close();

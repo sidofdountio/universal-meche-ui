@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>Vous Enregistrer L'achat De Ce Produit</h1>
 <div mat-dialog-content [formGroup]="formPurchase">
 
-    <input formControlName="id" class="form-control" hidden>
     <div class="row">
         <div class="col mb-3">
             <label class="form-label">Nom Du Produit</label>
@@ -15,17 +14,18 @@
     </div>
 
     <p>
-        <mat-form-field appearance="outline" >
-            <mat-label>Prix Unitaire </mat-label>
+        <mat-form-field appearance="outline">
+            <mat-label>Prix Unitaire D'Achat </mat-label>
             <input matInput formControlName="price">
+            <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
+            <mat-hint>Ex 3000.00</mat-hint>
             <span matTextPrefix>CFA&nbsp;</span>
-            <mat-hint>Vous Pouvez Modifier Ce Prix</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>Quantite Achete</mat-label>
             <input matInput formControlName="quantity">
-            <mat-error></mat-error>
+            <mat-error>Entrer Que Les Nombres positifs Superieure A 0.</mat-error>
         </mat-form-field>
     </p>
 
@@ -44,6 +44,15 @@
             <input matInput formControlName="id">
         </mat-form-field>
     </div>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Prix Vente </mat-label>
+        <input matInput formControlName="salePrice">
+        <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
+        <mat-hint>Ex 3000.00</mat-hint>
+        <span matTextPrefix>CFA&nbsp;</span>
+        
+    </mat-form-field>
 
 
 </div>

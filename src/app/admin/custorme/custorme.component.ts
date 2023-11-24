@@ -4,38 +4,38 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BehaviorSubject, tap } from 'rxjs';
-import { Supplier } from 'src/app/model/supplier';
+import { Custormer } from 'src/app/model/custorme';
+import { CustormeService } from 'src/app/service/custorme.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { SnabarService } from 'src/app/service/snabar.service';
-import { SupplierService } from 'src/app/service/supplier.service';
 
 @Component({
-  selector: 'app-suppliers',
-  templateUrl: './suppliers.component.html',
-  styleUrls: ['./suppliers.component.css']
+  selector: 'app-custorme',
+  templateUrl: './custorme.component.html',
+  styleUrls: ['./custorme.component.css']
 })
-export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<Supplier>([]);
+export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
+  dataSource = new MatTableDataSource<Custormer>([]);
   displayedColumns: string[] = ['address', 'name', 'email', 'phone', 'action'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
 
-  suppliers: Supplier[] = [];
+  customers: Custormer[] = [];
   public isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
-  formSupplier = this.fb.group({
+  formCustormer = this.fb.group({
     name: ['', [Validators.required]],
     phone: ['', [Validators.maxLength(9)]],
     email: ['', Validators.email],
     address: ['', [Validators.required]]
   });
 
-  constructor(private dialogService: DialogService, private fb: FormBuilder, private supplierService: SupplierService, private snackbarService: SnabarService) { }
+  constructor(private dialogService: DialogService, private fb: FormBuilder, private custormeService: CustormeService, private snackbarService: SnabarService) { }
 
   ngOnInit(): void {
 
-    this.supplierService.getSupplier().pipe(
+    this.custormeService.getCustormes().pipe(
       tap(
         (response) => {
           this.dataSource.data = response;
@@ -52,11 +52,11 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
 
-  onAddNewSupplier() {
+  onAddNewCustomer() {
     this.isLoadingSubject.next(true);
-    this.supplierService.addSupplier(this.formSupplier.value as Supplier).subscribe(
+    this.custormeService.addCustomer(this.formCustormer.value as Custormer).subscribe(
       () => {
-        console.log(this.formSupplier.value as Supplier)
+        console.log(this.formCustormer.value as Custormer)
         this.isLoadingSubject.next(false);
         this.snackbarService.openSnackBarSuccess("Fournisseur Ajoute", "Fermer")
       },
@@ -67,21 +67,21 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
     )
   }
 
-  onDelete(productById: any) {
+  onDelete(id: number) {
     this.dialogService.message("Confirmez La Suppression De Ce Produit ?")
     this.dialogService.checkDiscaseValue().subscribe(
       (isAllow) => {
         if (!isAllow) {
           return;
         }
-        this.deleteProductById(productById);
+        this.deleteProductById(id);
         this.dialogService.updateValue();
       }
     )
   }
 
-  private deleteProductById(productById: number) {
-    this.supplierService.deleteSupplier(productById).
+  private deleteProductById(id: number) {
+    this.custormeService.deleteCustorme(id).
       subscribe(
         () => {
           this.snackbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer")

@@ -9,7 +9,7 @@ import { Observable, tap, catchError } from 'rxjs';
 export class PurcharseService {
 
 
-  readonly URL = "";
+  readonly URL: string = "";
 
   constructor(private http: HttpClient) { }
 

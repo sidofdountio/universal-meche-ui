@@ -11,20 +11,6 @@ import { Product } from 'src/app/model/product';
 export class UpdateProductComponent {
 
   productToUpdate!: FormGroup;
-  product: Product ={
-    name: '',
-    price: 0,
-    code: '',
-    color: '',
-    description: '',
-    productCategory: {
-      name: '',
-      categoryType: {
-        name: ''
-      }
-    }
-  };
-
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product, private formBuild: FormBuilder, public dialogRef: MatDialogRef<UpdateProductComponent>) {
     this.productToUpdate =this.formBuild.group({

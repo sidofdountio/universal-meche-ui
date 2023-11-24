@@ -8,8 +8,6 @@ import { ProductService } from 'src/app/service/product.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { AddProductComponent } from '../add-product/add-product.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CategoryType } from 'src/app/model/category-type';
-import { ProductCategory } from 'src/app/model/product-category';
 import { UpdateProductComponent } from '../update-product/update-product.component';
 import { DialogService } from 'src/app/service/dialog.service';
 
@@ -18,7 +16,7 @@ import { DialogService } from 'src/app/service/dialog.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit,AfterViewInit {
+export class ProductListComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['id', 'name', 'price', 'color', 'action'];
   PRODUCTS: Product[] = [];
@@ -26,8 +24,10 @@ export class ProductListComponent implements OnInit,AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   products: Product[] = [{
+    id: 1,
     name: 'Queen',
     price: 10,
+    salePrice: 13,
     code: 'QU-234',
     color: 'BLACK',
     description: 'decription',
@@ -44,6 +44,7 @@ export class ProductListComponent implements OnInit,AfterViewInit {
     id: 3,
     name: 'demo',
     price: 15,
+    salePrice: 23,
     code: '',
     color: '',
     length: 10,
@@ -65,7 +66,7 @@ export class ProductListComponent implements OnInit,AfterViewInit {
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort  = this.sort;
+    this.dataSource.sort = this.sort;
   }
 
   addNewProduct() {
@@ -91,7 +92,7 @@ export class ProductListComponent implements OnInit,AfterViewInit {
         (response: Product) => {
           console.log()
           this.snacbarService.openSnackBarSuccess("Product added successfuly", "close");
-          this.onGetProduct();
+          this.onGetProducts();
         },
         () => {
           this.snacbarService.openSnackBarError("Vous Avez Annuler Cette Opperation", "close");
@@ -100,8 +101,8 @@ export class ProductListComponent implements OnInit,AfterViewInit {
       );
   }
 
-  onGetProduct() {
-    this.productService.getProduct().
+  onGetProducts() {
+    this.productService.getProducts().
       subscribe(
         (() => {
         }),
@@ -142,7 +143,7 @@ export class ProductListComponent implements OnInit,AfterViewInit {
       .subscribe(
         () => {
           this.snacbarService.openSnackBarSuccess("Product edited successfuly", "Fermer");
-          this.onGetProduct();
+          this.onGetProducts();
         },
         (error: HttpErrorResponse) => {
           console.log("Error: %s", error.status);
@@ -159,7 +160,7 @@ export class ProductListComponent implements OnInit,AfterViewInit {
           return;
         }
         this.deleteProductById(productById);
-          this.dialogService.updateValue();
+        this.dialogService.updateValue();
       }
     )
   }

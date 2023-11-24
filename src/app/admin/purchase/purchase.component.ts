@@ -18,14 +18,49 @@ import { EditPurchaseComponent } from './edit-purchase/edit-purchase.component';
   styleUrls: ['./purchase.component.css']
 })
 export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
+
   displayedColumns: string[] = ['name', 'price', 'color', 'category', 'action'];
-  PRODUCTS: Product[] = [];
   productDataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) productPaginator!: MatPaginator;
   @ViewChild(MatSort) producSort!: MatSort;
+  displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
+  purchaseDataSource = new MatTableDataSource<Purchase>([]);
+  @ViewChild(MatPaginator) purchasePaginator!: MatPaginator;
+  @ViewChild(MatSort) purchaseSort!: MatSort;
+  purchases: Purchase[] = [{
+    price: 0,
+    salePrice: 1,
+    quantity: 1,
+    amount: 0,
+    purchaseAt: '12/2/23',
+    supplier: {
+      name: 'test',
+      address: '',
+      phone: ''
+    },
+    product: {
+      id: 1,
+      name: 'test',
+      price: 0,
+      salePrice: 12,
+      code: '',
+      color: '',
+      description: '',
+      productCategory: {
+        name: 'tet',
+        categoryType: {
+          name: ''
+        }
+      }
+    }
+  }];
+
+
   products: Product[] = [{
+    id: 1,
     name: 'Queen',
     price: 10,
+    salePrice: 12,
     code: 'QU-234',
     color: 'BLACK',
     description: 'decription',
@@ -41,6 +76,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     id: 3,
     name: 'demo',
     price: 15,
+    salePrice: 20,
     code: '',
     color: '',
     length: 10,
@@ -53,8 +89,9 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
   purchaseToEdite: Purchase = {
-    price: 0,
-    quantity: 0,
+    price: 1,
+    salePrice: 2,
+    quantity: 2,
     amount: 0,
     purchaseAt: '',
     supplier: {
@@ -63,8 +100,10 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
       phone: ''
     },
     product: {
+      id: 1,
       name: '',
       price: 0,
+      salePrice: 1,
       code: '',
       color: '',
       description: '',
@@ -77,17 +116,33 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
+  favoriteSeason: string = "Moi";
+  purchaseBy:string = "Moi";
+  filtre: string[] = ['Tout', 'Moi'];
+
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
-    private purchaseService: PurcharseService) { }
+    private purchaseService: PurcharseService) {
+
+  }
 
   ngOnInit(): void {
     this.productDataSource.data = this.products;
+    this.purchaseDataSource.data = this.purchases;
+   console.log( this.purchaseBy);
+    
+  }
+
+  filterByMonthOrAll(filter: string) {
+    this.purchaseBy = filter;
+    console.log("Fitre %s", this.purchaseBy);
   }
 
   ngAfterViewInit() {
     this.productDataSource.paginator = this.productPaginator;
     this.productDataSource.sort = this.producSort;
+    this.purchaseDataSource.paginator = this.purchasePaginator;
+    this.purchaseDataSource.sort = this.purchaseSort;
   }
 
   buyNewProduct(productId: number) {

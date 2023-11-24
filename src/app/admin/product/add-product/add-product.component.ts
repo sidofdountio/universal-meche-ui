@@ -12,36 +12,11 @@ export class AddProductComponent {
 
   productCategorys: ProductCategory[] =[];
   productToSave!: FormGroup;
-  product: Product ={
-    name: '',
-    price: 0,
-    code: '',
-    color: '',
-    description: '',
-    productCategory: {
-      name: '',
-      categoryType: {
-        name: ''
-      }
-    }
-  };
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddProductComponent>,
     private formBuild: FormBuilder) {
-      this.product={
-        name: '',
-        price: 0,
-        code: '',
-        color: '',
-        description: '',
-        productCategory: {
-          name: '',
-          categoryType: {
-            name: ''
-          }
-        }
-      };
+      
     }
 
   ngOnInit(): void {
@@ -55,14 +30,14 @@ export class AddProductComponent {
     }]
     this.productToSave = this.formBuild.group({
       id: ['', []],
-      name: [this.product.name, Validators.required],
-      price: [this.product.price, Validators.required],
-      code: [this.product.code, Validators.required],
-      description: [this.product.description],
-      color: [this.product.color],
-      lenght: [this.product.length],
+      name: ['', Validators.required],
+      price: ['', [Validators.required,Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      code: ['', Validators.required],
+      description: [''],
+      color: [''],
+      lenght: ['',[Validators.required,Validators.pattern(/^[1-9]\d*$/)]],
       categoryTypeForm: this.formBuild.group({
-        id: [this.product.productCategory.id, Validators.required]
+        id: ['', Validators.required]
       })
     });
     

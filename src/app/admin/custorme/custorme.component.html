@@ -1,25 +1,25 @@
 <div class="grid-container">
     <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
-        matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Fournisseur</h1>
+        matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Client</h1>
     <div class="row mb-3">
         <div class="col-md-8">
             <mat-card>
                 <mat-card-content>
-                    <form [formGroup]="formSupplier" (ngSubmit)="onAddNewSupplier()">
+                    <form [formGroup]="formCustormer" (ngSubmit)="onAddNewCustomer()">
                         <div class="row mb-3">
                             <div class="col-md-6 mb-2">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Nom du Fournisseur</mat-label>
+                                    <mat-label>Nom du Client</mat-label>
                                     <input matInput formControlName="name">
-                                    <mat-hint>Entrer Le Nom Du Fournisseur</mat-hint>
+                                    <mat-hint>Entrer Le Nom Du Client</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="col">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Telephone du Fournisseur</mat-label>
+                                    <mat-label>Telephone du Client</mat-label>
                                     <input matInput formControlName="phone" type="tel">
                                     <span matPrefix>+237&nbsp;</span>
-                                    <mat-hint>Entrer Le Telephone Du Fournisseur</mat-hint>
+                                    <mat-hint>Entrer Le Telephone Du Client</mat-hint>
                                     <mat-error>Entrer Numero De Telephone Valide</mat-error>
                                 </mat-form-field>
                             </div>
@@ -30,12 +30,12 @@
                                     <mat-label>Email du Fournisseur</mat-label>
                                     <input matInput formControlName="email" placeholder="jonhn@gmail.com" >
                                     <mat-error>Entrer Un Email Valide</mat-error>
-                                    <mat-hint>Entrer L'email Du Fournisseur</mat-hint>
+                                    <mat-hint>Entrer L'email Du Client</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="col">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Addresse Du Fournisseur</mat-label>
+                                    <mat-label>Addresse Du Client</mat-label>
                                     <input matInput formControlName="address">
                                     
                                     <mat-hint>Ex. Mokolo Boutique Fashion</mat-hint>
@@ -44,7 +44,7 @@
                         </div>
                         <div class="mb-2">
                             <button matTooltip="Ajouter Un Nouveau Fournisseur" mat-flat-button color="accent"
-                                type="submit" [disabled]="!formSupplier.valid" *ngIf="!(isLoading$ | async)">
+                                type="submit" [disabled]="!formCustormer.valid" *ngIf="!(isLoading$ | async)">
                                 AJOUTER
                             </button>
                             <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
@@ -61,7 +61,7 @@
         <div class="col-md-12">
             <!-- Product list start -->
 
-            <h2 class="mat-h2">Liste Des Fournisseurs</h2>
+            <h2 class="mat-h2">Liste Des Clients</h2>
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" matSort>
 

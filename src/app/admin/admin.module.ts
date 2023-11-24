@@ -24,6 +24,10 @@ import {MatInputModule} from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips'; 
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox'; 
+import {MatRadioModule} from '@angular/material/radio';
+import {MatBadgeModule} from '@angular/material/badge';
+
 
 
 
@@ -38,6 +42,9 @@ import { CategoryComponent } from './category/category.component';
 import { UpdateProductComponent } from './product/update-product/update-product.component';
 import { SuppliersComponent } from './supplier/suppliers/suppliers.component';
 import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.component';
+import { CustormeComponent } from './custorme/custorme.component';
+import { SalesComponent } from './sale/sales/sales.component';
+import { AddSaleComponent } from './sale/add-sale/add-sale.component';
 
 
 
@@ -53,9 +60,15 @@ import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.co
     CategoryComponent,
     UpdateProductComponent,
     SuppliersComponent,
-    EditPurchaseComponent
+    EditPurchaseComponent,
+    CustormeComponent,
+    SalesComponent,
+    AddSaleComponent
   ],
   imports: [
+    MatBadgeModule,
+    MatRadioModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatAutocompleteModule,
     MatChipsModule,

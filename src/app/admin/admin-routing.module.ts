@@ -7,6 +7,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { authGuard } from '../auth/auth.guard';
 import { CategoryComponent } from './category/category.component';
 import { SuppliersComponent } from './supplier/suppliers/suppliers.component';
+import { CustormeComponent } from './custorme/custorme.component';
+import { SalesComponent } from './sale/sales/sales.component';
 
 const routes: Routes = [{
   path: 'admin',
@@ -33,8 +35,17 @@ const routes: Routes = [{
           component: SuppliersComponent
         },
         {
+          path: 'customer',
+          component:CustormeComponent
+        },
+        {
           path: 'purchase',
           component: PurchaseComponent
+        }
+        ,
+        {
+          path: 'sale',
+          component: SalesComponent
         },
         {
           path: '',

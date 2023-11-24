@@ -16,7 +16,7 @@ export class ProductService {
 
   constructor(private http: HttpClient){}
 
-  getProduct():Observable<Product[]> {
+  getProducts():Observable<Product[]> {
     return this.http.get<Product[]>(`${this.URL}/products`).pipe(
       tap(console.log),
       catchError(this.handlerError)

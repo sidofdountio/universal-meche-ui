@@ -1,0 +1,136 @@
+<div class="grid-container">
+  <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+      matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Vente</h1>
+
+  <div class="row mb-3">
+    <div class="col-lg-12">
+      <h3 class="mat-h3">Selectioner Le Produit A Vendre</h3>
+      <!-- Product list start -->
+      <div class="col-md-8">
+        <div class="mb-2">
+          <button  (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button class="me-4" matBadge="{{ item }}" *ngIf="!(isLoading$ | async)"
+            [disabled]=" item === 0" matBadgePosition="after" matBadgeColor="primary" >VALIDER LA VENTE</button>
+          &nbsp; &nbsp;
+          <button [disabled]="!item" color="warn" matTooltip="Annuler La vente"  mat-raised-button type="button" (click)="clear()" *ngIf="!(isLoading$ | async)">
+            <mat-icon>block</mat-icon> ANNULER LA VENTE
+          </button>
+          &nbsp; &nbsp;
+          <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+        </button>
+        </div>
+        <h3 class="mat-h3">Liste Des Poduits</h3>
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="productDataSource" matSort>
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
+              <td mat-cell *matCellDef="let element"> {{element.price | currency}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="color">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Couleur </th>
+              <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+            </ng-container> <!-- Symbol Column -->
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let element"> {{element.productCategory.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let element">
+
+                <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(element.id)"> VENDRE CE
+                  PRODUIT
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+
+      </div>
+      <!-- Product list end-->
+    </div>
+  </div>
+  <!-- purchse start -->
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="mat-h3">Liste Des Prduits Achetes</h3>
+      <section class="example-section">
+        <label class="example-margin">Filtre:</label>
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+          [(ngModel)]="favoriteSeason" (ngModelChange)="filterByMonthOrAll($event)">
+          <mat-radio-button class="example-radio-button" *ngFor="let season of filtre" [value]="season">
+            {{season}}
+          </mat-radio-button>
+        </mat-radio-group>
+      </section>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="saleDataSource" matSort>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef> Nom Du Produit </th>
+            <td mat-cell *matCellDef="let element"> {{element.product.name}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="createAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.createAt | date}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nom Du Client </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantite </th>
+            <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef> Montant </th>
+            <td mat-cell *matCellDef="let element"> {{element.amount | currency}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="saleStatus">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let element">
+              <span [ngClass]="saleStatus.PAID === element.status ? 'badge-success': 'badge-danger' ">
+                {{element.saleStatus}}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedSaleColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedSaleColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+
+      <!-- purchase end -->
+    </div>
