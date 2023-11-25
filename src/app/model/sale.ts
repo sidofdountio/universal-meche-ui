@@ -3,6 +3,7 @@ import { SaleStatus } from "./enume/sale-status";
 import { Product } from "./product";
 
 export interface Sale {
+    id:number;
     product:Product;
     customer:Custormer;
     quantity:number;

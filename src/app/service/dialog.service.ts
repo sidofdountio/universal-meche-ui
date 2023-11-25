@@ -9,7 +9,7 @@ import { DialogMessageComponent } from '../message/dialog-message/dialog-message
 })
 export class DialogService {
 
-  data: DialogData = {
+  private data: DialogData = {
     message: '',
     discase: false
   }

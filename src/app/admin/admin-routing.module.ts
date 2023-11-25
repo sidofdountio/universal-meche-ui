@@ -9,6 +9,10 @@ import { CategoryComponent } from './category/category.component';
 import { SuppliersComponent } from './supplier/suppliers/suppliers.component';
 import { CustormeComponent } from './custorme/custorme.component';
 import { SalesComponent } from './sale/sales/sales.component';
+import { InvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
+import { InvoiceDetailsComponent } from './invoice/invoice-details/invoice-details.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { ChargeComponent } from './charge/charge.component';
 
 const routes: Routes = [{
   path: 'admin',
@@ -47,6 +51,23 @@ const routes: Routes = [{
           path: 'sale',
           component: SalesComponent
         },
+        {
+          path: 'invoice',
+          component: InvoiceListComponent
+        },
+        {
+          path: 'invoice/id',
+          component: InvoiceDetailsComponent
+        },
+        {
+          path: 'inventory',
+          component: InventoryComponent,
+        },
+        {
+          path: 'config',
+          component: ChargeComponent
+        }
+        ,
         {
           path: '',
           component: AdminDashboardComponent

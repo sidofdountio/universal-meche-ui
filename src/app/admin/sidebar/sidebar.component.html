@@ -12,6 +12,9 @@
       <a mat-list-item routerLink="./customer" routerLinkActive="active"><mat-icon matListItemIcon>person</mat-icon>Client</a>
       <a mat-list-item routerLink="./purchase" routerLinkActive="active"><mat-icon matListItemIcon>payments</mat-icon>Achat</a>
       <a mat-list-item routerLink="./sale" routerLinkActive="active"><mat-icon matListItemIcon>sell</mat-icon>Sale</a>
+      <a mat-list-item routerLink="./invoice" routerLinkActive="active"><mat-icon matListItemIcon>receipt_long</mat-icon>Facture</a>
+      <a mat-list-item routerLink="./inventory" routerLinkActive="active"><mat-icon matListItemIcon><i class="fa-sharp fa-solid fa-database"></i></mat-icon>Stock </a>
+      <a mat-list-item routerLink="./config" routerLinkActive="active"><mat-icon matListItemIcon>settings</mat-icon>Configuration</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -20,7 +23,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="text-uppercase">boutique-meche</span>
+      <span class="text-uppercase fw-bolder">unisersal meche</span>
       <div class="spacer"></div>
 
 

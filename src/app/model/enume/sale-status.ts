@@ -1,4 +1,4 @@
 export enum SaleStatus {
-    PAID="PAID",
-    PENDING="PENDING"
+    PAID='PAID',
+    PENDING='PENDING'
 }

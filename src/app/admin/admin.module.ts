@@ -27,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
 import {MatRadioModule} from '@angular/material/radio';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle'; 
 
 
 
@@ -45,6 +46,11 @@ import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.co
 import { CustormeComponent } from './custorme/custorme.component';
 import { SalesComponent } from './sale/sales/sales.component';
 import { AddSaleComponent } from './sale/add-sale/add-sale.component';
+import { InvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
+import { InvoiceDetailsComponent } from './invoice/invoice-details/invoice-details.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ChargeComponent } from './charge/charge.component';
 
 
 
@@ -63,9 +69,15 @@ import { AddSaleComponent } from './sale/add-sale/add-sale.component';
     EditPurchaseComponent,
     CustormeComponent,
     SalesComponent,
-    AddSaleComponent
+    AddSaleComponent,
+    InvoiceListComponent,
+    InvoiceDetailsComponent,
+    InventoryComponent,
+    ProfileComponent,
+    ChargeComponent
   ],
   imports: [
+    MatSlideToggleModule,
     MatBadgeModule,
     MatRadioModule,
     MatCheckboxModule,

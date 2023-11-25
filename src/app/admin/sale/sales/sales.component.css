@@ -20,6 +20,17 @@ table {
   background-color: #f44336;
   /* background-color: #d29922; */
   font-weight: bold;
-  padding: 4px;
+  padding: 8px;
   border-radius: 15px;
+}
+
+.spinner{
+  position: absolute;
+  top: 15rem;
+  left: 30rem;
+  background-color: #ccc;
+}
+
+mat-form-field{
+  width: 600px;
 }

@@ -7,31 +7,38 @@ import { Observable, catchError, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class SaleService {
-  readonly API:string ="sale";
-  constructor(private http:HttpClient){}
+  readonly API: string = "sale";
+  constructor(private http: HttpClient) { }
 
-  validSale(sales: Sale[]):Observable<Sale[]> {
-   return this.http.put<Sale[]>(`${this.API}/validSale`,sales)
-   .pipe(
-    tap(console.log),
-    catchError(this.handlerError)
-   )
+  validSales(sales: Sale[]): Observable<Sale[]> {
+    return this.http.put<Sale[]>(`${this.API}/validSales`, sales)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
   }
-  getSale(id: number):Observable<Sale> {
+  validSale(sale: Sale): Observable<Sale> {
+    return this.http.put<Sale>(`${this.API}/validSale`, sale)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
+  getSale(id: number): Observable<Sale> {
     return this.http.get<Sale>(`${this.API}/${id}`)
-    .pipe(
-     tap(console.log),
-     catchError(this.handlerError)
-    )
-   }
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
 
-  addSale(sales: Sale[]):Observable<Sale[]> {
-    return this.http.post<Sale[]>(`${this.API}/addSale`,sales)
-    .pipe(
-     tap(console.log),
-     catchError(this.handlerError)
-    )
-   }
+  addSale(sales: Sale[]): Observable<Sale[]> {
+    return this.http.post<Sale[]>(`${this.API}/addSale`, sales)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
 
 
 

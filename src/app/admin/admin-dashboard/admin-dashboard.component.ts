@@ -16,7 +16,7 @@ import { SaleStatus } from 'src/app/model/enume/sale-status';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
-  readonly saleStatus = SaleStatus;
+  readonly SaleStatus = SaleStatus;
   productName: string[] = ["bresiline", "peruque", "greffe"];
   productQuantity: number[] = [10, 13, 37];
   sells: Sale[] = [{
@@ -39,11 +39,12 @@ export class AdminDashboardComponent implements OnInit {
       id: 1,
       name: ''
     },
+    id: 1,
     quantity: 0,
     amount: 0,
     price: 0,
     createAt: '',
-    saleStatus: this.saleStatus.PENDING
+    saleStatus: SaleStatus.PAID
   }];
   displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
   dataSource = new MatTableDataSource<Sale>([]);
