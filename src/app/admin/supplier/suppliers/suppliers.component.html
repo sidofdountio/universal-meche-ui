@@ -1,0 +1,115 @@
+<div class="grid-container">
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+        matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Fournisseur</h1>
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <mat-card>
+                <mat-card-content>
+                    <form [formGroup]="formSupplier" (ngSubmit)="onAddNewSupplier()">
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-2">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nom du Fournisseur</mat-label>
+                                    <input matInput formControlName="name">
+                                    <mat-hint>Entrer Le Nom Du Fournisseur</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Telephone du Fournisseur</mat-label>
+                                    <input matInput formControlName="phone" type="tel">
+                                    <span matPrefix>+237&nbsp;</span>
+                                    <mat-hint>Entrer Le Telephone Du Fournisseur</mat-hint>
+                                    <mat-error>Entrer Numero De Telephone Valide</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Email du Fournisseur</mat-label>
+                                    <input matInput formControlName="email" placeholder="jonhn@gmail.com" >
+                                    <mat-error>Entrer Un Email Valide</mat-error>
+                                    <mat-hint>Entrer L'email Du Fournisseur</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Addresse Du Fournisseur</mat-label>
+                                    <input matInput formControlName="address">
+                                    
+                                    <mat-hint>Ex. Mokolo Boutique Fashion</mat-hint>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <button matTooltip="Ajouter Un Nouveau Fournisseur" mat-flat-button color="accent"
+                                type="submit" [disabled]="!formSupplier.valid" *ngIf="!(isLoading$ | async)">
+                                AJOUTER
+                            </button>
+                            <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Product list start -->
+
+            <h2 class="mat-h2">Liste Des Fournisseurs</h2>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef>Addresse</th>
+                        <td mat-cell *matCellDef="let element"> {{element.addresse}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+
+                    <!-- email Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef> Email </th>
+                        <td mat-cell *matCellDef="let element"> {{element.email | currency}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="phone">
+                        <th mat-header-cell *matHeaderCellDef> Telephone </th>
+                        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button matTooltip="Supprimer le fournisseur" mat-icon-button color="warm"
+                                (click)="onDelete(element.id)"> <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+
+
+            </div>
+            <!-- Product list end-->
+        </div>
+    </div>
+</div>

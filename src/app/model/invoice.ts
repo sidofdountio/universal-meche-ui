@@ -1,4 +1,9 @@
+import { Sale } from "./sale";
+
 export interface Invoice {
-    invoiceId:string;
+    id:number;
+    sale:Sale;
+    invoiceNumber:string;
     
+
 }

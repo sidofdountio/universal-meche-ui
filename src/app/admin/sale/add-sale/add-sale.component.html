@@ -1,0 +1,81 @@
+<h1 mat-dialog-title>Vous Proceder A La Vente De Ce Produit</h1>
+<div mat-dialog-content [formGroup]="formSale">
+    <div class="mb">
+        <p class="p-2 text-muted">NB: Soyez Concentrer Pendant Le Processus.</p>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label class="form-label">Nom Du Produit</label>
+            <input value="{{ data.name }}" class="form-control" disabled>
+        </div>
+
+        <div class="col mb-3">
+            <label class="form-label">Categorie Du Produit</label>
+            <input value="{{ data.productCategory.name }}" class="form-control" disabled>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="mb-1">
+                <label class="form-label">Prix Unitaire </label>
+                <input class="form-control" [value]="data.price" disabled>
+                
+            </div>
+        </div>
+        <div class="col">
+            <section class="example-section">
+                <label class="example-margin">Type De Client:</label>
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                    formControlName="custormeType" (ngModelChange)="filterCustomerType($event)">
+                    <mat-radio-button color="accent" class="example-radio-button" *ngFor="let type of customerTypes"
+                        [value]="type">
+                        {{type}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </section>
+        </div>
+
+       
+    </div>
+<!--  -->
+    <div class="row">
+        <div class="col">
+            <div formGroupName="formCustomer">
+                <mat-form-field appearance="outline">
+                    <mat-label>Selectioner Le Client </mat-label>
+                    <mat-select formControlName="id">
+                        <mat-option *ngFor="let customer  of customers" [value]="customer.id">{{
+                            customer.name}}</mat-option>
+                    </mat-select>
+                    <mat-hint>Peut Etre Vide Quand Le Type Est Cleint</mat-hint>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="col">
+            <mat-form-field appearance="outline">
+                <mat-label>Quantite Achete</mat-label>
+                <input matInput formControlName="quantity">
+                <mat-hint>Preciser La Quantite</mat-hint>
+                <mat-error></mat-error>
+            </mat-form-field>
+        </div>
+        
+    </div>
+
+
+    <div formGroupName="formProduct" hidden>
+        <mat-form-field appearance="outline">
+            <mat-label></mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field>
+    </div>
+
+
+</div>
+<div mat-dialog-actions>
+    <button matTooltip="ANNULER" mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button matTooltip="ENREGISTRER" mat-raised-button [disabled]="!formSale.valid" cdkFocusInitial color="primary"
+        (click)=" onSaveSaleProduct()">ENREGISTRER</button>
+</div>

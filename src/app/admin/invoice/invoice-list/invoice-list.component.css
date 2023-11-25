@@ -1,0 +1,45 @@
+.grid-container {
+    margin: 20px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .badge-success {
+    color: white;
+    /* background-color: rgb(13, 102, 32); */
+    background-color: #238636;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 15px;
+  }
+  
+  .badge-danger {
+    color: white;
+    background-color: #f44336;
+    /* background-color: #d29922; */
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 15px;
+  }
+  
+  .spinner{
+    position: absolute;
+    top: 15rem;
+    left: 30rem;
+    background-color: #ccc;
+  }
+  
+  mat-form-field{
+    width: 600px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul li{
+    display: inline-flex;
+    margin: 4px;
+  }

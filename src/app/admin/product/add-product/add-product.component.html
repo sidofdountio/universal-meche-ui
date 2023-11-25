@@ -1,1 +1,62 @@
-<p>add-product works!</p>
+<h1 mat-dialog-title> Ajour D'un Nouveau Produit</h1>
+<div mat-dialog-content [formGroup]="productToSave" >
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Nom De La Meche</mat-label>
+            <input matInput formControlName="name">
+            <mat-hint>Entrer Un Nom Valide</mat-hint>
+          
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Le Code De La Meche</mat-label>
+            <input matInput formControlName="code" iddesable >
+            <mat-hint>Entrer Un Code</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Prix Unitaire </mat-label>
+            <mat-error>Entrer Un Prix Valide et Positive</mat-error>
+            <input matInput formControlName="price">
+            <span matTextPrefix>$&nbsp;</span>
+            <span matTextSuffix>.00</span>
+            <mat-hint>Ex 4300.00</mat-hint>
+            
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field >
+            <mat-label>Couleur </mat-label>
+            <input matInput formControlName="color" type="color">
+            <mat-hint>Entrer La Couleur De La Meche</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>La Tailles</mat-label>
+            <input matInput formControlName="lenght" >
+            <mat-error>Entrer Une Taille Valide</mat-error>
+            <mat-hint>Entrer La Taille De La Meche</mat-hint>
+        </mat-form-field>
+    </p>
+    <div formGroupName="categoryTypeForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Selectioner La </mat-label>
+            <mat-select formControlName="id">
+                <mat-option *ngFor="let type  of productCategorys" [value]="type.id">{{ type.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button mat-raised-button [disabled]="!productToSave.valid" cdkFocusInitial color="primary"
+        (click)="onSaveProduct()">ENREGISTRER</button>
+</div>

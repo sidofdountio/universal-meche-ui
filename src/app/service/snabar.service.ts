@@ -15,7 +15,7 @@ export class SnabarService {
   constructor(private _snackBar: MatSnackBar) { }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: this.durationInSecond * 1000,
+      duration: this.durationInSecond * 5000,
      
 
     });
@@ -29,7 +29,7 @@ export class SnabarService {
         message,
         action,
       },
-      duration: this.durationInSecond * 1000,
+      duration: this.durationInSecond * 5000,
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
@@ -41,7 +41,7 @@ export class SnabarService {
         message,
         action,
       },
-      duration: this.durationInSecond * 1000,
+      duration: this.durationInSecond * 5000,
       horizontalPosition: "left",
       verticalPosition : "bottom"
     });

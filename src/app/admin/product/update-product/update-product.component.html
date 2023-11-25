@@ -1,0 +1,52 @@
+<h1 mat-dialog-title> Editer ce Produit</h1>
+<div mat-dialog-content [formGroup]="productToUpdate">
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Nom De La Meche</mat-label>
+            <input matInput formControlName="name">
+            <mat-hint>Entrer Un Nom Valid</mat-hint>
+            <mat-error>Entrer Un Nom Valid</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Le Code De La Meche</mat-label>
+            <input matInput formControlName="code" iddesable >
+            <mat-hint>Entrer Un Code</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Prix Unitaire </mat-label>
+            <input matInput formControlName="price">
+            <span matTextPrefix>FCFA&nbsp;</span>
+            <span matTextSuffix>.00</span>
+            
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field >
+            <mat-label>Couleur </mat-label>
+            <input matInput formControlName="color" type="color">
+            <mat-hint>Entrer La Couleur De La Meche</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>La Tailles</mat-label>
+            <input matInput formControlName="lenght" >
+            <mat-hint>Entrer La Taille De La Meche</mat-hint>
+        </mat-form-field>
+    </p>
+    
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button mat-raised-button [disabled]="!productToUpdate.valid" cdkFocusInitial color="primary"
+        (click)="onUpdateProduct()">ENREGISTRER LA MODIFICATION</button>
+</div>

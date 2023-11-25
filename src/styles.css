@@ -2,6 +2,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,500&display=swap');
 
+/* #d29922 progress */
+/* #238636 success */
+/* #f85149 error */
 :host {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;

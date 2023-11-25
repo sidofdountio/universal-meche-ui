@@ -1,13 +1,13 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { PaymentStatus } from 'src/app/model/enume/payment-status';
-import { Sell } from 'src/app/model/sell';
+import { Sale } from 'src/app/model/sale';
 import { DialogService } from 'src/app/service/dialog.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { Chart } from 'chart.js/auto';
+import { SaleStatus } from 'src/app/model/enume/sale-status';
 
 
 @Component({
@@ -16,46 +16,58 @@ import { Chart } from 'chart.js/auto';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
-
-  productName: string[] = ["bresiline","peruque","greffe"];
-  productQuantity: number[] = [10,13,37];
-  sells: Sell[] = [
-    {
-      createAt: new Date(),
-      customer: {
-        name: "sidof"
-      },
-      invoice: {
-        invoiceId: "INV-9W9W9"
-      },
-      payment: {
-        amount: 90,
-        paymentStatus: PaymentStatus.PENDING
+  readonly SaleStatus = SaleStatus;
+  productName: string[] = ["bresiline", "peruque", "greffe"];
+  productQuantity: number[] = [10, 13, 37];
+  sells: Sale[] = [{
+    product: {
+      id: 1,
+      name: '',
+      price: 0,
+      salePrice: 0,
+      code: '',
+      color: '',
+      description: '',
+      productCategory: {
+        name: '',
+        categoryType: {
+          name: ''
+        }
       }
-    }];
-  displayedColumns: string[] = ['invoiceId', 'createAt', 'name', 'amount', 'paymentStatus'];
-  dataSource = new MatTableDataSource<Sell>([]);
+    },
+    customer: {
+      id: 1,
+      name: ''
+    },
+    id: 1,
+    quantity: 0,
+    amount: 0,
+    price: 0,
+    createAt: '',
+    saleStatus: SaleStatus.PAID
+  }];
+  displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
+  dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   value: number = 10;
   sellAmount: number = 10;
   // Montant vendue
   purchaseAmount: number = 10;
   // Autre charge: frais de luimiere, achat d'un material
-  miscellaneousLoad:number = 5;
+  miscellaneousLoad: number = 5;
   // Gain possible
-  receiveAmount:number = 20;
+  receiveAmount: number = 20;
   // facture annuler;
-  invoiceCancel:number =1;
+  invoiceCancel: number = 1;
 
   private breakpointObserver = inject(BreakpointObserver);
-  paymentStatus = PaymentStatus;
 
 
   constructor(private router: Router, private dialogService: DialogService, private snacbarService: SnabarService) { }
 
   ngOnInit(): void {
     this.dataSource.data = this.sells;
-    stockProductState(this.productName,this.productQuantity);
+    stockProductState(this.productName, this.productQuantity);
   }
 
   ngAfterViewInit() {
@@ -81,7 +93,7 @@ function stockProductState(productName: string[], productQuantity: number[]) {
     datasets: [
       {
         data: productQuantity,
-        backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+        backgroundColor: ['#f56954', '#00a65a', '#00b64a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#d1d6df'],
       }
     ]
   }

@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Modifier</h1>
+<div mat-dialog-content [formGroup]="formPurchase">
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Prix Unitaire D'Achat </mat-label>
+            <input matInput formControlName="price">
+            <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
+            <mat-hint>Ex 3000.00</mat-hint>
+            <span matTextPrefix>CFA&nbsp;</span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Quantite Achete</mat-label>
+            <input matInput formControlName="quantity">
+            <mat-error>Entrer Que Les Nombres positifs Superieure A 0.</mat-error>
+        </mat-form-field>
+    </p>
+    <mat-form-field appearance="outline">
+        <mat-label>Prix Vente </mat-label>
+        <input matInput formControlName="salePrice">
+        <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
+        <mat-hint>Ex 3000.00</mat-hint>
+        <span matTextPrefix>CFA&nbsp;</span>
+
+    </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+    <button matTooltip="ANNULER" mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button matTooltip="ENREGISTRER" mat-raised-button [disabled]="!formPurchase.valid" cdkFocusInitial color="primary"
+        (click)="onEditPurchase()">ENREGISTRER</button>
+</div>

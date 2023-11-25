@@ -1,0 +1,35 @@
+<!-- Filter table  -->
+<section class="example-section">
+    <label class="example-margin">Filtre:</label>
+    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+      [(ngModel)]="favoriteSeason" (ngModelChange)="filterByMonthOrAll($event)">
+      <mat-radio-button class="example-radio-button" *ngFor="let season of filtre" [value]="season">
+        {{season}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </section> <!-- End Filter table -->
+
+  sale.saleStatus = SaleStatus.PAID;
+  this.validSale(sale);
+  this.snacbarService.openSnackBar("Vente Valide", "X");
+  if (this.checked) {
+    e.source.checked = true;
+    this.dialogService.message("Confirmez La Modification De Cette Vente ?\n Rassurez vous d'avoir encaisse La Somme Liee A Cette Vente.");
+    this.dialogService.checkDiscaseValue().subscribe(
+      (response) => {
+        if (response) {
+          this.checked = !this.checked;
+          sale.saleStatus = SaleStatus.PENDING;
+          this.validSale(sale);
+          this.snacbarService.openSnackBar("Vente Annuler", "X");
+          console.log("toggle")
+        } else {
+          // sale.saleStatus = this.saleStatus.PAID;
+          // this.validSale(sale);
+          console.log("toggle should not change if I click the cancel button");
+        }
+      }
+    )
+  } else {
+    this.checked = !this.checked;
+  }

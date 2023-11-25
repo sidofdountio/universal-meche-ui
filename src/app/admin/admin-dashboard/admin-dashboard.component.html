@@ -1,9 +1,7 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <div><button (click)="onAlert()" mat-raised-button color="accent">ALERT</button>
-    <button (click)="onDialog()" mat-raised-button color="accent">DIALOG</button>
-  </div>
-  <!--  -->
+ 
+  <!--  Global stats-->
   <div class="row mb-4">
     <div class="col-md-3">
       <div class="card">
@@ -60,39 +58,38 @@
           <mat-tab-group>
             <mat-tab label="Les Ventes">
               <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource">
+                <table mat-table [dataSource]="dataSource" matSort>
 
                   <!-- Position Column -->
-                  <ng-container matColumnDef="invoiceId">
-                    <th mat-header-cell *matHeaderCellDef> INVOICE ID </th>
-                    <td mat-cell *matCellDef="let element"> {{element.invoice.invoiceId}} </td>
+                  <ng-container matColumnDef="product">
+                    <th mat-header-cell *matHeaderCellDef> Nom Du Produit </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.product.name }} </td>
                   </ng-container>
 
                   <!-- Name Column -->
                   <ng-container matColumnDef="createAt">
-                    <th mat-header-cell *matHeaderCellDef> Create At </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                     <td mat-cell *matCellDef="let element"> {{element.createAt | date}} </td>
                   </ng-container>
 
                   <!-- Name Column -->
                   <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <th mat-header-cell *matHeaderCellDef> Nom Du Client </th>
                     <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
                   </ng-container>
 
                   <!-- Weight Column -->
                   <ng-container matColumnDef="amount">
-                    <th mat-header-cell *matHeaderCellDef> Amount </th>
-                    <td mat-cell *matCellDef="let element"> {{element.payment.amount | currency}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Montant </th>
+                    <td mat-cell *matCellDef="let element"> {{element.amount | currency }} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
-                  <ng-container matColumnDef="paymentStatus">
-                    <th mat-header-cell *matHeaderCellDef> Payment status </th>
+                  <ng-container matColumnDef="saleStatus">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
                     <td mat-cell *matCellDef="let element">
-                      <span [ngClass]="paymentStatus.PAID === element.status ? 'badge-success': 'badge-danger' ">
-                        {{element.payment.paymentStatus}}</span>
-
+                      <span [ngClass]="[element.saleStatus === SaleStatus.PENDING ? 'badge-danger': 'badge-success'] ">
+                        {{element.saleStatus}}</span>
                     </td>
                   </ng-container>
 
@@ -105,7 +102,7 @@
               </div>
             </mat-tab>
             <mat-tab label="Les achats"> Les achat </mat-tab>
-            <mat-tab label="Etat du stock"> Content 3 </mat-tab>
+            <mat-tab label="Etat du stock">  </mat-tab>
           </mat-tab-group> <!-- Tab end -->
         </mat-card-content>
       </mat-card>
