@@ -1,1 +1,155 @@
-<p>invoice-details works!</p>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="grid-container">
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Details De La Facture</h1>
+    <ng-container *ngIf="state === DataState.LOADING_STATE">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="spinner">
+                    <mat-spinner></mat-spinner>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="state === DataState.ERROR_STATE">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="error">
+                    Une erreur s'est produite. Veuillez recharger l'application.
+                    <i class="fa-solid fa-face-pensive"></i>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="invoices$ | async">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="invoice-company text-inverse f-w-600  mb-5">
+                    <span class="pull-right hidden-print">
+                        <button mat-icon-button (click)="exportToPDF(invoiceNumer)"> <mat-icon>print</mat-icon></button>
+                    </span>
+                </div>
+                <div id="invoice-contents" class="invoice">
+                    <!-- begin invoice-company -->
+                    <div class="invoice-company text-inverse f-w-600  mb-5">
+
+                        LYFECOMPANY, Inc
+                    </div>
+                    <!-- end invoice-company -->
+                    <!-- begin invoice-header -->
+                    <div class="invoice-header">
+                        <div class="invoice-from">
+                            <small>from</small>
+                            <address class="m-t-5 m-b-5">
+                                <strong class="text-inverse">LYFECOMPANY, Inc.</strong><br>
+                                Street Address<br>
+                                City, Yaounde, simbock<br>
+                                Phone: (+237) 671309015<br>
+                                Fax: (123) 456-7890
+                            </address>
+                        </div>
+                        <div class="invoice-to">
+                            <small>to</small>
+                            <address class="m-t-5 m-b-5">
+                                <strong class="text-inverse">{{ customerEmail }}</strong><br>
+                                Street {{ customerAddress }}<br>
+                                City, <br>
+                                Phone: (237) {{ customerPhone }}<br>
+                                Fax:
+                            </address>
+                        </div>
+                        <div class="invoice-date">
+                            <small>Invoice / {{ invoiceDate | date:'short' }}</small>
+                            <div class="date text-inverse m-t-5">date</div>
+                            <div class="invoice-detail">
+                                {{ invoiceNumer }}<br>
+                                Services Product
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end invoice-header -->
+                    <!-- begin invoice-content -->
+                    <div class="invoice-content">
+                        <!-- begin table-responsive -->
+                        <div class="table-responsive">
+                            <table class="table table-invoice">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" width="10%">INVOICE NUMBER</th>
+                                        <th class="text-center" width="10%">PRODUCT NAME</th>
+                                        <th class="text-center" width="10%">QUANTITY</th>
+                                        <th class="text-center" width="10%">PRICE</th>
+                                        <th class="text-right" width="20%">LINE TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let invoiceSale of invoices$ | async ">
+                                    <tr>
+                                        <td>{{ invoiceSale.invoiceNumber }}</td>
+                                        <td>
+                                            <span class="text-inverse">
+                                                {{ invoiceSale.sale.product.name| uppercase }}</span><br>
+                                        </td>
+                                        <td class="text-center">{{ invoiceSale?.sale?.quantity }}</td>
+                                        <td class="text-center">{{ invoiceSale?.sale?.price | currency
+                                            }}</td>
+                                        <td class="text-right">{{ invoiceSale.sale.amount | currency }}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end table-responsive -->
+                        <!-- begin invoice-price -->
+                        <div class="invoice-price">
+                            <div class="invoice-price-left">
+                                <div class="invoice-price-row">
+                                    <div class="sub-price">
+                                        <small>SUBTOTAL</small>
+                                        <span class="text-inverse">{{ invoiceSubTotal | currency }}</span>
+                                    </div>
+                                    <div class="sub-price">
+                                        <i class="fa fa-plus text-muted"></i>
+                                    </div>
+                                    <div class="sub-price">
+                                        <small>PAYPAL FEE (0.0%)</small>
+                                        <span class="text-inverse">{{ invoiceTax | currency }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="invoice-price-right">
+                                <small>TOTAL</small> <span class="fw-bold">{{ invoiceTotal | currency }}</span>
+                            </div>
+                        </div>
+                        <!-- end invoice-price -->
+                    </div>
+                    <!-- end invoice-content -->
+                    <!-- begin invoice-note -->
+                    <div class="invoice-note">
+                        * Make all cheques payable to LYFECOMPANY<br>
+                        * Payment is due within 30 days<br>
+                        * If you have any questions concerning this invoice, contact lyfecompany@gmail.com
+                    </div>
+                    <!-- end invoice-note -->
+                    <!-- begin invoice-footer -->
+                    <div class="invoice-footer">
+                        <p class="text-center m-b-5 f-w-600">
+                            THANK YOU FOR YOUR BUSINESS
+                        </p>
+                        <p class="text-center">
+                            <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> lyfecomany.com</span>
+                            <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> T:+237
+                                671309015</span>
+                            <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i>
+                                lyfecomany@gmail.com</span>
+                        </p>
+                    </div>
+                    <!-- end invoice-footer -->
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

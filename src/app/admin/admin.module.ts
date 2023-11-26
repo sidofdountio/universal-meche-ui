@@ -51,6 +51,11 @@ import { InvoiceDetailsComponent } from './invoice/invoice-details/invoice-detai
 import { InventoryComponent } from './inventory/inventory.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChargeComponent } from './charge/charge.component';
+import { EmployeeComponent } from './employee/employee/employee.component';
+import { AddEmployeeComponent } from './employee/add-employee/add-employee.component';
+import { UpdateChargeComponent } from './charge/update-charge/update-charge.component';
+import { UpdateEmployeeComponent } from './employee/update-employee/update-employee.component';
+import { BillanComponent } from './billan/billan.component';
 
 
 
@@ -74,9 +79,15 @@ import { ChargeComponent } from './charge/charge.component';
     InvoiceDetailsComponent,
     InventoryComponent,
     ProfileComponent,
-    ChargeComponent
+    ChargeComponent,
+    EmployeeComponent,
+    AddEmployeeComponent,
+    UpdateChargeComponent,
+    UpdateEmployeeComponent,
+    BillanComponent
   ],
   imports: [
+    FormsModule,
     MatSlideToggleModule,
     MatBadgeModule,
     MatRadioModule,

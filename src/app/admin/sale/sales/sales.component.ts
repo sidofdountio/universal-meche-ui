@@ -13,6 +13,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleRequest } from 'src/app/model/sale-request';
 import { BehaviorSubject } from 'rxjs';
+import { TransactionType } from 'src/app/model/enume/transaction-type';
+import { DataState } from 'src/app/model/enume/data-state';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sales',
@@ -20,7 +23,8 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  readonly DataState = DataState;
+  state: DataState = DataState.LOADING_STATE;
   displayedColumns: string[] = ['name', 'price', 'color', 'category', 'action'];
   productDataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) productPaginator!: MatPaginator;
@@ -88,11 +92,11 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
   checked: boolean = false;
   disabled = false;
+  productInSale: Product[] = [];
 
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
     private saleService: SaleService) {
-    // Create 100 users
   }
 
   ngOnInit(): void {
@@ -119,7 +123,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       id: 1,
       product: {
         id: 1,
-        name: 'Queen',
+        name: 'P1',
         price: 0,
         salePrice: 0,
         code: '',
@@ -135,7 +139,47 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       customer: {
         id: 1,
-        name: 'test'
+        name: 'C1'
+      },
+      trasaction: {
+        amount: 1,
+        id: 'TRA-1',
+        timestamp: new Date,
+        type: TransactionType.SALE
+      },
+      quantity: 1,
+      amount: 1,
+      price: 0,
+      createAt: new Date(),
+      saleStatus: SaleStatus.PENDING
+    },
+    {
+      id: 2,
+      product: {
+        id: 2,
+        name: 'P2',
+        price: 0,
+        salePrice: 0,
+        code: '',
+        color: '',
+        description: '',
+        productCategory: {
+          name: '',
+          categoryType: {
+            id: 1,
+            name: ''
+          }
+        }
+      },
+      customer: {
+        id: 1,
+        name: 'C1'
+      },
+      trasaction: {
+        amount: 1,
+        id: 'TRA-1',
+        timestamp: new Date,
+        type: TransactionType.SALE
       },
       quantity: 1,
       amount: 1,
@@ -144,10 +188,10 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       saleStatus: SaleStatus.PENDING
     },
     {
-      id: 2,
+      id: 3,
       product: {
         id: 2,
-        name: 'Naturelle',
+        name: 'p4',
         price: 0,
         salePrice: 0,
         code: '',
@@ -166,15 +210,30 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         id: 2,
         name: 'demo'
       },
+      trasaction: {
+        amount: 1,
+        id: 'TRA-2',
+        timestamp: new Date,
+        type: TransactionType.SALE
+      },
       quantity: 2,
       amount: 0,
       price: 2,
       createAt: '',
       saleStatus: SaleStatus.PAID
-    }
-    ];
+    }];
     this.productDataSource.data = this.products;
-    this.dataSource = new MatTableDataSource(this.sales);
+
+    
+    for (const sale of this.sales) {
+      if (sale.trasaction?.id) {
+        this.productInSale.push(sale.product);
+      }
+    }
+    this.onGetSales();
+
+  
+  
   }
 
   ngAfterViewInit() {
@@ -213,6 +272,24 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     )
     return this.saleDataSujet.value;
   }
+
+  onGetSales(): void {
+    this.state = DataState.LOADING_STATE;
+      this.saleService.getSales().subscribe(
+  
+        (response: Sale[]) => {
+          
+          this.dataSource = new MatTableDataSource(response);
+          this.state = DataState.LOADED_STATE;
+          this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        },
+        (error: HttpErrorResponse) => {
+          this.state = DataState.ERROR_STATE;
+          this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+          console.log("Error code : %s", error.status);
+        }
+      )
+    }
 
   /** Filter table  */
   filterByMonthOrAll(filter: string) {
@@ -342,15 +419,15 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     if (saleById?.saleStatus === SaleStatus.PENDING) {
       this.dialogService.message("Confirmer Vous La Validation De Cette Vente ? \n Rassurez Vous D'avoir Recus L'argent En Caise");
       this.dialogService.checkDiscaseValue().subscribe(
-        (confirm)=>{
-          if (confirm){
+        (confirm) => {
+          if (confirm) {
             this.validSale(saleById);
-          }else{
-            this.snacbarService.openSnackBar("Vous Avez Annuler La Confirmation De Cette Vente","Fermer");
+          } else {
+            this.snacbarService.openSnackBar("Vous Avez Annuler La Confirmation De Cette Vente", "Fermer");
           }
         }
       )
-     
+
     }
 
   }

@@ -61,14 +61,9 @@ export class AddSaleComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddSaleComponent>,
     private fb: FormBuilder, private snacbarService: SnabarService) {
-
-
   }
 
-
   ngOnInit(): void {
-
-
   }
 
   filterCustomerType(typeSelected: string) {

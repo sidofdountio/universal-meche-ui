@@ -13,6 +13,8 @@ import { InvoiceListComponent } from './invoice/invoice-list/invoice-list.compon
 import { InvoiceDetailsComponent } from './invoice/invoice-details/invoice-details.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { ChargeComponent } from './charge/charge.component';
+import { EmployeeComponent } from './employee/employee/employee.component';
+import { BillanComponent } from './billan/billan.component';
 
 const routes: Routes = [{
   path: 'admin',
@@ -52,11 +54,11 @@ const routes: Routes = [{
           component: SalesComponent
         },
         {
-          path: 'invoice',
+          path: 'invoices',
           component: InvoiceListComponent
         },
         {
-          path: 'invoice/id',
+          path: 'invoice/:id',
           component: InvoiceDetailsComponent
         },
         {
@@ -66,6 +68,14 @@ const routes: Routes = [{
         {
           path: 'config',
           component: ChargeComponent
+        },
+        {
+          path: 'employee',
+          component: EmployeeComponent
+        },
+        {
+          path: "billan",
+          component: BillanComponent
         }
         ,
         {

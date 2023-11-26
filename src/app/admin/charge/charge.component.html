@@ -1,1 +1,92 @@
-<p>charge works!</p>
+<div class="grid-container">
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Les Charges</h1>
+    <ng-container>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-content *ngFor="let charge of charges">
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="totalSalaire" class="form-label">Salaire Des Employes</label>
+                                    <input type="number" class="form-control" value="{{ charge.totalSalaire }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="totalSalaire" class="form-label">Import</label>
+                                    <input type="number" class="form-control" value="{{ charge.impot }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="totalSalaire" class="form-label">Loyer</label>
+                                    <input type="number" class="form-control" value="{{ charge.loyer }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="totalSalaire" class="form-label">Charge Divers</label>
+                                    <input type="number" class="form-control" value="{{ charge.autreCharge.amount }}" disabled>
+                                </div>
+                            </div> <!-- end -->
+                            <!-- start -->
+                            <div class="col">
+                                <!-- elect -->
+                                <div class="mb-3">
+                                    <label for="totalSalaire" class="form-label">Electricite</label>
+                                    <input type="number" class="form-control" value="{{ charge.electriciter }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ration" class="form-label">Ration</label>
+                                    <input type="number" class="form-control" value="{{ charge.ration }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="transport" class="form-label">Tranport</label>
+                                    <input type="number" class="form-control" value="{{ charge.transport }}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+            </div><!-- end form charge -->
+            <!-- start list charge -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="mat-h2">List Des Charges</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Salaire Total </th>
+                                    <th scope="col">Import</th>
+                                    <th scope="col">Loyer</th>
+                                    <th scope="col">Electricite</th>
+                                    <th scope="col">Ration</th>
+                                    <th scope="col">Tranport</th>
+                                    <th scope="col">Autre Charge</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let charge of charges">
+                                    <th scope="row">{{ charge.totalSalaire }}</th>
+                                    <td>{{ charge.impot }}</td>
+                                    <td>{{ charge.loyer }}</td>
+                                    <td>{{ charge.electriciter }}</td>
+                                    <td>{{ charge.ration }}</td>
+                                    <td>{{ charge.transport }}</td>
+                                    <td>{{ charge.autreCharge.amount }}</td>
+                                    <td>
+                                        <button mat-icon-button (click)="updateCharge(charge)"> <mat-icon>edit</mat-icon></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- end list charge -->
+        </div>
+    </ng-container>
+
+    <ng-container>
+    </ng-container>
+    <ng-container>
+    </ng-container>
+</div>

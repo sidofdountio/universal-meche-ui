@@ -24,6 +24,15 @@ export class SaleService {
         catchError(this.handlerError)
       )
   }
+
+  getSales(): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.API}`)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
+  
   getSale(id: number): Observable<Sale> {
     return this.http.get<Sale>(`${this.API}/${id}`)
       .pipe(

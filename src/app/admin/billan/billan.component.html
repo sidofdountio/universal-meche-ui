@@ -1,0 +1,53 @@
+<div class="grid-container">
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Billan Mensuel</h1>
+    <ng-container>
+        <button matTooltip="Billan Mensuel" mat-raised-button class="text-uppercase" (click)="billanMensuel()">Billan
+            Mensuel</button>&nbsp;
+        <button matTooltip="Billan Annuelle" mat-raised-button class="text-uppercase" (click)="billanAnnuelle()">Billan
+            Mensuel</button>&nbsp;
+        <button matTooltip="Historique" mat-raised-button class="text-uppercase" (click)="billan()">Billan
+            Mensuel</button>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Achat ToTal</label>
+                            <input  class="form-control" value="" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Total Des Charges</label>
+                            <input class="form-control" value="" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="" class="form-label"> Gain Possible</label>
+                            <input class="form-control" value="" disabled>
+                        </div>
+
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container><!-- end -->
+    </ng-container>
+    <div class="col-md-12">
+        <div class="error">
+            Une erreur s'est produite. Veuillez recharger l'application.
+            <i class="fa-solid fa-face-pensive"></i>
+        </div>
+    </div>
+    <ng-container>
+        <div class="col-md-12">
+            <div class="spinner">
+                <mat-spinner></mat-spinner>
+            </div>
+        </div>
+    </ng-container>
+</div>
