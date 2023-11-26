@@ -1,0 +1,75 @@
+<h1 mat-dialog-title> Modification Des Charges</h1>
+<div mat-dialog-content [formGroup]="formCharge">
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Impot</mat-label>
+            <input matInput formControlName="impot">
+            <mat-error>Entrer Une somme valide Valide et Positive</mat-error>
+            <mat-hint>Entrer La nouvelle valeur L'impot</mat-hint>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Loyer</mat-label>
+            <input matInput formControlName="loyer">
+            <mat-error>Entrer Une somme valide Valide et Positive</mat-error>
+            <mat-hint>Entrer Le Montant Du Loyer</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Electricite</mat-label>
+            <input matInput formControlName="electricity">
+            <mat-error>Entrer Une somme valide Valide et Positive</mat-error>
+            <mat-hint>Entrer Le Montant De L'Electricite</mat-hint>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Ration</mat-label>
+            <input matInput formControlName="ration">
+            <mat-error>Entrer Une somme valide Valide et Positive</mat-error>
+            <mat-hint>Entrer Le Montant De L'Electricite</mat-hint>
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Tranport </mat-label>
+            <input matInput formControlName="transport">
+            <mat-error>Entrer Une valide Valide et Positive</mat-error>
+            <mat-hint>Entrer Le Montant Des Transport</mat-hint>
+        </mat-form-field>
+    </p>
+    <div formGroupName="anotherCharge" >
+
+        <mat-form-field appearance="outline" hidden>
+            <mat-label> </mat-label>
+            <input matInput formControlName="id">
+        </mat-form-field>
+        <div class="row">
+            <div class="col">
+                <!-- Description od another charge -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Les Raison Des Charges Divers</mat-label>
+                    <input matInput formControlName="raison">
+                    <mat-hint>Les Raison Des Charges Divers</mat-hint>
+                </mat-form-field><!-- end description -->
+            </div>
+            <div class="col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Somme Total Des Charges Divers</mat-label>
+                    <input matInput formControlName="amount">
+                    <mat-error>Entrer Une somme valide Valide et Positive</mat-error>
+                    <mat-hint>Entrer La Somme Total Des Charges Divers</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button mat-raised-button [disabled]="!formCharge.valid" color="primary"
+        (click)="onSaveCharge()">ENREGISTRER</button>
+</div>

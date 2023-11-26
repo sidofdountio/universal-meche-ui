@@ -1,0 +1,74 @@
+<h1 mat-dialog-title>Ajout D'un Nouveau Employe</h1>
+<div mat-dialog-content [formGroup]="formEmployee">
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Prenom</mat-label>
+                    <input matInput formControlName="firstName">
+                    <mat-hint>Entrer Le Prenom</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Nom</mat-label>
+                    <input matInput formControlName="lastName">
+                    <mat-hint>Entrer Le Nom</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Telephone</mat-label>
+                    <input matInput formControlName="phone" type="tel">
+                    <span matPrefix>+237&nbsp;</span>
+                    <mat-hint>Entrer Le Numero De Telephone</mat-hint>
+                    
+                </mat-form-field>
+            </div>
+
+
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Date De Naissance</mat-label>
+                    <input matInput formControlName="birthDay" type="date">
+                    <mat-hint>Entrer La Date De Naissance</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Sexe</mat-label>
+                    <mat-select formControlName="sexe">
+                        <mat-option value="M">Masculin</mat-option>
+                        <mat-option value="F">Feminin</mat-option>
+                    </mat-select>
+                    <mat-hint>Selectioner Le Sexe</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Adrresse</mat-label>
+                    <input matInput formControlName="address" type="text">
+                    <mat-hint>Entrer L'Adresse</mat-hint>
+                </mat-form-field>
+            </div>
+
+            <div class="mb-3">
+                <mat-form-field>
+                    <mat-label>Salaire</mat-label>
+                    <input matInput formControlName="salary" type="number">
+                    <mat-hint>Entrer Le Salaire</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onClose()">ANNULER</button>
+    <button mat-raised-button [disabled]="!formEmployee.valid" color="primary"
+        (click)="onSaveEmployee()">ENREGISTRER</button>
+</div>

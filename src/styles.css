@@ -39,7 +39,6 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.custom-snackbar {
-  background-color: #ff0000; /* Customize the background color */
-  color: #ffffff; /* Customize the text color */
+.delete{
+  color: #f85149
 }

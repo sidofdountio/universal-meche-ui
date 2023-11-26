@@ -13,7 +13,6 @@ export class ProductService {
 
  
   readonly URL = "";
-
   constructor(private http: HttpClient){}
 
   getProducts():Observable<Product[]> {
@@ -47,7 +46,5 @@ export class ProductService {
 
   handlerError(error:HttpErrorResponse):Observable<never> {
     throw new Error(`An error occured - Error code :${error.status}`);
-  }
-
-  
+  }  
 }

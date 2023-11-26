@@ -1,0 +1,35 @@
+.grid-container {
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+.badge-danger {
+    font-weight: 500;
+    color: #f44336;
+}
+
+.badge-success {
+    font-weight: 500;
+    color: green;
+    font-weight: 800;
+}
+
+.spinner {
+    position: absolute;
+    top: 15rem;
+    left: 30rem;
+}
+
+
+
+.error {
+    background-color: #f44336;;
+    color: #ffffff;
+    padding: 4px 8px;
+    font-weight: 600;
+    border-radius: 1px;
+    font-size: 18px;
+}

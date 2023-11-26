@@ -1,0 +1,55 @@
+<div class="grid-container">
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
+            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Employee</h1>
+    <ng-container>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-content>
+                        <h2 class="mat-h2">Liste Des Employes </h2>
+                        <button  matTooltip="AJOUTER UN NOUVEAU EMPLOYEE " mat-icon-button class="mb-3" color="primary" (click)="addEmployee()"><mat-icon>add</mat-icon></button>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col"># </th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Prenom</th>
+                                        <th scope="col">Adresse</th>
+                                        <th scope="col">Date De Naissance</th>
+                                        <th scope="col">Telephone</th>
+                                        <th scope="col">Salaire</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let employee of employees">
+                                        <th scope="row">{{ employee.id }}</th>
+                                        <td>{{ employee.firstName }}</td>
+                                        <td>{{ employee.lastName }}</td>
+                                        <td>{{ employee.address}}</td>
+                                        <td>{{ employee.birtDay }}</td>
+                                        <td>{{ employee.phone }}</td>
+                                        <td>{{ employee.salary }}</td>
+                                        <td>
+                                            <button mat-icon-button (click)="updateEmployee(employee)">
+                                                <mat-icon>edit</mat-icon></button>&nbsp;&nbsp;&nbsp;
+                                            <button mat-icon-button (click)="confirmDelete(employee)"
+                                                class="delte"><mat-icon>delete</mat-icon></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+            </div><!-- end form charge -->
+        </div>
+    </ng-container>
+
+    <ng-container>
+    </ng-container>
+    <ng-container>
+    </ng-container>
+</div>
