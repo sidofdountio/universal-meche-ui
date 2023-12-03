@@ -1,9 +1,9 @@
 import { TransactionType } from "./enume/transaction-type";
 
 export interface Transaction {
-    id: string;
+    id: string| any;
     amount: number;
     parties?: string[];
-    timestamp: Date;
+    timestamp: Date | string;
     type: TransactionType;
 }

@@ -18,51 +18,18 @@ import { DialogService } from 'src/app/service/dialog.service';
 })
 export class ProductListComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'price', 'color', 'action'];
   PRODUCTS: Product[] = [];
+  displayedColumns: string[] = ['id', 'name', 'price','salePrice', 'color','lenght','code', 'action'];
   dataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  products: Product[] = [{
-    id: 1,
-    name: 'Queen',
-    price: 10,
-    salePrice: 13,
-    code: 'QU-234',
-    color: 'BLACK',
-    description: 'decription',
-    productCategory: {
-      name: 'synthétiques',
-      categoryType: {
-        name: 'Kanekalon'
-      }
-    }
-  }]
 
-
-  product: Product = {
-    id: 3,
-    name: 'demo',
-    price: 15,
-    salePrice: 23,
-    code: '',
-    color: '',
-    length: 10,
-    description: '',
-    productCategory: {
-      name: '',
-      categoryType: {
-        name: ''
-      }
-    }
-  };
-  productById: any;
 
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
-    this.dataSource.data = this.products
+   this.onGetProducts();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -70,16 +37,33 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   addNewProduct() {
+    let product:Product = {
+      id: undefined,
+      name: '',
+      price: 0,
+      salePrice: 0,
+      code: '',
+      color: '',
+      description: '',
+      length: 0,
+      productCategory: {
+        id: undefined,
+        name: '',
+        categoryType: {
+          id: undefined,
+          name: ''
+        }
+      },
+    }
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
     configDialog.disableClose = true;
-    configDialog.data = this.product;
+    configDialog.data = product;
     const dialogRef = this.dialog.open(AddProductComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
         (productToAdd) => {
-          console.log(productToAdd);
-          // this.addProduct(productToAdd);
+          this.addProduct(productToAdd);
         },
         () => {
           console.log("Error due save product");
@@ -89,14 +73,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   addProduct(productToAdd: Product) {
     this.productService.addProduct(productToAdd)
       .subscribe(
-        (response: Product) => {
-          console.log()
-          this.snacbarService.openSnackBarSuccess("Product added successfuly", "close");
+        () => {
+          this.snacbarService.openSnackBarSuccess("Produit Ajoutee", "close");
           this.onGetProducts();
         },
         () => {
           this.snacbarService.openSnackBarError("Vous Avez Annuler Cette Opperation", "close");
-
         }
       );
   }
@@ -104,45 +86,41 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   onGetProducts() {
     this.productService.getProducts().
       subscribe(
-        (() => {
-        }),
+        (response) => {
+          this.dataSource.data = response;
+          this.snacbarService.openSnackBar("Product Loaded", "Fermer");
+        },
         ((error: HttpErrorResponse) => {
-          this.snacbarService.openSnackBarError("Une Error Est Survenue.\n Veillez Ressayer", "close");
+          this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
           console.log("Error code : %s", error.status);
         })
       )
   }
 
   // Edite product
-  onEdit(id: number) {
-    // for (let index = 0; index < this.productToCheck.value.length; index++) {
-    //   if (this.productToCheck.value[index].id === id) {
-    //     this.productById = this.productToCheck.value[index];
-    //   }
-    // }
+  onEdit(product:Product) {
     // matDialog confi
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
     configDialog.disableClose = true;
-    this.product.name = "test";
-    configDialog.data = this.product;
-    // configDialog.data = this.productById;
-
+    configDialog.data = product;
+    
     // passing matDialogue and config to open 
     const dialogRef = this.dialog.open(UpdateProductComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
-        (productToUpdate) => {
-          this.onUpdate(productToUpdate);
+        (response) => {
+          console.log(response);
+          this.onUpdateProduct(response);
         })
   }
 
   // edite product: Method that run api and be called.->
-  private onUpdate(prodtuctToUpdate: Product) {
+  private onUpdateProduct(prodtuctToUpdate: Product) {
     this.productService.editeProduct(prodtuctToUpdate)
       .subscribe(
         () => {
-          this.snacbarService.openSnackBarSuccess("Product edited successfuly", "Fermer");
+          this.snacbarService.openSnackBarSuccess("Produit Modifie Avec Success", "Fermer");
           this.onGetProducts();
         },
         (error: HttpErrorResponse) => {
@@ -152,11 +130,11 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       )
   }
 
-  onDelete(productById: any) {
-    this.dialogService.message("Confirmez La Suppression De Ce Produit ?")
+  onDelete(productById: number) {
+    this.dialogService.message("Confirmez Vous La Suppression De Ce Produit ?")
     this.dialogService.checkDiscaseValue().subscribe(
-      (isAllow) => {
-        if (!isAllow) {
+      (allow) => {
+        if (!allow) {
           return;
         }
         this.deleteProductById(productById);
@@ -169,7 +147,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     this.productService.deleteProduct(productById).
       subscribe(
         () => {
-          this.snacbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer")
+          this.snacbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer");
+          this.onGetProducts();
         },
         () => {
           this.snacbarService.openSnackBarError("Erreure De Supprission", "Fermer");

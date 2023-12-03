@@ -1,20 +1,19 @@
 <div class="grid-container">
     <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Billan Mensuel</h1>
-    <ng-container>
+    <ng-container *ngIf="state === DataState.LOADED_STATE">
         <button matTooltip="Billan Mensuel" mat-raised-button class="text-uppercase" (click)="billanMensuel()">Billan
             Mensuel</button>&nbsp;
         <button matTooltip="Billan Annuelle" mat-raised-button class="text-uppercase" (click)="billanAnnuelle()">Billan
             Mensuel</button>&nbsp;
-        <button matTooltip="Historique" mat-raised-button class="text-uppercase" (click)="billan()">Billan
-            Mensuel</button>
+        <button matTooltip="Historique" color="warn" mat-raised-button class="text-uppercase" (click)="billan()">exporter tout les transactions</button>
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col">
                         <div class="mb-3">
                             <label for="" class="form-label">Achat ToTal</label>
-                            <input  class="form-control" value="" disabled>
+                            <input class="form-control" value="" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Total Des Charges</label>
@@ -23,27 +22,51 @@
                     </div>
                     <div class="col">
                         <div class="mb-3">
+                            <label for="" class="form-label"> Total Des Ventes</label>
+                            <input class="form-control" value="" disabled>
+                        </div>
+                        <div class="mb-3">
                             <label for="" class="form-label"> Gain Possible</label>
                             <input class="form-control" value="" disabled>
                         </div>
+                    </div>
 
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col">
+                        <mat-card>
+                            <mat-card-content>
+
+                                <canvas id="myChart"></canvas>
+
+                            </mat-card-content>
+                        </mat-card>
                     </div>
                     <div class="col">
 
+                        <mat-card>
+                            <mat-card-content>
+                                <canvas id="salePermonth"></canvas>
+                            </mat-card-content>
+                        </mat-card>
                     </div>
                 </div>
             </div>
+
         </div>
     </ng-container>
-    <ng-container><!-- end -->
-    </ng-container>
-    <div class="col-md-12">
-        <div class="error">
-            Une erreur s'est produite. Veuillez recharger l'application.
-            <i class="fa-solid fa-face-pensive"></i>
+    
+    <ng-container *ngIf="state === DataState.ERROR_STATE" >
+        <div class="col-md-12">
+            <div class="error">
+                Une erreur s'est produite. Veuillez recharger l'application.
+                <i class="fa-solid fa-face-pensive"></i>
+            </div>
         </div>
-    </div>
-    <ng-container>
+    </ng-container>
+    <ng-container *ngIf="state === DataState.LOADING_STATE">
         <div class="col-md-12">
             <div class="spinner">
                 <mat-spinner></mat-spinner>

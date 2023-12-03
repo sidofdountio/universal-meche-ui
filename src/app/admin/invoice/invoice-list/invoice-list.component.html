@@ -29,11 +29,13 @@
 
                 <div class="mat-elevation-z8">
                     <table mat-table [dataSource]="dataSource" matSort>
+                       
                         <!-- ID Column -->
-                        <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-                            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-                        </ng-container>
+                        <!-- <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero De La Commande </th>
+                            <td mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </td>
+                        </ng-container> -->
+
 
                         <!-- ID Column -->
                         <ng-container matColumnDef="invoiceNumber">
@@ -42,25 +44,17 @@
                         </ng-container>
 
                         <!-- Progress Column -->
-                        <ng-container matColumnDef="product">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Produit </th>
-                            <td mat-cell *matCellDef="let row">
-                                <ul>
-                                    <li>p1</li>
-                                    <li>p2</li>
-                                </ul>
-                            </td>
-                        </ng-container>
+                       
 
                         <!-- Name Column -->
-                        <ng-container matColumnDef="status">
+                        <!-- <ng-container matColumnDef="status">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
                             <td mat-cell *matCellDef="let row">
                                 <span
                                     [ngClass]="[row.status === SaleStatus.PENDING ? 'badge-danger': 'badge-success'] ">
                                     {{row.status}}</span>
                             </td>
-                        </ng-container>
+                        </ng-container> -->
 
                         <!-- Fruit Column -->
                         <ng-container matColumnDef="date">
@@ -71,16 +65,16 @@
                         <!-- Fruit Column -->
                         <ng-container matColumnDef="amount">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
-                            <td mat-cell *matCellDef="let row"> {{row.amount}} </td>
+                            <td mat-cell *matCellDef="let row"> <span class="number">{{ row.total | CustomCurrency }}</span> </td>
                         </ng-container>
 
                         <!-- Fruit Column -->
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Voir La Facture Facture</th>
                             <td mat-cell *matCellDef="let row">
-                                <button mat-icon-button color="" (click)="onInvoice(row.id)"
-                                    matTooltip="Imprimer Cette Vente">
-                                    <mat-icon>print</mat-icon>
+                                <button mat-icon-button color="" (click)="onInvoice(row.invoiceNumber)"
+                                    matTooltip="Voir Les Detailles De Cette Vente">
+                                    <mat-icon>more_vert</mat-icon>
                                 </button>
                             </td>
                         </ng-container>

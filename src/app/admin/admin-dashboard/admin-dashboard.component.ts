@@ -8,6 +8,7 @@ import { DialogService } from 'src/app/service/dialog.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { Chart } from 'chart.js/auto';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
+import { SaleService } from 'src/app/service/sale.service';
 
 
 @Component({
@@ -19,33 +20,7 @@ export class AdminDashboardComponent implements OnInit {
   readonly SaleStatus = SaleStatus;
   productName: string[] = ["bresiline", "peruque", "greffe"];
   productQuantity: number[] = [10, 13, 37];
-  sells: Sale[] = [{
-    product: {
-      id: 1,
-      name: '',
-      price: 0,
-      salePrice: 0,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: '',
-        categoryType: {
-          name: ''
-        }
-      }
-    },
-    customer: {
-      id: 1,
-      name: ''
-    },
-    id: 1,
-    quantity: 0,
-    amount: 0,
-    price: 0,
-    createAt: '',
-    saleStatus: SaleStatus.PAID
-  }];
+  sells: Sale[] = [];
   displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -63,10 +38,17 @@ export class AdminDashboardComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
 
 
-  constructor(private router: Router, private dialogService: DialogService, private snacbarService: SnabarService) { }
+  constructor(private router: Router, private dialogService: DialogService, 
+    private snacbarService: SnabarService,
+    private saleSercice:SaleService) { }
 
   ngOnInit(): void {
-    this.dataSource.data = this.sells;
+    this.saleSercice.getSales().subscribe(
+      (response)=>{
+        this.dataSource.data = response;
+      }
+    )
+    
     stockProductState(this.productName, this.productQuantity);
   }
 

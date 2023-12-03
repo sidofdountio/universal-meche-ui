@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Supplier } from '../model/supplier';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.development';
 
 
 @Injectable({
@@ -10,11 +11,11 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class SupplierService {
 
-  private readonly URL = "supplier";
+  private readonly URL = environment.URL;
   constructor(private http: HttpClient) { }
 
   getSupplier(): Observable<Supplier[]> {
-    return this.http.get<Supplier[]>(`${this.URL}`)
+    return this.http.get<Supplier[]>(`${this.URL}/supplier`)
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -22,7 +23,7 @@ export class SupplierService {
   }
 
   getSupplierById(id:number): Observable<Supplier> {
-    return this.http.get<Supplier>(`${this.URL}/${id}`)
+    return this.http.get<Supplier>(`${this.URL}/supplier/${id}`)
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -30,7 +31,7 @@ export class SupplierService {
   }
 
   addSupplier(supplierToAdd: Supplier): Observable<Supplier> {
-    return this.http.post<Supplier>(`${this.URL}/addSupplier`, supplierToAdd)
+    return this.http.post<Supplier>(`${this.URL}/supplier`, supplierToAdd)
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -39,7 +40,7 @@ export class SupplierService {
 
 
   deleteSupplier(supplierId: number) {
-    return this.http.delete(`${this.URL}/delete/${supplierId}`)
+    return this.http.delete(`${this.URL}/supplier/${supplierId}`)
       .pipe(
         tap(console.log)
       );

@@ -37,18 +37,18 @@ export class InvoiceDetailsComponent {
   ngOnInit() {
     this.invoices$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
-        this.invoiceService.getInvoiceByInvoiceNumber(params.get('id')!).pipe(
+        this.invoiceService.getInvoiceByInvoiceNumber(params.get('invoiceNumber')!).pipe(
           tap(
             (data) => {
               for (let iterator of data) {
                 this.invoiceNumer = iterator.invoiceNumber;
                 this.customerAddress = iterator.sale.customer?.address;
-                this.customerEmail = iterator.sale.customer?.email;
+                this.customerEmail = iterator.sale.customer?.name;
                 this.customerPhone = iterator.sale.customer?.phone;
                 this.invoiceDate = iterator.createAt;
                 this.invoiceSubTotal = iterator?.subTotal;
                 this.invoiceTax = iterator?.tax;
-                this.invoiceTotal = iterator.amount
+                this.invoiceTotal = iterator.total
               }
               this.state = DataState.LOADING_STATE;
             },

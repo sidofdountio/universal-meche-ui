@@ -15,7 +15,10 @@ import { SaleRequest } from 'src/app/model/sale-request';
 import { BehaviorSubject } from 'rxjs';
 import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { DataState } from 'src/app/model/enume/data-state';
-import { HttpErrorResponse } from '@angular/common/http';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { PaymentMethod } from 'src/app/model/paymentMethod';
+import { E } from '@angular/cdk/keycodes';
+import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
 
 @Component({
   selector: 'app-sales',
@@ -23,294 +26,110 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
+  appState = new BehaviorSubject<DataState>(DataState.LOADING_STATE);
+  appState$ = this.appState.asObservable();
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
-  displayedColumns: string[] = ['name', 'price', 'color', 'category', 'action'];
-  productDataSource = new MatTableDataSource<Product>([]);
-  @ViewChild(MatPaginator) productPaginator!: MatPaginator;
-  @ViewChild(MatSort) producSort!: MatSort;
 
-  ELEMENT_DATA: Sale[] = [];
-  displayedColumnSale: string[] = ['id', 'product', 'name', 'amount', 'saleStatus', 'action'];
-  dataSource!: MatTableDataSource<Sale>;
-  @ViewChild(MatPaginator)
-  paginatorSale!: MatPaginator;
-  @ViewChild(MatSort)
-  sortSale!: MatSort;
-
-
+  private saleToSaves: Sale[] = [];
   isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
-  isSpinnerSubject = new BehaviorSubject<boolean>(false);
-  spinner$ = this.isSpinnerSubject.asObservable();
-  // List Sale
-  sales: Sale[] = [];
+  spinnerSubject = new BehaviorSubject<boolean>(false);
+  spinner$ = this.spinnerSubject.asObservable();
+  spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
+  spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
+  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'amount', 'status', 'action'];
+  dataSource = new MatTableDataSource<Sale>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   // List Product
-  private products: Product[] = [];
-  // Product To Sale
-  // private product!: Product;
-  // Display sale by filter
-  favoriteSeason: string = "Moi";
-  saleBy: string = "Moi";
-  readonly filtre: string[] = ['Tout', 'Moi'];
-  readonly SaleStatus = SaleStatus;
-  productName: string = "";
-  private saleToSave: Sale = {
-    product: {
-      id: 1,
-      name: '',
-      price: 0,
-      salePrice: 0,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: '',
-        categoryType: {
-          name: ''
-        }
-      }
+  products: Product[] = [];
+  readonly paymentMethods: PaymentMethod[] = [
+    {
+      type: "LIQUIDE"
     },
-    customer: {
-      id: 1,
-      name: ''
+    {
+      type: "MTN MONEY"
     },
-    id: 0,
-    quantity: 0,
-    amount: 0,
-    price: 0,
-    createAt: '',
-    saleStatus: SaleStatus.PENDING
-  };
-  private saleToSaves: Sale[] = [];
+    {
+      type: "ORANGE MONEY"
+    }
+  ];
+  paymentForm = this.fb.group({
+    type: this.fb.group({
+      value: [""]
+    })
+  });
+  paymentSelected: boolean = false;
+  private paymentTypeValue = new BehaviorSubject<string>("LIQUIDE");
+  readonly status = SaleStatus;
+
   item: number = 0;
   checkedSujet = new BehaviorSubject<boolean>(false);
   disableSujet = new BehaviorSubject<boolean>(false);
   isChecked$ = this.checkedSujet.asObservable();
   isDisabled$ = this.disableSujet.asObservable();
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
-  checked: boolean = false;
-  disabled = false;
   productInSale: Product[] = [];
+
 
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
-    private saleService: SaleService) {
+    private saleService: SaleService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     // fetch product
     this.getProducts();
-    this.products = [{
-      id: 1,
-      name: 'Queen',
-      price: 10,
-      salePrice: 12,
-      code: 'QU-234',
-      color: 'BLACK',
-      description: 'decription',
-      productCategory: {
-        name: 'synthétiques',
-        categoryType: {
-          id: 2,
-          name: 'Kanekalon'
-        }
-      }
-    }];
-
-    this.sales = [{
-      id: 1,
-      product: {
-        id: 1,
-        name: 'P1',
-        price: 0,
-        salePrice: 0,
-        code: '',
-        color: '',
-        description: '',
-        productCategory: {
-          name: '',
-          categoryType: {
-            id: 1,
-            name: ''
-          }
-        }
-      },
-      customer: {
-        id: 1,
-        name: 'C1'
-      },
-      trasaction: {
-        amount: 1,
-        id: 'TRA-1',
-        timestamp: new Date,
-        type: TransactionType.SALE
-      },
-      quantity: 1,
-      amount: 1,
-      price: 0,
-      createAt: new Date(),
-      saleStatus: SaleStatus.PENDING
-    },
-    {
-      id: 2,
-      product: {
-        id: 2,
-        name: 'P2',
-        price: 0,
-        salePrice: 0,
-        code: '',
-        color: '',
-        description: '',
-        productCategory: {
-          name: '',
-          categoryType: {
-            id: 1,
-            name: ''
-          }
-        }
-      },
-      customer: {
-        id: 1,
-        name: 'C1'
-      },
-      trasaction: {
-        amount: 1,
-        id: 'TRA-1',
-        timestamp: new Date,
-        type: TransactionType.SALE
-      },
-      quantity: 1,
-      amount: 1,
-      price: 0,
-      createAt: '',
-      saleStatus: SaleStatus.PENDING
-    },
-    {
-      id: 3,
-      product: {
-        id: 2,
-        name: 'p4',
-        price: 0,
-        salePrice: 0,
-        code: '',
-        color: '',
-        description: '',
-        productCategory: {
-          id: 2,
-          name: '',
-          categoryType: {
-            id: 2,
-            name: ''
-          }
-        }
-      },
-      customer: {
-        id: 2,
-        name: 'demo'
-      },
-      trasaction: {
-        amount: 1,
-        id: 'TRA-2',
-        timestamp: new Date,
-        type: TransactionType.SALE
-      },
-      quantity: 2,
-      amount: 0,
-      price: 2,
-      createAt: '',
-      saleStatus: SaleStatus.PAID
-    }];
-    this.productDataSource.data = this.products;
-
-    
-    for (const sale of this.sales) {
-      if (sale.trasaction?.id) {
-        this.productInSale.push(sale.product);
-      }
-    }
     this.onGetSales();
-
-  
-  
   }
 
   ngAfterViewInit() {
-    this.productDataSource.paginator = this.productPaginator;
-    this.productDataSource.sort = this.producSort;
-    this.dataSource.paginator = this.paginatorSale;
-    this.dataSource.sort = this.sortSale;
-  }
-
-  onRowClicked(row: any) {
-    console.log('Row clicked: ', row);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   /** Get Product */
   getProducts() {
+    this.appState.next(DataState.LOADING_STATE);
     this.productService.getProducts().subscribe(
-      () => {
-        this.snacbarService.openSnackBar("Product Loading", "Fermer");
+      (response) => {
+        this.products = response;
+        this.snacbarService.openSnackBarSuccess("Product Loading", "Fermer");
+        this.appState.next(DataState.LOADED_STATE);
       },
       () => {
+        this.appState.next(DataState.ERROR_STATE);
         this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
       }
     );
   }
 
-  /** Get Sale */
-  getSale(saleId: number): Sale | null {
-    this.saleService.getSale(saleId).subscribe(
-      (response) => {
-        this.saleDataSujet.next(response);
-        this.snacbarService.openSnackBar("Sale Loading", "Fermer");
-      },
-      () => {
-        this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
-      }
-    )
-    return this.saleDataSujet.value;
-  }
-
   onGetSales(): void {
     this.state = DataState.LOADING_STATE;
-      this.saleService.getSales().subscribe(
-  
-        (response: Sale[]) => {
-          
-          this.dataSource = new MatTableDataSource(response);
-          this.state = DataState.LOADED_STATE;
-          this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
-        },
-        (error: HttpErrorResponse) => {
-          this.state = DataState.ERROR_STATE;
-          this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
-          console.log("Error code : %s", error.status);
-        }
-      )
-    }
-
-  /** Filter table  */
-  filterByMonthOrAll(filter: string) {
-    this.saleBy = filter;
-    console.log("Fitre %s", this.saleBy);
-    this.snacbarService.openSnackBar(`Vous Avez Choisir Le Filtrer ${this.saleBy}`, "Fermer")
+    this.saleService.getSales().subscribe(
+      (response: Sale[]) => {
+        this.dataSource.data = response;
+        this.state = DataState.LOADED_STATE;
+        this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
+      },
+      () => {
+        this.state = DataState.ERROR_STATE;
+        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+      }
+    )
   }
-
-
-
+  // select payment type 
+  onPaymentMethod(event: any) {
+    this.paymentSelected = true;
+    this.paymentTypeValue.next(event);
+    this.getPaymentType(event);
+    console.log("type %s", event);
+  }
   /** Start sale product here
    * First Get product by id when they click on button */
-  saleNewProduct(productId: number) {
-    let product;
-    // Firt: Fecth product By Id
-    for (const productItem of this.products) {
-      if (productItem.id === productId) {
-        this.productName = productItem.name;
-        product = productItem;
-      }
-    }
+  saleNewProduct(product: Product) {
     // MatDialog configuration.
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
@@ -319,23 +138,24 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogRef = this.dialog.open(AddSaleComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
-        (productSaleRquest: SaleRequest) => {
-          console.log(productSaleRquest);
+        (response: SaleRequest) => {
+          console.log(response);
           // Call ProcessToSave. 
-          this.processToSaveSale(productSaleRquest);
+          this.processToSaveSale(response);
         });
+  }
+
+  private getPaymentType(type: string): string {
+    return type;
   }
 
   // This Method map with the output afterClosed method of saleNewSale provide.
   private processToSaveSale(saleRequest: SaleRequest) {
-    const date = new Date();
-    const quantity = saleRequest.quantity;
-    const price = saleRequest.price;
-    const amount = Math.imul(quantity, price);
-    let id = +1;
-    this.saleToSave = {
+
+    let saleToSave: Sale = {
       product: {
-        id: saleRequest.product.id,
+        id: 1,
+        length: 0,
         name: '',
         price: 0,
         salePrice: 0,
@@ -343,9 +163,54 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         color: '',
         description: '',
         productCategory: {
+          id: undefined,
           name: '',
           categoryType: {
+            id: undefined,
             name: ''
+          }
+        }
+      },
+      customer: {
+        id: 1,
+        name: ''
+      },
+      id: 0,
+      quantity: 0,
+      amount: 0,
+      price: 0,
+      createAt: '',
+      status: SaleStatus.PENDING,
+      trasaction: {
+        id: undefined,
+        amount: 0,
+        timestamp: '',
+        type: TransactionType.SALE
+      },
+      day: 0,
+      month: undefined,
+      year: undefined,
+      paymentType: "LIQUIDE"
+    };
+    const quantity = saleRequest.quantity;
+    const price = saleRequest.price;
+    const amount = Math.imul(quantity, price);
+    saleToSave = {
+      product: {
+        id: saleRequest.product.id,
+        length: 0,
+        name: saleRequest.product.name,
+        price: 0,
+        salePrice: 0,
+        code: '',
+        color: '',
+        description: '',
+        productCategory: {
+          id: undefined,
+          name: '',
+          categoryType: {
+            name: '',
+            id: undefined
           }
         }
       },
@@ -353,42 +218,48 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         id: saleRequest.customer.id,
         name: ''
       },
-      id: id,
+      trasaction: {
+        id: undefined,
+        amount: 0,
+        timestamp: '',
+        type: TransactionType.SALE
+      },
+      status: SaleStatus.PENDING,
+      id: undefined,
       quantity: saleRequest.quantity,
       amount: amount,
       price: saleRequest.price,
-      createAt: date,
-      saleStatus: SaleStatus.PENDING
+      createAt: '',
+      day: 0,
+      month: undefined,
+      year: undefined,
+      paymentType: this.paymentTypeValue.value
     };
-    this.saleToSaves.push(this.saleToSave);
+    this.saleToSaves.push(saleToSave);
     this.item = this.saleToSaves.length;
     this.snacbarService.openSnackBar("Produit Ajoute", "Fermer");
   }
 
   // Trigger Event when button it's click.
   onSaveSale() {
-    this.isLoadingSubject.next(true);
-    setTimeout(() => {
-      console.log(this.saleToSaves);
-      this.isLoadingSubject.next(false);
-    }, 5000);
-    this.isLoadingSubject.next(true);
-    // this.saleDataSource.data = this.saleToSaves;
-    // this.saveSale(this.saleToSaves);
+    for (let sale of this.saleToSaves) {
+      sale.paymentType = this.paymentTypeValue.value;
+    }
+    this.saveSale(this.saleToSaves);
   }
 
-  /**  This Method will be called on OnsaveSale.
-   * Call the API
-  */
   private saveSale(sales: Sale[]) {
+    this.isLoadingSubject.next(true);
     this.saleService.addSale(sales)
       .subscribe(
         (response) => {
-          console.log()
-          this.snacbarService.openSnackBarSuccess("Vente Enregistrer", "Fermer");
+          this.onGetSales();
+          this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
+          this.isLoadingSubject.next(false);
           this.clear();
         },
         () => {
+          this.isLoadingSubject.next(false);
           this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
         }
       );
@@ -410,41 +281,39 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changeSaleStatus(sale: Sale) {
-
-    const saleById = this.getSale(sale.id);
-    if (saleById?.saleStatus === SaleStatus.PAID) {
-      this.snacbarService.openSnackBar("Cette Vente est Deja Valide", "Fermer");
-      return;
-    }
-    if (saleById?.saleStatus === SaleStatus.PENDING) {
-      this.dialogService.message("Confirmer Vous La Validation De Cette Vente ? \n Rassurez Vous D'avoir Recus L'argent En Caise");
-      this.dialogService.checkDiscaseValue().subscribe(
-        (confirm) => {
-          if (confirm) {
-            this.validSale(saleById);
-          } else {
-            this.snacbarService.openSnackBar("Vous Avez Annuler La Confirmation De Cette Vente", "Fermer");
-          }
-        }
-      )
-
-    }
-
+    const alown = false;
+    const configDialog = new MatDialogConfig();
+    configDialog.autoFocus = true;
+    configDialog.disableClose = true;
+    configDialog.data = alown;
+    const dialogRef = this.dialog.open(ValidSaleComponent, configDialog);
+    dialogRef.afterClosed()
+      .subscribe(
+        (response: boolean) => {
+          this.validSale(sale, response);
+        });
   }
 
-
-  private validSale(sale: Sale) {
-    this.isSpinnerSubject.next(true);
-    this.saleService.validSale(sale).subscribe(
-      () => {
-        this.isSpinnerSubject.next(false);
-        this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
-      },
-      () => {
-        this.isSpinnerSubject.next(false);
-        this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
-      }
-    )
+  private validSale(sale: Sale, valid: boolean) {
+    if (valid) {
+      console.log("status 1 %s", valid);
+      this.saleService.validSale(sale).subscribe(
+        () => {
+          this.saleService.validSale(sale);
+          this.spinnerSaleStatusSubject.next(false);
+          this.onGetSales();
+          this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
+        },
+        () => {
+          this.spinnerSaleStatusSubject.next(false);
+          this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+        }
+      )
+    } else {
+      this.snacbarService.openSnackBarError("Vous Avez Annuler Le Processus De Validation De Cette Vente", "Fermer");
+      console.log("status 2 %s", valid);
+      return;
+    }
   }
 
   applyFilter(event: Event) {
@@ -456,10 +325,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
   ngOnDestroy(): void {
-
   }
-
-
 }

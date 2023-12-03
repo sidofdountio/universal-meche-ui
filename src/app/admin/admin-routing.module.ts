@@ -58,7 +58,7 @@ const routes: Routes = [{
           component: InvoiceListComponent
         },
         {
-          path: 'invoice/:id',
+          path: 'invoice/:invoiceNumber',
           component: InvoiceDetailsComponent
         },
         {

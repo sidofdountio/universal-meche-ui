@@ -20,8 +20,6 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-
-  suppliers: Supplier[] = [];
   public isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
   formSupplier = this.fb.group({
@@ -31,26 +29,29 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
     address: ['', [Validators.required]]
   });
 
-  constructor(private dialogService: DialogService, private fb: FormBuilder, private supplierService: SupplierService, private snackbarService: SnabarService) { }
+  constructor(private dialogService: DialogService, 
+    private fb: FormBuilder, 
+    private supplierService: SupplierService, 
+    private snackbarService: SnabarService) { }
 
   ngOnInit(): void {
+    this.onGetSupplier();
+  }
 
-    this.supplierService.getSupplier().pipe(
-      tap(
+  private onGetSupplier() {
+    this.supplierService.getSupplier().subscribe(
         (response) => {
           this.dataSource.data = response;
         },
         () => {
-          this.snackbarService.openSnackBar("Error Du Loading", "close")
+          this.snackbarService.openSnackBar("Error Du Loading", "close");
         }
-      )
-    )
+    );
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-
 
   onAddNewSupplier() {
     this.isLoadingSubject.next(true);
@@ -58,7 +59,8 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
       () => {
         console.log(this.formSupplier.value as Supplier)
         this.isLoadingSubject.next(false);
-        this.snackbarService.openSnackBarSuccess("Fournisseur Ajoute", "Fermer")
+        this.snackbarService.openSnackBarSuccess("Fournisseur Ajoute", "Fermer");
+        this.onGetSupplier();
       },
       () => {
         this.isLoadingSubject.next(false);
@@ -67,21 +69,22 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
     )
   }
 
-  onDelete(productById: any) {
-    this.dialogService.message("Confirmez La Suppression De Ce Produit ?")
+  onDelete(supplier:Supplier) {
+    this.dialogService.message(`Confirmez La Suppression De ${supplier.name} ?`)
     this.dialogService.checkDiscaseValue().subscribe(
       (isAllow) => {
         if (!isAllow) {
           return;
         }
-        this.deleteProductById(productById);
+        this.deleteSupplierById(supplier);
         this.dialogService.updateValue();
+        this.onGetSupplier();
       }
     )
   }
 
-  private deleteProductById(productById: number) {
-    this.supplierService.deleteSupplier(productById).
+  private deleteSupplierById(supplier:Supplier) {
+    this.supplierService.deleteSupplier(supplier.id as number).
       subscribe(
         () => {
           this.snackbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer")

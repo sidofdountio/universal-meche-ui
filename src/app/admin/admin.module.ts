@@ -56,12 +56,15 @@ import { AddEmployeeComponent } from './employee/add-employee/add-employee.compo
 import { UpdateChargeComponent } from './charge/update-charge/update-charge.component';
 import { UpdateEmployeeComponent } from './employee/update-employee/update-employee.component';
 import { BillanComponent } from './billan/billan.component';
+import { CustomPipe } from './custome.pipe';
+import { ValidSaleComponent } from './sale/valid-sale/valid-sale.component';
 
 
 
 
 @NgModule({
   declarations: [
+    CustomPipe,
     ProductListComponent,
     PurchaseComponent,
     AddPurchaseComponent,
@@ -84,7 +87,8 @@ import { BillanComponent } from './billan/billan.component';
     AddEmployeeComponent,
     UpdateChargeComponent,
     UpdateEmployeeComponent,
-    BillanComponent
+    BillanComponent,
+    ValidSaleComponent
   ],
   imports: [
     FormsModule,

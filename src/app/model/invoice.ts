@@ -8,10 +8,9 @@ export interface Invoice {
     sale:Sale;
     invoiceNumber:string;
     status:SaleStatus;
-    amount: number;
+    total: number;
     createAt: Date | string;
     month?:string;
     day?:string;
     hour?:string;
-
 }

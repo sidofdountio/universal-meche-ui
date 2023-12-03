@@ -1,71 +1,72 @@
 <div class="grid-container">
-    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
-            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Etat Des Stocks</h1>
+    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button matTooltip="Retour">
+            <mat-icon>arrow_back</mat-icon></button>Etat Des Stocks</h1>
     <ng-container *ngIf="state === DataState.LOADED_STATE">
         <div class="row">
             <div class="col-md-12">
                 <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource">
+                    <table mat-table [dataSource]="dataSource" matSort>
     
                         <!-- Up Column -->
                         <ng-container matColumnDef="up">
-                            <th mat-header-cell *matHeaderCellDef> #</th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> #</th>
                             <td mat-cell *matCellDef="let element"> {{ element.up === true ? "is up": "is down"}} </td>
                         </ng-container>
                         <!-- Position Column -->
                         <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef> Date </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                             <td mat-cell *matCellDef="let element"> {{element.date | date: 'short'}} </td>
                         </ng-container>
     
                         <!-- Name Column -->
                         <ng-container matColumnDef="label">
-                            <th mat-header-cell *matHeaderCellDef> Operation type </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Operation type </th>
                             <td mat-cell *matCellDef="let element"> {{element.label}} </td>
                         </ng-container>
     
                         <!-- Weight Column -->
                         <ng-container matColumnDef="productName">
-                            <th mat-header-cell *matHeaderCellDef> Product name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.productName | uppercase }} </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="orldQuantity">
-                            <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
                             <td mat-cell *matCellDef="let element"> {{element.orldQuantity}} </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="orldPrice">
-                            <th mat-header-cell *matHeaderCellDef> Unit price </th>
-                            <td mat-cell *matCellDef="let element"> {{element.orldPrice | currency }} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit price </th>
+                            <td mat-cell *matCellDef="let element"> {{element.orldPrice | CustomCurrency }} </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="orldAmount">
-                            <th mat-header-cell *matHeaderCellDef> Amount </th>
-                            <td mat-cell *matCellDef="let element"> {{element.oldAmount | currency }} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+                            <td mat-cell *matCellDef="let element"> {{element.oldAmount | CustomCurrency }} </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="newQuantity">
-                            <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="[element.newQuantity === 0 ? 'badge-danger' : 'badge-success' ]">
-                                {{element.newQuantity}} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span [ngClass]="[element.newQuantity <= 50 ? 'badge-danger' : 'badge-success' ]"> {{element.newQuantity}} </span>
+                               
+                            </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="newPrice">
-                            <th mat-header-cell *matHeaderCellDef> Unit price </th>
-                            <td mat-cell *matCellDef="let element"> {{element.newPrice | currency }} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit price </th>
+                            <td mat-cell *matCellDef="let element"> {{element.newPrice | CustomCurrency }} </td>
                         </ng-container>
     
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="newAmount">
-                            <th mat-header-cell *matHeaderCellDef> Amount </th>
-                            <td mat-cell *matCellDef="let element"> {{element.newAmount | currency}} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+                            <td mat-cell *matCellDef="let element"> <span class="number"> {{element.newAmount | CustomCurrency }}</span> </td>
                         </ng-container>
     
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -85,6 +86,9 @@
         <div class="col-md-12">
             <div class="spinner" >
                 <mat-spinner></mat-spinner>
+            </div>
+            <div class="">
+                Etat de stock ...
             </div>
         </div>
     </ng-container>

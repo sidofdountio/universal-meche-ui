@@ -23,147 +23,12 @@ import * as XLSX from 'xlsx';
 export class InvoiceListComponent implements AfterViewInit, OnInit {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
-  displayedColumns: string[] = ['id', 'invoiceNumber', 'product', 'status', 'date', 'amount', 'action'];
+  displayedColumns: string[] = ['invoiceNumber', 'date', 'amount', 'action'];
   dataSource!: MatTableDataSource<Invoice>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  invoices: Invoice[] = [
-    {
-      id: 1,
-      sale: {
-        id: 1,
-        product: {
-          id: 1,
-          name: 'P1',
-          price: 0,
-          salePrice: 0,
-          code: '',
-          color: '',
-          description: '',
-          productCategory: {
-            name: '',
-            categoryType: {
-              id: 1,
-              name: ''
-            }
-          }
-        },
-        customer: {
-          id: 1,
-          name: 'C1',
-          phone: '',
-          email: '',
-          address: ''
-        },
-        trasaction: {
-          amount: 1,
-          id: 'TRA-1',
-          timestamp: new Date,
-          type: TransactionType.SALE
-        },
-        quantity: 1,
-        amount: 1,
-        price: 0,
-        createAt: '',
-        saleStatus: SaleStatus.PENDING
-      },
-      invoiceNumber: 'INV-1',
-      status: SaleStatus.PAID,
-      amount: 0,
-      createAt: '',
-      subTotal: 0,
-    },
-    {
-      id: 2,
-      sale: {
-        id: 2,
-        product: {
-          id: 1,
-          name: 'P1',
-          price: 0,
-          salePrice: 0,
-          code: '',
-          color: '',
-          description: '',
-          productCategory: {
-            name: '',
-            categoryType: {
-              id: 1,
-              name: ''
-            }
-          }
-        },
-        customer: {
-          id: 1,
-          name: 'C1',
-          phone: '',
-          email: '',
-          address: ''
-        },
-        trasaction: {
-          amount: 1,
-          id: 'TRA-1',
-          timestamp: new Date,
-          type: TransactionType.SALE
-        },
-        quantity: 1,
-        amount: 1,
-        price: 0,
-        createAt: '',
-        saleStatus: SaleStatus.PENDING
-      },
-      invoiceNumber: 'INV-1',
-      status: SaleStatus.PAID,
-      amount: 0,
-      createAt: ''
-    },
-    {
-      id: 3,
-      sale: {
-        id: 3,
-        product: {
-          id: 1,
-          name: 'P1',
-          price: 0,
-          salePrice: 0,
-          code: '',
-          color: '',
-          description: '',
-          productCategory: {
-            name: '',
-            categoryType: {
-              id: 1,
-              name: ''
-            }
-          }
-        },
-        customer: {
-          id: 1,
-          name: 'C1',
-          phone: '',
-          email: '',
-          address: ''
-        },
-        trasaction: {
-          amount: 1,
-          id: 'TRA-2',
-          timestamp: new Date,
-          type: TransactionType.SALE
-        },
-        quantity: 1,
-        amount: 1,
-        price: 0,
-        createAt: '',
-        saleStatus: SaleStatus.PENDING
-      },
-      invoiceNumber: 'INV-2',
-      status: SaleStatus.PENDING,
-      amount: 0,
-      createAt: '',
-      subTotal: 0
-    }
-  ];
+  invoices: Invoice[] = [];
   readonly SaleStatus = SaleStatus;;
   productOnInvoice: Product[] = [];
   ngAfterViewInit(): void {
@@ -176,7 +41,8 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
     this.onGetInvoices();
   }
 
-  constructor(private invoiceService: InvoiceService, private productService: ProductService,
+  constructor(private invoiceService: InvoiceService,
+    private productService: ProductService,
     private snackbarService: SnabarService, private router: Router) { }
 
   applyFilter(event: Event) {
@@ -190,24 +56,23 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
 
   onGetInvoices(): void {
     this.state = DataState.LOADING_STATE;
-      this.invoiceService.getInvoices().subscribe(
-  
-        (response: Invoice[]) => {
-          this.invoices = response;
-          this.dataSource.data = response;
-          this.state = DataState.LOADED_STATE;
-          this.snackbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
-        },
-        (error: HttpErrorResponse) => {
-          this.state = DataState.ERROR_STATE;
-          this.snackbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
-          console.log("Error code : %s", error.status);
-        }
-      )
-    }
+    this.invoiceService.getInvoices().subscribe(
 
-  onInvoice(id: number) {
-    this.router.navigate(["admin/invoice/", id]);
+      (response: Invoice[]) => {
+        this.dataSource.data = response;
+        this.state = DataState.LOADED_STATE;
+        this.snackbarService.openSnackBarSuccess("Liste Des Factures Afichee", "Fermer");
+      },
+      (error: HttpErrorResponse) => {
+        this.state = DataState.ERROR_STATE;
+        this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+        console.log("Error code : %s", error.status);
+      }
+    )
+  }
+
+  onInvoice(invoiceNumber: number) {
+    this.router.navigate(["admin/invoice/", invoiceNumber]);
   }
 
   getInvoiceByInvoiceNumber(invoiceNumber: string) {
@@ -220,15 +85,15 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
     // Create a workbook and worksheet
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-  
+
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-  
+
     // Generate the Excel file
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveExcelFile(excelBuffer, new Date()+'invoice_sale_list.xlsx');
+    this.saveExcelFile(excelBuffer, new Date() + 'invoice_sale_list.xlsx');
   }
-  
+
   saveExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
     const url: string = window.URL.createObjectURL(data);
@@ -242,11 +107,6 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
     }, 100);
   }
 
-  
+
 }
 
-function triggerDataTable() {
-  //   $(document).ready(function() {
-  //     $('#listOfChoriste').DataTable();
-  // });
-}

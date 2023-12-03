@@ -4,12 +4,12 @@
     <div class="row">
         <div class="col mb-3">
             <label class="form-label">Nom Du Produit</label>
-            <input value="{{ data.name }}" class="form-control">
+            <input value="{{ data.name }}" class="form-control" disabled>
         </div>
 
         <div class="col mb-3">
             <label class="form-label">Categorie Du Produit</label>
-            <input value="{{ data.productCategory.name }}" class="form-control">
+            <input value="{{ data.productCategory.name }}" class="form-control" disabled>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
             <input matInput formControlName="price">
             <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
             <mat-hint>Ex 3000.00</mat-hint>
-            <span matTextPrefix>CFA&nbsp;</span>
+            <span matPrefix>CFA&nbsp;</span>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -50,7 +50,7 @@
         <input matInput formControlName="salePrice">
         <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
         <mat-hint>Ex 3000.00</mat-hint>
-        <span matTextPrefix>CFA&nbsp;</span>
+        <span matPrefix>CFA&nbsp;</span>
         
     </mat-form-field>
 

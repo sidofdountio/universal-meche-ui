@@ -10,23 +10,20 @@ import { Product } from 'src/app/model/product';
 })
 export class UpdateProductComponent {
 
-  productToUpdate!: FormGroup;
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Product, private formBuild: FormBuilder, public dialogRef: MatDialogRef<UpdateProductComponent>) {
-    this.productToUpdate =this.formBuild.group({
-      id: [data.id],
-      name: [data.name, Validators.required,],
-      price: [data.price, Validators.required],
-      code: [data.code, Validators.required],
-      description: [data.description],
-      color: [data.color],
-      lenght: [data.length]
-     
-    });
-  }
-
-  ngOnInit(): void {
+  productToUpdate =this.formBuild.group({
+    id: [this.data.id],
+    name: [this.data.name, Validators.required,],
+    price: [this.data.price, Validators.required],
+    code: [this.data.code, Validators.required],
+    description: [this.data.description],
+    color: [this.data.color],
+    length: [this.data.length]
    
+  });
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Product, 
+  private formBuild: FormBuilder, 
+  public dialogRef: MatDialogRef<UpdateProductComponent>) {
+    
   }
 
   onClose() {
@@ -34,6 +31,24 @@ export class UpdateProductComponent {
   }
 
   onUpdateProduct() {
+    let product: Product = {
+      id: undefined,
+      name: this.productToUpdate.value.name as string,
+      price: this.productToUpdate.value.price as any,
+      salePrice: 0,
+      code: this.productToUpdate.value.code as string,
+      color: this.productToUpdate.value.color as string,
+      length: this.productToUpdate.value.length as any,
+      description: this.productToUpdate.value.description as string,
+      productCategory: {
+        id: undefined,
+        name: '',
+        categoryType: {
+          name: '',
+          id: undefined
+        }
+      }
+    };
     this.dialogRef.close(this.productToUpdate.value)
   }
 }
