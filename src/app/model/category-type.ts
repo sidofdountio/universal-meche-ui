@@ -1,4 +1,4 @@
 export interface CategoryType {
-    id?:number;
-    name:string
+    id:any;
+    name:string;
 }

@@ -34,17 +34,20 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
   constructor(private dialogService: DialogService, private fb: FormBuilder, private custormeService: CustormeService, private snackbarService: SnabarService) { }
 
   ngOnInit(): void {
+    this.onGetCustomer();
+  }
 
-    this.custormeService.getCustormes().pipe(
-      tap(
+  private onGetCustomer() {
+    this.custormeService.getCustormes().subscribe(
+      
         (response) => {
           this.dataSource.data = response;
+          console.log(response);
         },
         () => {
-          this.snackbarService.openSnackBar("Error Du Loading", "close")
+          this.snackbarService.openSnackBar("Error Du Loading", "close");
         }
-      )
-    )
+    );
   }
 
   ngAfterViewInit() {
@@ -58,7 +61,8 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
       () => {
         console.log(this.formCustormer.value as Custormer)
         this.isLoadingSubject.next(false);
-        this.snackbarService.openSnackBarSuccess("Fournisseur Ajoute", "Fermer")
+        this.snackbarService.openSnackBarSuccess("Nouveau Client Ajoute", "Fermer");
+        this.onGetCustomer();
       },
       () => {
         this.isLoadingSubject.next(false);
@@ -68,23 +72,25 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   onDelete(id: number) {
-    this.dialogService.message("Confirmez La Suppression De Ce Produit ?")
+    this.dialogService.message("Confirmez La Suppression De Ce Client ?")
     this.dialogService.checkDiscaseValue().subscribe(
       (isAllow) => {
         if (!isAllow) {
           return;
         }
-        this.deleteProductById(id);
+        this.deleteCustumerById(id);
         this.dialogService.updateValue();
+       
       }
     )
   }
 
-  private deleteProductById(id: number) {
+  private deleteCustumerById(id: number) {
     this.custormeService.deleteCustorme(id).
       subscribe(
         () => {
-          this.snackbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer")
+          this.snackbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer");
+          this.onGetCustomer();
         },
         () => {
           this.snackbarService.openSnackBarError("Erreure De Supprission", "Fermer");

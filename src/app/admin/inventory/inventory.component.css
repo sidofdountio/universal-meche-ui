@@ -6,16 +6,7 @@ table {
     width: 100%;
 }
 
-.badge-danger {
-    font-weight: 500;
-    color: #f44336;
-}
 
-.badge-success {
-    font-weight: 500;
-    color: green;
-    font-weight: 800;
-}
 
 .spinner {
     position: absolute;

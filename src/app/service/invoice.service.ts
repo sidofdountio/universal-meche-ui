@@ -2,50 +2,57 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Invoice } from '../model/invoice';
 import { Observable } from 'rxjs';
-import { tap,catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { Sale } from '../model/sale';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceService {
 
-  readonly URL = "invoice";
+  readonly URL = environment.URL;
   constructor(private http: HttpClient) { }
 
   getInvoices(): Observable<Invoice[]> {
-    return this.http.get<Invoice[]>(`${this.URL}/invoices`).pipe(
+    return this.http.get<Invoice[]>(`${this.URL}/invoice`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
-  getInvoice(id:number): Observable<Invoice> {
-    return this.http.get<Invoice>(`${this.URL}/${id}`).pipe(
-      tap(console.log),
-      catchError(this.handlerError)
-    )
-  }
 
-  getInvoiceBySale(sale:Sale): Observable<Invoice> {
-    return this.http.get<Invoice>(`${this.URL}/sale/${sale}`).pipe(
-      tap(console.log),
-      catchError(this.handlerError)
-    )
-  }
+
+
 
   getInvoiceByInvoiceNumber(invoiceNumber: string): Observable<Invoice[]> {
-    return this.http.get<Invoice[]>(`${this.URL}/invoices/${invoiceNumber}`).pipe(
+    return this.http.get<Invoice[]>(`${this.URL}/invoice/${invoiceNumber}`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
-  saveInvoice(invoice:Invoice[]): Observable<Invoice[]> {
-    return this.http.post<Invoice[]>(`${this.URL}/save`, invoice).pipe(
+  saveInvoice(invoice: Invoice[]): Observable<Invoice[]> {
+    return this.http.post<Invoice[]>(`${this.URL}/invoice`, invoice).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
+  }
+
+  getInvoiceByMonthAndYear(month: any, year: any): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.URL}/invoice/month/${month}/${year}`)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
+  }
+
+  getInvoiceByDayAndMoth(day: number, month: string): Observable<Sale[]> {
+    return this.http.get<Sale[]>(`${this.URL}/invoice/${day}/${month}`)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
   }
 
   generateInvoiceId(prefix: string): string {
@@ -54,7 +61,7 @@ export class InvoiceService {
     return invoiceId;
   }
 
-  handlerError(error:HttpErrorResponse):Observable<never> {
+  handlerError(error: HttpErrorResponse): Observable<never> {
     throw new Error(`An error occured - Error code :${error.status}`);
-  }  
+  }
 }

@@ -5,6 +5,7 @@ import { Product } from 'src/app/model/product';
 import { Custormer } from 'src/app/model/custorme';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { SaleRequest } from 'src/app/model/sale-request';
+import { CustormeService } from 'src/app/service/custorme.service';
 
 @Component({
   selector: 'app-add-sale',
@@ -17,10 +18,7 @@ export class AddSaleComponent implements OnInit {
   custormeType: string = "";
   custormeTypeSelected: string = "";
   customerTypes: string[] = ['Client', 'Grosiste'];
-  customers: Custormer[] = [{
-    id: 2,
-    name: 'test'
-  }];
+  customers: Custormer[] = [];
 
   saleRequest: SaleRequest = {
     quantity: undefined,
@@ -28,6 +26,7 @@ export class AddSaleComponent implements OnInit {
     custormeType: undefined,
     product: {
       id: 1,
+      length: 0,
       name: '',
       price: 0,
       salePrice: 0,
@@ -35,8 +34,10 @@ export class AddSaleComponent implements OnInit {
       color: '',
       description: '',
       productCategory: {
+        id: undefined,
         name: '',
         categoryType: {
+          id: undefined,
           name: ''
         }
       }
@@ -52,7 +53,7 @@ export class AddSaleComponent implements OnInit {
     quantity: [, [Validators.required]],
     custormeType: ['', [Validators.required]],
     formCustomer: this.fb.group({
-      id: ['']
+      id: ['',[Validators.required]]
     }),
     formProduct: this.fb.group({
       id: [this.data.id]
@@ -60,10 +61,16 @@ export class AddSaleComponent implements OnInit {
   });
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddSaleComponent>,
-    private fb: FormBuilder, private snacbarService: SnabarService) {
+    private fb: FormBuilder, private snacbarService: SnabarService,
+    private customerService:CustormeService) {
   }
 
   ngOnInit(): void {
+    this.customerService.getCustormes().subscribe(
+      (response)=>{
+        this.customers = response;
+      }
+    )
   }
 
   filterCustomerType(typeSelected: string) {
@@ -89,7 +96,7 @@ export class AddSaleComponent implements OnInit {
         quantity: [, [Validators.required]],
         custormeType: ['Client'],
         formCustomer: this.fb.group({
-          id: ['']
+          id: ["null"]
         }),
         formProduct: this.fb.group({
           id: [this.data.id]
@@ -100,21 +107,24 @@ export class AddSaleComponent implements OnInit {
   }
 
   onSaveSaleProduct() {
-    this.saleRequest = {
+    let saleRequest : SaleRequest = {
       quantity: this.formSale.value.quantity,
       price: this.formSale.value.price,
       custormeType: this.formSale.value.custormeType,
       product: {
         id: this.data.id,
-        name: '',
+        name: this.data.name,
+        length: 0,
         price: 0,
         salePrice: 0,
         code: '',
         color: '',
         description: '',
         productCategory: {
+          id:undefined,
           name: '',
           categoryType: {
+            id: undefined,
             name: ''
           }
         }
@@ -124,7 +134,7 @@ export class AddSaleComponent implements OnInit {
         name: ''
       }
     }
-    this.dialogRef.close(this.saleRequest);
+    this.dialogRef.close(saleRequest);
   }
 
   onClose() {

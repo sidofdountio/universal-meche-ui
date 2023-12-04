@@ -4,31 +4,32 @@ import { Observable } from 'rxjs';
 import { tap,catchError } from 'rxjs/operators';
 import { Charge } from '../model/charge';
 import { AnotherCharge } from '../model/another-charge';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChargeService {
 
-  readonly URL = "charge";
+  readonly URL = environment.URL;
   constructor(private http: HttpClient) { }
 
   getCharges(): Observable<Charge[]> {
-    return this.http.get<Charge[]>(`${this.URL}/charges`).pipe(
+    return this.http.get<Charge[]>(`${this.URL}/charge`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
   getCharge(id:number): Observable<Charge> {
-    return this.http.get<Charge>(`${this.URL}/${id}`).pipe(
+    return this.http.get<Charge>(`${this.URL}/charge/${id}`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
   saveCharge(charge:Charge): Observable<Charge> {
-    return this.http.put<Charge>(`${this.URL}/edit`,charge).pipe(
+    return this.http.put<Charge>(`${this.URL}/charge`,charge).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

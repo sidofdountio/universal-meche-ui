@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource } from '@angular/material/table';
+
 import { Product } from 'src/app/model/product';
 import { DialogService } from 'src/app/service/dialog.service';
 import { ProductService } from 'src/app/service/product.service';
@@ -11,6 +11,9 @@ import { AddPurchaseComponent } from './add-purchase/add-purchase.component';
 import { PurcharseService } from 'src/app/service/purcharse.service';
 import { Purchase } from 'src/app/model/purchase';
 import { EditPurchaseComponent } from './edit-purchase/edit-purchase.component';
+import { DataState } from 'src/app/model/enume/data-state';
+import { BehaviorSubject } from 'rxjs';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-purchase',
@@ -18,119 +21,73 @@ import { EditPurchaseComponent } from './edit-purchase/edit-purchase.component';
   styleUrls: ['./purchase.component.css']
 })
 export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  displayedColumns: string[] = ['name', 'price', 'color', 'category', 'action'];
-  productDataSource = new MatTableDataSource<Product>([]);
-  @ViewChild(MatPaginator) productPaginator!: MatPaginator;
-  @ViewChild(MatSort) producSort!: MatSort;
-  displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
-  purchaseDataSource = new MatTableDataSource<Purchase>([]);
-  @ViewChild(MatPaginator) purchasePaginator!: MatPaginator;
-  @ViewChild(MatSort) purchaseSort!: MatSort;
-  purchases: Purchase[] = [{
-    price: 0,
-    salePrice: 1,
-    quantity: 1,
-    amount: 0,
-    purchaseAt: '12/2/23',
-    supplier: {
-      name: 'test',
-      address: '',
-      phone: ''
-    },
-    product: {
-      id: 1,
-      name: 'test',
-      price: 0,
-      salePrice: 12,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: 'tet',
-        categoryType: {
-          name: ''
-        }
-      }
-    }
-  }];
-
-
-  products: Product[] = [{
-    id: 1,
-    name: 'Queen',
-    price: 10,
-    salePrice: 12,
-    code: 'QU-234',
-    color: 'BLACK',
-    description: 'decription',
-    productCategory: {
-      name: 'synthétiques',
-      categoryType: {
-        name: 'Kanekalon'
-      }
-    }
-  }];
-
-  product: Product = {
-    id: 3,
-    name: 'demo',
-    price: 15,
-    salePrice: 20,
-    code: '',
-    color: '',
-    length: 10,
-    description: '',
-    productCategory: {
-      name: 'Syntehetique',
-      categoryType: {
-        name: ''
-      }
-    }
-  };
-  purchaseToEdite: Purchase = {
-    price: 1,
-    salePrice: 2,
-    quantity: 2,
-    amount: 0,
-    purchaseAt: '',
-    supplier: {
-      name: '',
-      address: '',
-      phone: ''
-    },
-    product: {
-      id: 1,
-      name: '',
-      price: 0,
-      salePrice: 1,
-      code: '',
-      color: '',
-      description: '',
-      productCategory: {
-        name: '',
-        categoryType: {
-          name: ''
-        }
-      }
-    }
-  };
+  appState = new BehaviorSubject<DataState>(DataState.LOADING_STATE);
+  appState$ = this.appState.asObservable();
+  readonly DataState = DataState;
+  state: DataState = DataState.LOADING_STATE;
+  purchases:Purchase[]=[];
+  // displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
+  displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
+  dataSource = new  MatTableDataSource<Purchase>(this.purchases);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   favoriteSeason: string = "Moi";
-  purchaseBy:string = "Moi";
+  purchaseBy: string = "Moi";
   filtre: string[] = ['Tout', 'Moi'];
+  products: Product[] = [];
 
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
     private purchaseService: PurcharseService) {
 
   }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+ 
   ngOnInit(): void {
-    this.productDataSource.data = this.products;
-    this.purchaseDataSource.data = this.purchases;
-   console.log( this.purchaseBy);
-    
+    this.onGetProduct();
+    this.onGetPurchase();
+
+  }
+
+  private onGetPurchase() {
+    this.appState.next(DataState.LOADING_STATE);
+    this.purchaseService.getPurchase().subscribe(
+      (response) => {
+        this.dataSource.data =response;
+        this.purchases = response;
+        this.snacbarService.openSnackBarSuccess("Commande Afichee", "Fermer");
+        this.appState.next(DataState.LOADED_STATE);
+      },
+      () => {
+        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
+        this.appState.next(DataState.ERROR_STATE);
+      });
+  }
+
+  private onGetProduct() {
+    this.state = DataState.LOADING_STATE;
+    this.productService.getProducts().subscribe(
+      (response) => {
+        this.products = response;
+        this.snacbarService.openSnackBar("Produit Affiche", "Fermer");
+        this.state = DataState.LOADED_STATE;
+      },
+      () => {
+        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
+        this.state = DataState.ERROR_STATE;
+      });
   }
 
   filterByMonthOrAll(filter: string) {
@@ -138,33 +95,28 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log("Fitre %s", this.purchaseBy);
   }
 
-  ngAfterViewInit() {
-    this.productDataSource.paginator = this.productPaginator;
-    this.productDataSource.sort = this.producSort;
-    this.purchaseDataSource.paginator = this.purchasePaginator;
-    this.purchaseDataSource.sort = this.purchaseSort;
-  }
 
-  buyNewProduct(productId: number) {
+  buyNewProduct(product: Product) {
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
     configDialog.disableClose = true;
-    configDialog.data = this.product;
+    configDialog.data = product;
     const dialogRef = this.dialog.open(AddPurchaseComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
-        (productToAdd) => {
-          console.log(productToAdd);
-          // this.addProduct(productToAdd);
+        (response) => {
+          console.log(response);
+          this.purchaseNewProduct(response);
         });
   }
 
   purchaseNewProduct(purchaseToAdd: Purchase) {
     this.purchaseService.addPurchase(purchaseToAdd)
       .subscribe(
-        (response) => {
-          console.log()
+        () => {
+          
           this.snacbarService.openSnackBarSuccess("Achat Enregistrer", "Fermer");
+          this.onGetPurchase();
         },
         () => {
           this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
@@ -172,25 +124,24 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  onEditePurchase(id: number) {
+  onEditePurchase(puchaseToUpdate: Purchase) {
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
     configDialog.disableClose = true;
-
-    configDialog.data = this.purchaseToEdite;
+    configDialog.data = puchaseToUpdate;
     const dialogRef = this.dialog.open(EditPurchaseComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
         (response) => {
-          console.log(response);
-          // this.addProduct(productToAdd);
+          this.editePurchase(response);
         });
   }
 
-  edite(purchase: Purchase) {
+  editePurchase(purchase: Purchase) {
     this.purchaseService.editePurchase(purchase).subscribe(
       () => {
         this.snacbarService.openSnackBarSuccess("Achat Modifier", "Fermer");
+        this.onGetPurchase();
       },
       () => {
         this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
@@ -215,7 +166,8 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     this.purchaseService.delete(id).
       subscribe(
         () => {
-          this.snacbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer")
+          this.snacbarService.openSnackBarSuccess("Suppression Effectuer Avec Success", "Fermer");
+          this.onGetPurchase();
         },
         () => {
           this.snacbarService.openSnackBarError("Erreure De Supprission", "Fermer");

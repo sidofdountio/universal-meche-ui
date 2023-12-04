@@ -4,13 +4,17 @@ import { Product } from "./product";
 import { Transaction } from "./transaction";
 
 export interface Sale {
-    id:number;
+    id:number | any;
     product:Product;
-    customer:Custormer;
-    quantity:number;
-    amount:number;
-    price:number;
+    customer?:Custormer;
+    quantity:number | any;
+    amount:number | any;
+    price:number | any;
     createAt:string| Date | number;
-    saleStatus:SaleStatus;
-    trasaction?:Transaction;
+    status:SaleStatus;
+    trasaction:Transaction;
+    day:number;
+    month:string | any;
+    year:string | any;
+    paymentType?:string;
 }

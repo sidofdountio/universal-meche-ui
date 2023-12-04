@@ -6,35 +6,12 @@ table {
   width: 100%;
 }
 
-.badge-success {
-  color: white;
-  /* background-color: rgb(13, 102, 32); */
-  background-color: #238636;
-  /* background-color: #2a963e; */
-  text-align: center;
-  border: 1px solid #238636;
-  font-weight: bold;
-  padding: 5px;
-  border-radius: 2rem;
-}
-
 .excel {
   color: #209e62;
   border: 1px solid #209e62;
 }
 
-.badge-danger {
-  color: white;
-  /* background-color: #8957e5; 
-  background-color: #d29922;
-  */
-  background-color: #f44336;
-  text-align: center;
-  border: 1px solid #f44336;
-  font-weight: bold;
-  padding: 5px;
-  border-radius: 2rem;
-}
+
 
 .spinner {
   position: absolute;
@@ -54,19 +31,4 @@ ul {
 ul li {
   display: inline-flex;
   margin: 4px;
-}
-
-.spinner {
-  position: absolute;
-  top: 15rem;
-  left: 30rem;
-}
-
-.error {
-  background-color: #f44336;
-  color: #ffffff;
-  padding: 4px 8px;
-  font-weight: 600;
-  border-radius: 1px;
-  font-size: 18px;
 }

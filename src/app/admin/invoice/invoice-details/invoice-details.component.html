@@ -1,8 +1,10 @@
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="grid-container">
-    <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
-            matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Details De La Facture</h1>
+    <h1 class="mat-h1">
+        <button routerLink="/admin/invoices" routerLinkActive="active" mat-icon-button matTooltip="Retour">
+            <mat-icon>arrow_back</mat-icon></button>
+        Details De La Facture
+    </h1>
     <ng-container *ngIf="state === DataState.LOADING_STATE">
         <div class="row">
             <div class="col-md-12">
@@ -28,15 +30,16 @@
         <div class="container">
             <div class="col-md-12">
                 <div class="invoice-company text-inverse f-w-600  mb-5">
-                    <span class="pull-right hidden-print">
-                        <button mat-icon-button (click)="exportToPDF(invoiceNumer)"> <mat-icon>print</mat-icon></button>
+                    <span class="pull-right hidden-print mt-2">
+                        <button mat-icon-button  matTooltip="Imprimer Cette Facture" (click)="exportToPDF(invoiceNumer)"> <mat-icon>print</mat-icon></button>
                     </span>
                 </div>
                 <div id="invoice-contents" class="invoice">
                     <!-- begin invoice-company -->
                     <div class="invoice-company text-inverse f-w-600  mb-5">
-
-                        LYFECOMPANY, Inc
+                        <div class="logo">
+                            <img src="/assets/logo-universal.jpeg" alt="UNIVERSAL MECHE">
+                        </div>
                     </div>
                     <!-- end invoice-company -->
                     <!-- begin invoice-header -->
@@ -44,29 +47,28 @@
                         <div class="invoice-from">
                             <small>from</small>
                             <address class="m-t-5 m-b-5">
-                                <strong class="text-inverse">LYFECOMPANY, Inc.</strong><br>
-                                Street Address<br>
-                                City, Yaounde, simbock<br>
-                                Phone: (+237) 671309015<br>
-                                Fax: (123) 456-7890
+                                <strong class="text-inverse">UNIVERSAL MECHE.</strong><br>
+                               <br>
+                                Ville, CDI MEFOU ET AFAMBA <br>
+                                Tele: (+237) 671309015<br>
+                                Numéro D'indentifiant Unique Des Impôt(NIU): P068518557761Y
                             </address>
                         </div>
                         <div class="invoice-to">
                             <small>to</small>
                             <address class="m-t-5 m-b-5">
                                 <strong class="text-inverse">{{ customerEmail }}</strong><br>
-                                Street {{ customerAddress }}<br>
-                                City, <br>
-                                Phone: (237) {{ customerPhone }}<br>
-                                Fax:
+                               <br>
+                                Ville, {{ customerAddress }}<br>
+                                Tele: (+237) {{ customerPhone }}<br>
                             </address>
                         </div>
                         <div class="invoice-date">
-                            <small>Invoice / {{ invoiceDate | date:'short' }}</small>
-                            <div class="date text-inverse m-t-5">date</div>
+                            <small>Facture </small>
+                            <div class="date text-inverse m-t-5">{{ invoiceDate | date:'short' }}</div>
                             <div class="invoice-detail">
-                                {{ invoiceNumer }}<br>
-                                Services Product
+                                Numero De La Facture {{ invoiceNumer }}<br>
+
                             </div>
                         </div>
                     </div>
@@ -78,11 +80,11 @@
                             <table class="table table-invoice">
                                 <thead>
                                     <tr>
-                                        <th class="text-center" width="10%">INVOICE NUMBER</th>
-                                        <th class="text-center" width="10%">PRODUCT NAME</th>
-                                        <th class="text-center" width="10%">QUANTITY</th>
-                                        <th class="text-center" width="10%">PRICE</th>
-                                        <th class="text-right" width="20%">LINE TOTAL</th>
+                                        <th class="text-center text-uppercase" width="10%">NUMERO DE LA FACTURE</th>
+                                        <th class="text-center text-uppercase" width="10%">Nom du produit</th>
+                                        <th class="text-center text-uppercase" width="10%">quantite</th>
+                                        <th class="text-center text-uppercase" width="10%">Prix</th>
+                                        <th class="text-right text-uppercase" width="20%">TOTAL DE LIGNE</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let invoiceSale of invoices$ | async ">
@@ -93,9 +95,9 @@
                                                 {{ invoiceSale.sale.product.name| uppercase }}</span><br>
                                         </td>
                                         <td class="text-center">{{ invoiceSale?.sale?.quantity }}</td>
-                                        <td class="text-center">{{ invoiceSale?.sale?.price | currency
+                                        <td class="text-center">{{ invoiceSale?.sale?.price| CustomCurrency
                                             }}</td>
-                                        <td class="text-right">{{ invoiceSale.sale.amount | currency }}</td>
+                                        <td class="text-right">{{ invoiceSale.sale.amount | CustomCurrency }}</td>
                                     </tr>
 
 
@@ -108,20 +110,20 @@
                             <div class="invoice-price-left">
                                 <div class="invoice-price-row">
                                     <div class="sub-price">
-                                        <small>SUBTOTAL</small>
-                                        <span class="text-inverse">{{ invoiceSubTotal | currency }}</span>
+                                        <small>SOUS TOTAL</small>
+                                        <span class="text-inverse">{{ invoiceSubTotal | CustomCurrency }}</span>
                                     </div>
                                     <div class="sub-price">
                                         <i class="fa fa-plus text-muted"></i>
                                     </div>
                                     <div class="sub-price">
-                                        <small>PAYPAL FEE (0.0%)</small>
-                                        <span class="text-inverse">{{ invoiceTax | currency }}</span>
+                                        <small>OM,MTN MOBIL FEE (0.0%)</small>
+                                        <span class="text-inverse">{{ invoiceTax | CustomCurrency }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="invoice-price-right">
-                                <small>TOTAL</small> <span class="fw-bold">{{ invoiceTotal | currency }}</span>
+                                <small>TOTAL</small> <span class="fw-bold">{{ invoiceTotal | CustomCurrency }}</span>
                             </div>
                         </div>
                         <!-- end invoice-price -->
@@ -129,22 +131,20 @@
                     <!-- end invoice-content -->
                     <!-- begin invoice-note -->
                     <div class="invoice-note">
-                        * Make all cheques payable to LYFECOMPANY<br>
-                        * Payment is due within 30 days<br>
-                        * If you have any questions concerning this invoice, contact lyfecompany@gmail.com
+                        * Si vous avez des questions concernant cette facture, contactez universalemeche@gmail.com
                     </div>
                     <!-- end invoice-note -->
                     <!-- begin invoice-footer -->
                     <div class="invoice-footer">
                         <p class="text-center m-b-5 f-w-600">
-                            THANK YOU FOR YOUR BUSINESS
+                            MERCI POUR VOS ACHATS
                         </p>
                         <p class="text-center">
-                            <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> lyfecomany.com</span>
+                            <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> universalmeche.com</span>
                             <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> T:+237
-                                671309015</span>
+                                +237 6 96 03 71 07</span>
                             <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i>
-                                lyfecomany@gmail.com</span>
+                                universalemeche@gmail.com</span>
                         </p>
                     </div>
                     <!-- end invoice-footer -->

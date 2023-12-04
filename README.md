@@ -8,5 +8,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 ## UNIVERSALE MECHE
 <p>Store management</p>
+<p>The Main Goal of the Application For Manage A Customer Store <br>
 
+</p>
 

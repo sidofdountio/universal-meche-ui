@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Employee } from 'src/app/model/employee';
 import { DialogService } from 'src/app/service/dialog.service';
@@ -12,18 +12,9 @@ import { UpdateEmployeeComponent } from '../update-employee/update-employee.comp
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.css']
 })
-export class EmployeeComponent {
+export class EmployeeComponent implements OnInit{
 
-  employees: Employee[] = [{
-    id: 1,
-    firstName: "Man",
-    lastName: "Nguesson",
-    phone: 2939339303,
-    address: "Soa",
-    birtDay: '10/11/2023',
-    sexe: 'M',
-    salary: 150
-  }];
+  employees: Employee[] = [];
   employee: Employee = {
     id: 0,
     firstName: "",
@@ -42,13 +33,16 @@ export class EmployeeComponent {
     private employeeService: EmployeeService) { }
 
 
-  onGetEmployee() {
-    this.employeeService.getEmployees().subscribe(
+    ngOnInit(): void {
+      this.onGetEmployees();
+    }
+  onGetEmployees() {
+    this.employeeService.employees().subscribe(
       (response: Employee[]) => {
         this.employees = response;
-        this.snackBarService.openSnackBar("Employee Loaded", "close");
+        this.snackBarService.openSnackBarSuccess("Liste Des Employes", "Fermer");
       }, () => {
-        this.snackBarService.openSnackBar("Error Due Loaded Employee", "close");
+        this.snackBarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
       }
     )
   }
@@ -73,6 +67,7 @@ export class EmployeeComponent {
   saveEmployee(employee: Employee) {
     this.employeeService.saveEmployee(employee).subscribe(
       () => {
+        this.onGetEmployees();
         this.snackBarService.openSnackBarSuccess("Le Nouveau Employee A ete Ajoute", "Fermer");
       },
       () => {

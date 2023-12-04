@@ -9,7 +9,6 @@ import { DialogData } from 'src/app/model/dialog-data';
 })
 export class DialogMessageComponent {
 
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,private dialogRef: MatDialogRef<DialogMessageComponent>) { }
 
   save(): void {

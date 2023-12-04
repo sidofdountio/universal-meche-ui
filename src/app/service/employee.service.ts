@@ -3,6 +3,7 @@ import { Employee } from '../model/employee';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +11,20 @@ import { tap, catchError } from 'rxjs/operators';
 export class EmployeeService {
 
 
-  readonly URL = "employee";
+  readonly URL = environment.URL;
   constructor(private http: HttpClient) { }
 
-  getEmployees(): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${this.URL}`).pipe(
-      tap(console.log),
-      catchError(this.handlerError)
-    )
+
+  employees(): Observable<Employee[]> {
+    return this.http.get<Employee[]>(`${this.URL}/employee`)
+      .pipe(
+        tap(console.log),
+        catchError(this.handlerError)
+      )
   }
 
   getEmployee(id: number): Observable<Employee> {
-    return this.http.get<Employee>(`${this.URL}/${id}`).pipe(
+    return this.http.get<Employee>(`${this.URL}/employee/${id}`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
@@ -29,21 +32,21 @@ export class EmployeeService {
 
 
   saveEmployee(employee: Employee): Observable<Employee> {
-    return this.http.post<Employee>(`${this.URL}/save`, employee).pipe(
+    return this.http.post<Employee>(`${this.URL}/employee`, employee).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
   editEmployee(employee: Employee): Observable<Employee> {
-    return this.http.put<Employee>(`${this.URL}/save`, employee).pipe(
+    return this.http.put<Employee>(`${this.URL}/employee`, employee).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
   deleteEmployee(id: number): Observable<void> {
-    return this.http.delete<Employee>(`${this.URL}/delete/${id}`).pipe(
+    return this.http.delete<Employee>(`${this.URL}/employee/${id}`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

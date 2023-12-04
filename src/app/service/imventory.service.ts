@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Inventory } from '../model/inventory';
 import { Observable } from 'rxjs';
 import { tap,catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.development';
 
 
 @Injectable({
@@ -10,11 +11,11 @@ import { tap,catchError } from 'rxjs/operators';
 })
 export class InventoryService {
 
-  readonly URL = "invoice";
+  readonly URL = environment.URL;
   constructor(private http: HttpClient) { }
 
   getInventories(): Observable<Inventory[]> {
-    return this.http.get<Inventory[]>(`${this.URL}/invoices`).pipe(
+    return this.http.get<Inventory[]>(`${this.URL}/inventory`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

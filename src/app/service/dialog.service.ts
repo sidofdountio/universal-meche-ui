@@ -8,7 +8,7 @@ import { DialogMessageComponent } from '../message/dialog-message/dialog-message
   providedIn: 'root'
 })
 export class DialogService {
-
+  allow: boolean = false;
   private data: DialogData = {
     message: '',
     discase: false
@@ -32,19 +32,21 @@ export class DialogService {
 
     // Get output after it's close
     dialogRef.afterClosed().subscribe(
-      (response:DialogData)=>{
+      (response: DialogData) => {
+        this.allow = response.discase;
         this.discase.next(response.discase);
       }
     );
   }
 
-// Observable That chech the values of this Discase: true | false
-// Then Allown process if it's true and cancel it if it' False.
+  // Observable That chech the values of this Discase: true | false
+  // Then Allown process if it's true and cancel it if it' False.
   checkDiscaseValue(): Observable<boolean> {
     return this.discase.asObservable();
-   }
-  
-   updateValue() {
+  }
+
+  updateValue() {
     this.discase.next(false);
+    this.allow =false;
   }
 }

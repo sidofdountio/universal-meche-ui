@@ -13,32 +13,24 @@ import { EmployeeService } from 'src/app/service/employee.service';
   templateUrl: './charge.component.html',
   styleUrls: ['./charge.component.css']
 })
-export class ChargeComponent implements OnInit, AfterViewInit {
+export class ChargeComponent implements OnInit {
   public isLoadingSubject = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject.asObservable();
-  charges: Charge[] = [{
-    id: 0,
-    totalSalaire: 0,
-    impot: 0,
-    loyer: 0,
-    ration: 0,
-    transport: 0,
-    electriciter: 0,
-    autreCharge: {
-      id: 0,
-      raison: 'raison',
-      amount: 0
-    }
-  }];
+  charge: Charge[]=[];
 
   constructor(private fb: FormBuilder, private chargeService: ChargeService,
     private dialog: MatDialog, private snackBarService: SnabarService, private employeeService: EmployeeService) { }
 
-  ngAfterViewInit(): void {
-
-  }
   ngOnInit(): void {
+    this.getCharges();
+  }
 
+  private getCharges() {
+    this.chargeService.getCharges().subscribe(
+      (response) => {
+        this.charge = response;
+      }
+    );
   }
 
   updateCharge(charge: Charge) {
@@ -49,9 +41,10 @@ export class ChargeComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(UpdateChargeComponent, configDialog);
     dialogRef.afterClosed()
       .subscribe(
-        (charge) => {
-          console.log(charge);
-          this.saveChargeChange(charge);
+        (response) => {
+          console.log("toupdate")
+          console.log(response);
+          this.saveChargeChange(response);
         },
         () => {
           console.log("Error due save product");
@@ -62,6 +55,7 @@ export class ChargeComponent implements OnInit, AfterViewInit {
     this.chargeService.saveCharge(charge).subscribe(
       () => {
         this.snackBarService.openSnackBarSuccess("Les Charges Ont Ete Modifiee Avec Success.", "Fermer");
+        this.getCharges();
       },
       () => {
         this.snackBarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
