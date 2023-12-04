@@ -39,7 +39,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
   spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
-  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'amount', 'status', 'action'];
+  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -260,7 +260,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         () => {
           this.isLoadingSubject.next(false);
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+          this.snacbarService.openSnackBarError("Une Erreure Est Survenue. Rassurez vous d'avoir achete Ce Produit ou Qu'il soit Encore Disponoble en Stock ", "Fermer");
         }
       );
   }

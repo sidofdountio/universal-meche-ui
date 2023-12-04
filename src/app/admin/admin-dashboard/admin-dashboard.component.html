@@ -1,5 +1,5 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
+  <h1 class="mat-h1">Dashboard   {{ currentDate | date:'short'}} </h1>
  
   <!--  Global stats-->
   <div class="row mb-4">
@@ -8,8 +8,8 @@
         <div class="card">
           <div class="card-body">
             <h6 class="m-b-20">FACTURE TOTAL</h6>
-            <h2 class="text-end t"><mat-icon class="icon f-left">receipt_long</mat-icon><span>486</span></h2>
-            <p class="m-b-0">FACTURE TOTAL JOUR<span class="f-right">351</span></p>
+            <h2 class="text-end t"><mat-icon class="icon f-left">receipt_long</mat-icon><span>0</span></h2>
+            <p class="m-b-0">FACTURE TOTAL JOUR<span class="f-right">0</span></p>
           </div>
         </div>
       </div>
@@ -18,8 +18,8 @@
       <div class="card">
         <div class="card-body">
           <h6 class="m-b-20">ACHAT TOTAL</h6>
-          <h2 class="text-end"><mat-icon class="icon f-left">shopping_cart</mat-icon><span>486</span></h2>
-          <p class="m-b-0">ACHAT TOTAL JOUR<span class="f-right">351</span></p>
+          <h2 class="text-end"><mat-icon class="icon f-left">shopping_cart</mat-icon><span>{{ purchaseAmountSize}}</span></h2>
+          <p class="m-b-0">ACHAT TOTAL JOUR<span class="f-right">{{  purchaseAmount }}</span></p>
         </div>
       </div>
     </div>
@@ -31,8 +31,8 @@
           <h2 class="text-end"><mat-icon class="icon f-left">shopping_cart_checkout<span
                 class="material-symbols-outlined">
                 order_approve
-              </span></mat-icon><span>486</span></h2>
-          <p class="m-b-0">COMMANDE TOTAL JOUR<span class="f-right">351</span></p>
+              </span></mat-icon><span>0</span></h2>
+          <p class="m-b-0">COMMANDE TOTAL JOUR<span class="f-right">0</span></p>
         </div>
       </div>
     </div>
@@ -41,8 +41,8 @@
       <div class="card">
         <div class="card-body">
           <h6 class="m-b-20">VENTE TOTAL</h6>
-          <h2 class="text-end"><mat-icon class="icon f-left">sell</mat-icon><span>486</span></h2>
-          <p class="m-b-0">VENTE TOTAL JOUR<span class="f-right">351</span></p>
+          <h2 class="text-end"><mat-icon class="icon f-left">sell</mat-icon><span>{{ totalAmountSalePerDay }}</span></h2>
+          <p class="m-b-0">VENTE TOTAL JOUR<span class="f-right">{{ totalSalePerDay }}</span></p>
         </div>
       </div>
     </div>
@@ -114,31 +114,31 @@
           <!-- Montant des vente -->
           <div class="example-section">
             <p class="text-end "><small class="icon f-left">Montant Vendu</small><span
-                [ngClass]="sellAmount > 0 ? 'number' : 'negative' ">{{ sellAmount | currency }}</span></p>
+                [ngClass]="totalAmountSalePerDay > 0 ? 'number' : 'negative' ">{{ totalAmountSalePerDay | CustomCurrency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="sellAmount"></mat-progress-bar>
+              [value]="totalAmountSalePerDay"></mat-progress-bar>
           </div>
           <!-- Montant des achats -->
           <div class="example-section">
             <p class="text-end "><small class="icon f-left">Montant Des Achats</small><span
-                [ngClass]="purchaseAmount > 0 ? 'number' : 'negative' ">{{ purchaseAmount | currency }}</span></p>
+                [ngClass]="purchaseAmount > 0 ? 'number' : 'negative' ">{{ purchaseAmount | CustomCurrency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
               [value]="purchaseAmount"></mat-progress-bar>
           </div>
           <!-- Charge divers -->
-          <div class="example-section">
+          <!-- <div class="example-section">
             <p class="text-end "><small class="icon f-left">Montant Des Charges Divers</small><span
                 [ngClass]="miscellaneousLoad > 0 ? 'number' : 'negative' ">{{ miscellaneousLoad | currency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
               [value]="miscellaneousLoad"></mat-progress-bar>
-          </div>
+          </div> -->
           <!-- Gain possible -->
-          <div class="example-section">
+          <!-- <div class="example-section">
             <p class="text-end "><small class="icon f-left">Gain Possible</small><span
                 [ngClass]="receiveAmount > 0 ? 'number' : 'negative' ">{{ receiveAmount | currency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
               [value]="receiveAmount"></mat-progress-bar>
-          </div>
+          </div> -->
           <!--  -->
           <div class="example-section">
             <p class="text-end "><small class="icon f-left">Facture Annuler</small><span

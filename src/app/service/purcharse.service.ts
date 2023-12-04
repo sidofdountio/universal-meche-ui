@@ -15,7 +15,14 @@ export class PurcharseService {
   constructor(private http: HttpClient) { }
 
   getPurchase(): Observable<Purchase[]> {
-    return this.http.get<Purchase[]>(`${this.URL}/purchase`).pipe(
+    return this.http.get<Purchase[]> (`${this.URL}/purchase`).pipe(
+      tap(console.log),
+      catchError(this.handlerError)
+    )
+  }
+
+  getPurchasePerMonth(): Observable<Purchase[]> {
+    return this.http.get<Purchase[]> (`${this.URL}/purchase/month`).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

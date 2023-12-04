@@ -14,6 +14,7 @@ import { CustormeService } from 'src/app/service/custorme.service';
 })
 export class AddSaleComponent implements OnInit {
 
+  customerName: string = "";
   // Display sale by filter
   custormeType: string = "";
   custormeTypeSelected: string = "";
@@ -53,7 +54,7 @@ export class AddSaleComponent implements OnInit {
     quantity: [, [Validators.required]],
     custormeType: ['', [Validators.required]],
     formCustomer: this.fb.group({
-      id: ['',[Validators.required]]
+      id: ['', [Validators.required]]
     }),
     formProduct: this.fb.group({
       id: [this.data.id]
@@ -62,13 +63,17 @@ export class AddSaleComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddSaleComponent>,
     private fb: FormBuilder, private snacbarService: SnabarService,
-    private customerService:CustormeService) {
+    private customerService: CustormeService) {
   }
 
   ngOnInit(): void {
     this.customerService.getCustormes().subscribe(
-      (response)=>{
+      (response) => {
         this.customers = response;
+        for (let item of response) {
+          if (item.id === this.formSale.value.formCustomer?.id)
+            this.customerName = item.name as string;
+        }
       }
     )
   }
@@ -79,7 +84,7 @@ export class AddSaleComponent implements OnInit {
     this.snacbarService.openSnackBar(`Vous Avez Choisir  ${this.custormeTypeSelected}`, "Fermer");
     if (typeSelected === "Grosiste") {
       this.formSale = this.fb.group({
-        price: [this.data.price],
+        price: [this.data.salePrice],
         quantity: [, [Validators.required]],
         custormeType: ['Grosiste'],
         formCustomer: this.fb.group({
@@ -92,11 +97,11 @@ export class AddSaleComponent implements OnInit {
     }
     else {
       this.formSale = this.fb.group({
-        price: [this.data.price],
+        price: [this.data.salePrice],
         quantity: [, [Validators.required]],
         custormeType: ['Client'],
         formCustomer: this.fb.group({
-          id: ["null"]
+          id: ['', [Validators.required]]
         }),
         formProduct: this.fb.group({
           id: [this.data.id]
@@ -107,7 +112,7 @@ export class AddSaleComponent implements OnInit {
   }
 
   onSaveSaleProduct() {
-    let saleRequest : SaleRequest = {
+    let saleRequest: SaleRequest = {
       quantity: this.formSale.value.quantity,
       price: this.formSale.value.price,
       custormeType: this.formSale.value.custormeType,
@@ -115,17 +120,17 @@ export class AddSaleComponent implements OnInit {
         id: this.data.id,
         name: this.data.name,
         length: 0,
-        price: 0,
-        salePrice: 0,
+        price: this.data.price,
+        salePrice: this.data.salePrice,
         code: '',
         color: '',
         description: '',
         productCategory: {
-          id:undefined,
+          id: undefined,
           name: '',
           categoryType: {
             id: undefined,
-            name: ''
+            name: this.customerName
           }
         }
       },

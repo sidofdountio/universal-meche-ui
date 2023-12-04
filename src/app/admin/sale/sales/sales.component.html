@@ -57,7 +57,7 @@
                       <th scope="col">Couleur</th>
                       <th scope="col">Taille</th>
                       <th scope="col">Code</th>
-                      <th scope="col">Description</th>
+                      <th scope="col">Prix de vente</th>
                       <th scope="col">Categorie</th>
                       <th scope="col">Action</th>
                     </tr>
@@ -69,7 +69,7 @@
                       <td>{{ product.color }}</td>
                       <td>{{ product.length}}</td>
                       <td>{{ product.code }}</td>
-                      <td>{{ product.description }}</td>
+                      <td>{{ product.salePrice }}</td>
                       <td>{{ product.productCategory.name }}</td>
                       <td>
                         <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(product)" class="text-primary text-uppercase"> 
@@ -132,6 +132,17 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Client </th>
                 <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
               </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantite </th>
+                  <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
 
               <!-- Weight Column -->
               <ng-container matColumnDef="amount">

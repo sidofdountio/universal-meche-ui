@@ -1,74 +1,163 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DataState } from 'src/app/model/enume/data-state';
 import { Chart } from 'chart.js/auto';
 import { SaleService } from 'src/app/service/sale.service';
 import { PurcharseService } from 'src/app/service/purcharse.service';
 import { ChargeService } from 'src/app/service/charge.service';
+import { SnabarService } from 'src/app/service/snabar.service';
+import { EmployeeService } from 'src/app/service/employee.service';
 
 @Component({
   selector: 'app-billan',
   templateUrl: './billan.component.html',
   styleUrls: ['./billan.component.css']
 })
-export class BillanComponent implements OnInit {
-  
-  totalSalePerMonth:number = 0;
-  totalSalePerDay:number = 0;
-  billan: any;
-  constructor(
-    private saleService: SaleService,
-    private purchaseService: PurcharseService,
-    private charserService:ChargeService,
-  ) { }
-  billanAnnuelle() {
-  }
-  billanMensuel() {
-
-  }
+export class BillanComponent implements OnInit, AfterViewInit {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
 
-  ngOnInit(): void {
-    this.getSaleByDay();
-    this.getSaleByMonth();
-    const months = generateMonthArray();
-    const totalSalePerMonth = [500, 800, 600, 900, 1200, 1000, 700, 1100, 900, 1300, 1500, 1200];
-    totalSaleAmountPerMonth(months, totalSalePerMonth);
+  totalAmountSalePerMonth: number = 0;
+  totalAmountPurchasePerMonth: number = 0;
+  totalSalePerDay: number = 0;
+  totalAmuntSalePerDay: number = 0;
+  totalSalary: number = 0;
+  charges: number = 0;
+  billan: any;
+  earn:number = 0;
+
+  constructor(
+    private saleService: SaleService,
+    private purchaseService: PurcharseService,
+    private charserService: ChargeService,
+    private snabarService: SnabarService,
+    private employeeService: EmployeeService
+  ) {
   }
 
-  getSaleByMonth(){
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSaleMonth().subscribe(
-      (response)=>{
-        this.state = DataState.LOADED_STATE;
-        const salePermonth = response;
-        for(let item of response){
-          this.totalSalePerMonth += item.amount;
+  ngAfterViewInit(): void {
+  }
+
+  ngOnInit(): void {
+    this.onCharges();
+    this.getSaleByMonth();
+    this.getSaleByDay();
+    this.getSales();
+    this.getPurchasePerMonth();
+
+  }
+
+  billanAnnuelle() {
+  }
+
+  billanMensuel() {
+
+  }
+
+
+  onCharges() {
+    this.charserService.getCharges().subscribe(
+      (response) => {
+        let salary:number = 0;
+        let impot: number =0;
+        let loyer: number =0;
+        let ration: number =0;
+        let transport: number=0;
+        let electricity: number =0;
+        let anotherCharge:number=0;
+        // let anotherCharge: AnotherCharge;
+        for (let item of response) {
+          salary = item.totalSalary;
+          impot = item.impot;
+          loyer = item.loyer;
+          ration = item.ration;
+          transport = item.transport;
+          electricity  = item.electricity;
+          anotherCharge=item.anotherCharge.amount;
         }
-      },
-      ()=>{
-        this.state = DataState.ERROR_STATE;
+// 
+        this.charges = impot + loyer + ration +electricity +anotherCharge +salary;
       }
     )
   }
 
-  getSaleByDay(){
-    this.saleService.getSaleDay().subscribe(
-      (response)=>{
-        const day: number[] = [];
-        const totalAmountPerDay: number[] = [];
-        const salePermonth = response;
-        for(let item of response){
-          this.totalSalePerDay += item.amount;
-         
-        }
+  employees() {
+    this.employeeService.employees().subscribe(
+      (response) => {
         
-        for (let index = 0; index < response.length; index++) {
-          totalAmountPerDay[index] = response[index].amount;
-          day[index]=response[index].day;
+
+        for (let item of response) {
+          this.totalSalary += item.salary;
         }
 
-        totalSaleAmountPerDay(day, totalAmountPerDay);
+        
+      }
+    )
+  }
+
+  getSales() {
+    this.saleService.getSales().subscribe(
+      (sales) => {
+        let monthName:string = '';
+        let monthAmounts:MonthAmount[]=[];
+        for (let sale of sales){
+
+        }
+        let months:string[]=[];
+        let totalSalePerMonth:number[] = [];
+        for (let i = 0; i < sales.length; i++) {
+          monthName = sales[i].month;
+          for (let j = 0; j < 12; j++) {
+            if (months[j] === monthName){
+              totalSalePerMonth[j] += sales[i].amount;
+            }else{
+              months[j] = sales[i].month;
+              totalSalePerMonth[j]= sales[i].amount
+            }
+
+
+          }
+          
+        }
+        totalSaleAmountPerMonth(months, totalSalePerMonth);
+      }
+    )
+  }
+
+  getSaleByMonth() {
+    this.state = DataState.LOADING_STATE;
+    this.saleService.getSaleMonth().subscribe(
+      (response) => {
+        for (let item of response) {
+          this.totalAmountSalePerMonth += item.amount;
+          this.earn = this.charges - this.totalAmountSalePerMonth;
+        }
+        this.state = DataState.LOADED_STATE;
+      },
+      () => {
+        this.state = DataState.ERROR_STATE;
+        this.snabarService.openSnackBar("Une erreur", "Fermer");
+      }
+    )
+  }
+
+  getSaleByDay() {
+    this.saleService.getSaleDay().subscribe(
+      (response) => {
+        this.totalSalePerDay = response.length;
+        for (const item of response) {
+          this.totalAmuntSalePerDay += item.amount;
+        }
+      },() => {
+      }
+    )
+  }
+
+  getPurchasePerMonth() {
+    this.purchaseService.getPurchasePerMonth().subscribe(
+      (response) => {
+        for (let purchase of response) {
+          this.totalAmountPurchasePerMonth += purchase.amount;
+        }
       }
     )
   }
@@ -76,8 +165,6 @@ export class BillanComponent implements OnInit {
 
 function totalSaleAmountPerDay(day: number[], totalAmountPerDay: number[]) {
   const ctx: any = document.getElementById('myChart');
-
-
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -119,30 +206,24 @@ function totalSaleAmountPerDay(day: number[], totalAmountPerDay: number[]) {
       }
     }
   });
-
   return myChart;
 }
 
-
+export interface MonthAmount {
+  month: string;
+  amount: number;
+}
 export interface DaylySale {
   amount: number;
+  day: number;
   date: Date | string;
 }
-
-
-const dailySales = [
-  { date: '2023-01-05', amount: 100 },
-  { date: '2023-01-10', amount: 150 },
-  { date: '2023-02-12', amount: 200 },
-  // ...and so on
-];
-
 
 
 function totalSaleAmountPerMonth(months: string[], totalSalePerMonth: number[]) {
   const ctx: any = document.getElementById('salePermonth');
   const myChart = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
       labels: months,
       datasets: [{
