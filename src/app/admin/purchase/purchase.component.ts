@@ -117,6 +117,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
           
           this.snacbarService.openSnackBarSuccess("Achat Enregistrer", "Fermer");
           this.onGetPurchase();
+          this.onGetProduct();
         },
         () => {
           this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");

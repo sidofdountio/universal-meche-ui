@@ -9,6 +9,12 @@ import { SnabarService } from 'src/app/service/snabar.service';
 import { Chart } from 'chart.js/auto';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleService } from 'src/app/service/sale.service';
+import { PurcharseService } from 'src/app/service/purcharse.service';
+import { InvoiceService } from 'src/app/service/invoice.service';
+import { Inventory } from 'src/app/model/inventory';
+import { InventoryService } from 'src/app/service/imventory.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { DateAdapter } from '@angular/material/core';
 
 
 @Component({
@@ -18,8 +24,10 @@ import { SaleService } from 'src/app/service/sale.service';
 })
 export class AdminDashboardComponent implements OnInit {
   readonly SaleStatus = SaleStatus;
-  productName: string[] = ["bresiline", "peruque", "greffe"];
-  productQuantity: number[] = [10, 13, 37];
+  productName: string[] = [];
+  productQuantity: number[] = [];
+  stockData: Inventory[] = [];
+
   sells: Sale[] = [];
   displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
   dataSource = new MatTableDataSource<Sale>([]);
@@ -27,7 +35,8 @@ export class AdminDashboardComponent implements OnInit {
   value: number = 10;
   sellAmount: number = 10;
   // Montant vendue
-  purchaseAmount: number = 10;
+  purchaseAmount: number = 0;
+  purchaseAmountSize: number = 0;
   // Autre charge: frais de luimiere, achat d'un material
   miscellaneousLoad: number = 5;
   // Gain possible
@@ -35,21 +44,34 @@ export class AdminDashboardComponent implements OnInit {
   // facture annuler;
   invoiceCancel: number = 1;
 
+
+  data: number[] = [];
+
   private breakpointObserver = inject(BreakpointObserver);
-
-
-  constructor(private router: Router, private dialogService: DialogService, 
+  totalAmountSalePerDay: number = 0;
+  totalSalePerDay: number = 0;
+  currentDate!: string|number|Date;
+  constructor( 
+    private purchaseService: PurcharseService,
+    private router: Router, 
+    private dialogService: DialogService, 
     private snacbarService: SnabarService,
-    private saleSercice:SaleService) { }
+    private saleService:SaleService,
+    private invoiceService:InvoiceService,
+    private inventoryService:InventoryService) { }
 
   ngOnInit(): void {
-    this.saleSercice.getSales().subscribe(
+    this.currentDate = new Date();
+    this.stockChart();
+    this.getPurchasePerMonth();
+    this. getSaleByDay();
+    this.saleService.getSales().subscribe(
       (response)=>{
         this.dataSource.data = response;
       }
     )
     
-    stockProductState(this.productName, this.productQuantity);
+   
   }
 
   ngAfterViewInit() {
@@ -61,6 +83,50 @@ export class AdminDashboardComponent implements OnInit {
 
   onDialog() {
     this.dialogService.message("was clicked")
+  }
+
+  getSaleByDay() {
+    this.saleService.getSaleDay().subscribe(
+      (response) => {
+        this.totalSalePerDay = response.length;
+        this.totalAmountSalePerDay = response.length;
+        for (const item of response) {
+          this.totalAmountSalePerDay += item.amount;
+        }
+      },() => {
+      }
+    )
+  }
+
+  getPurchasePerMonth() {
+    this.purchaseService.getPurchasePerMonth().subscribe(
+      (response) => {
+        this.purchaseAmountSize = response.length;
+        for (let purchase of response) {
+          this.purchaseAmount += purchase.amount;
+          this.purchaseAmount = this.purchaseAmount / 1000;
+        }
+      }
+    )
+  }
+
+
+  stockChart() {
+    this.inventoryService.getInventories().subscribe(
+      (response: Inventory[]) => {
+        for (var item of response){
+          if(item.up){
+            this.productName.push(item.productName);
+            this.data.push(item.newQuantity);   
+          }
+        }
+
+        stockProductState(this.productName, this.productQuantity);
+      },
+      (error: HttpErrorResponse) => {
+        console.log("error status :  %s", error.status);
+      }
+    );
   }
 
 }
@@ -75,7 +141,7 @@ function stockProductState(productName: string[], productQuantity: number[]) {
     datasets: [
       {
         data: productQuantity,
-        backgroundColor: ['#f56954', '#00a65a', '#00b64a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#d1d6df'],
+        backgroundColor: ['#f56954', '#00a65a', '#00b64a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#d1d6df','#d1d6ed', '#a1d6de',, '#3d7dbc','#f39c47','#f39c18','#11c0ef','#22c0ef','#23c0ef','#33c0ef','#45c0ea','#10c0ew'],
       }
     ]
   }
