@@ -10,7 +10,6 @@ import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { Invoice } from 'src/app/model/invoice';
 import { Product } from 'src/app/model/product';
 import { InvoiceService } from 'src/app/service/invoice.service';
-import { ProductService } from 'src/app/service/product.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import * as XLSX from 'xlsx';
 
@@ -42,7 +41,6 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
   }
 
   constructor(private invoiceService: InvoiceService,
-    private productService: ProductService,
     private snackbarService: SnabarService, private router: Router) { }
 
   applyFilter(event: Event) {
@@ -85,13 +83,12 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
     // Create a workbook and worksheet
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
     // Generate the Excel file
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveExcelFile(excelBuffer, new Date() + 'invoice_sale_list.xlsx');
+    this.saveExcelFile(excelBuffer, new Date().getMonth + 'invoice_sale_list.xlsx');
   }
 
   saveExcelFile(buffer: any, fileName: string): void {

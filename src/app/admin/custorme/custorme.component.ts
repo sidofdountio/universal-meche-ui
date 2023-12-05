@@ -45,7 +45,7 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
           console.log(response);
         },
         () => {
-          this.snackbarService.openSnackBar("Error Du Loading", "close");
+          this.snackbarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
         }
     );
   }
@@ -66,7 +66,7 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
       },
       () => {
         this.isLoadingSubject.next(false);
-        this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+        this.snackbarService.openSnackBarError("Une Erreure Est Survenue. Ne pas Utiliser Le Meme Numero De Telephne", "Fermer");
       }
     )
   }

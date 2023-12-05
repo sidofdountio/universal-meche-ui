@@ -42,7 +42,7 @@
         <div class="card-body">
           <h6 class="m-b-20">VENTE TOTAL</h6>
           <h2 class="text-end"><mat-icon class="icon f-left">sell</mat-icon><span>{{ totalAmountSalePerDay }}</span></h2>
-          <p class="m-b-0">VENTE TOTAL JOUR<span class="f-right">{{ totalSalePerDay }}</span></p>
+          <p class="m-b-0">VENTE TOTAL JOUR<span class="f-right">{{ totalItemSalePerDay }}</span></p>
         </div>
       </div>
     </div>
@@ -116,14 +116,14 @@
             <p class="text-end "><small class="icon f-left">Montant Vendu</small><span
                 [ngClass]="totalAmountSalePerDay > 0 ? 'number' : 'negative' ">{{ totalAmountSalePerDay | CustomCurrency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="totalAmountSalePerDay"></mat-progress-bar>
+              [value]="totalAmountSalePerDayProgresseBar"></mat-progress-bar>
           </div>
           <!-- Montant des achats -->
           <div class="example-section">
             <p class="text-end "><small class="icon f-left">Montant Des Achats</small><span
                 [ngClass]="purchaseAmount > 0 ? 'number' : 'negative' ">{{ purchaseAmount | CustomCurrency }}</span></p>
             <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="purchaseAmount"></mat-progress-bar>
+              [value]="progresseBarPurchse"></mat-progress-bar>
           </div>
           <!-- Charge divers -->
           <!-- <div class="example-section">
@@ -152,9 +152,9 @@
   </div><!--  -->
   <!--  -->
   <div class="row">
-    <div class="col-sm-4">
-      <mat-card>
-        <mat-card-content>
+    <div class="col-md-12 ">
+      <mat-card cl>
+        <mat-card-content class="p-4">
           <canvas id="stock" style="height: 230px; width: 230px;"></canvas>
         </mat-card-content>
       </mat-card>

@@ -6,6 +6,7 @@ import { PurcharseService } from 'src/app/service/purcharse.service';
 import { ChargeService } from 'src/app/service/charge.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { EmployeeService } from 'src/app/service/employee.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-billan',
@@ -23,7 +24,9 @@ export class BillanComponent implements OnInit, AfterViewInit {
   totalSalary: number = 0;
   charges: number = 0;
   billan: any;
-  earn:number = 0;
+  earn: number = 0;
+  daySujet = new BehaviorSubject<number| any>(1);
+  amounDaySujet = new BehaviorSubject<number| any>(1);
 
   constructor(
     private saleService: SaleService,
@@ -38,6 +41,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log(generateMonthArray());
     this.onCharges();
     this.getSaleByMonth();
     this.getSaleByDay();
@@ -45,7 +49,6 @@ export class BillanComponent implements OnInit, AfterViewInit {
     this.getPurchasePerMonth();
 
   }
-
   billanAnnuelle() {
   }
 
@@ -57,13 +60,13 @@ export class BillanComponent implements OnInit, AfterViewInit {
   onCharges() {
     this.charserService.getCharges().subscribe(
       (response) => {
-        let salary:number = 0;
-        let impot: number =0;
-        let loyer: number =0;
-        let ration: number =0;
-        let transport: number=0;
-        let electricity: number =0;
-        let anotherCharge:number=0;
+        let salary: number = 0;
+        let impot: number = 0;
+        let loyer: number = 0;
+        let ration: number = 0;
+        let transport: number = 0;
+        let electricity: number = 0;
+        let anotherCharge: number = 0;
         // let anotherCharge: AnotherCharge;
         for (let item of response) {
           salary = item.totalSalary;
@@ -71,11 +74,11 @@ export class BillanComponent implements OnInit, AfterViewInit {
           loyer = item.loyer;
           ration = item.ration;
           transport = item.transport;
-          electricity  = item.electricity;
-          anotherCharge=item.anotherCharge.amount;
+          electricity = item.electricity;
+          anotherCharge = item.anotherCharge.amount;
         }
-// 
-        this.charges = impot + loyer + ration +electricity +anotherCharge +salary;
+        // 
+        this.charges = impot + loyer + ration + electricity + anotherCharge + salary;
       }
     )
   }
@@ -83,13 +86,9 @@ export class BillanComponent implements OnInit, AfterViewInit {
   employees() {
     this.employeeService.employees().subscribe(
       (response) => {
-        
-
         for (let item of response) {
           this.totalSalary += item.salary;
         }
-
-        
       }
     )
   }
@@ -97,57 +96,66 @@ export class BillanComponent implements OnInit, AfterViewInit {
   getSales() {
     this.saleService.getSales().subscribe(
       (sales) => {
-        let monthName:string = '';
-        let monthAmounts:MonthAmount[]=[];
-        for (let sale of sales){
-
-        }
-        let months:string[]=[];
-        let totalSalePerMonth:number[] = [];
-        for (let i = 0; i < sales.length; i++) {
-          monthName = sales[i].month;
-          for (let j = 0; j < 12; j++) {
-            if (months[j] === monthName){
-              totalSalePerMonth[j] += sales[i].amount;
-            }else{
-              months[j] = sales[i].month;
-              totalSalePerMonth[j]= sales[i].amount
-            }
-
+        let total = 0;
+        let monthAmounts = [];
+        let months: string[] = [];
+        let totalSalePerMonth: number[] = [];
+        for (let sale of sales) {
+          if (sale.month === "January") {
+            total += sale.amount;
+            monthAmounts[0] = total
+          }
+          if (sale.month === "February") {
+            total += sale.amount;
+            monthAmounts[1] = total
+          }
+          if (sale.month === "March") {
+            total += sale.amount;
+            monthAmounts[2] = total
+          }
+          if (sale.month === "April") {
+            total += sale.amount;
+            monthAmounts[3] = total
+          }
+          if (sale.month === "May") {
+            total += sale.amount;
+            monthAmounts[4] = total
+          }
+          if (sale.month === "June") {
+            total += sale.amount;
+            monthAmounts[5] = total
+          }
+          if (sale.month === "July") {
+            total += sale.amount;
+            monthAmounts[6] = total
+          }
+          if (sale.month === "August") {
+            total += sale.amount;
+            monthAmounts[7] = total
+          }
+          if (sale.month === "September") {
+            total += sale.amount;
+            monthAmounts[8] = total
+          }
+          if (sale.month === "October") {
+            total += sale.amount;
+            monthAmounts[9] = total
+          }
+          if (sale.month === "November") {
+            total += sale.amount;
+            monthAmounts[10] = total
 
           }
-          
-        }
-        totalSaleAmountPerMonth(months, totalSalePerMonth);
-      }
-    )
-  }
+          if (sale.month === "DECEMBER") {
+            total += sale.amount;
+            monthAmounts[11] = total;
+            console.log(sale.month)
+          }
 
-  getSaleByMonth() {
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSaleMonth().subscribe(
-      (response) => {
-        for (let item of response) {
-          this.totalAmountSalePerMonth += item.amount;
-          this.earn = this.charges - this.totalAmountSalePerMonth;
         }
-        this.state = DataState.LOADED_STATE;
-      },
-      () => {
-        this.state = DataState.ERROR_STATE;
-        this.snabarService.openSnackBar("Une erreur", "Fermer");
-      }
-    )
-  }
 
-  getSaleByDay() {
-    this.saleService.getSaleDay().subscribe(
-      (response) => {
-        this.totalSalePerDay = response.length;
-        for (const item of response) {
-          this.totalAmuntSalePerDay += item.amount;
-        }
-      },() => {
+        let monthName = generateMonthArray();
+        totalSaleAmountPerMonth(monthName, monthAmounts);
       }
     )
   }
@@ -161,9 +169,62 @@ export class BillanComponent implements OnInit, AfterViewInit {
       }
     )
   }
+  // =============================================CALCULE=====================================
+  getSaleByMonth() {
+    this.state = DataState.LOADING_STATE;
+    this.saleService.getSaleMonth().subscribe(
+      (response) => {
+       
+        for (let item of response) {
+          this.totalAmountSalePerMonth += item.amount;
+        }
+        let depenceTotal = 0;
+        depenceTotal = this.charges + this.totalAmountPurchasePerMonth
+        this.earn = this.totalAmountSalePerMonth - depenceTotal;
+        this.state = DataState.LOADED_STATE;
+
+
+      },
+      () => {
+        this.state = DataState.ERROR_STATE;
+        this.snabarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
+
+      }
+    )
+  }
+  // =============================================CALCULE=====================================
+
+
+  getSaleByDay() {
+    this.saleService.getSaleDay().subscribe(
+      (sales) => {
+        let amountDay: any[] = [];
+        const dayOfMonthArray = getDayOfMonthArray();
+        
+        this.totalSalePerDay = sales.length;
+        for (var item of sales) {
+          this.totalAmuntSalePerDay += item.amount;
+          this.daySujet.next(item.day);
+          this.amounDaySujet.next(this.totalAmuntSalePerDay);
+        }
+       
+        for (let day = 1; day < dayOfMonthArray.length; day++) {
+          if(day === this.daySujet.value){
+            amountDay[day] = this.amounDaySujet.value;
+          }
+        }
+
+        totalSaleAmountPerDay(dayOfMonthArray,amountDay)
+      },
+      () => {
+      }
+    )
+  }
+
+
 }
 
-function totalSaleAmountPerDay(day: number[], totalAmountPerDay: number[]) {
+function totalSaleAmountPerDay(day: string[], amountPerday: any[]) {
   const ctx: any = document.getElementById('myChart');
   const myChart = new Chart(ctx, {
     type: 'line',
@@ -171,7 +232,7 @@ function totalSaleAmountPerDay(day: number[], totalAmountPerDay: number[]) {
       labels: day,
       datasets: [{
         label: '# MONITORING',
-        data: totalAmountPerDay,
+        data: amountPerday,
         backgroundColor: 'rgba(0, 123, 255, 0.2)', // Customize the background color
         borderColor: '#007bff', // Customize the line color
         pointBorderColor: '#007bff', // Customize the point border color
@@ -312,3 +373,20 @@ function generateMonthArray() {
 
   return months;
 }
+
+function getDayOfMonthArray() {
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const monthLength = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  const dayOfMonthArray = [];
+
+  for (let i = 1; i <= monthLength; i++) {
+    if (i === currentDay) {
+      dayOfMonthArray.push(`[${i}]`);
+    } else {
+      dayOfMonthArray.push(i.toString());
+    }
+  }
+  return dayOfMonthArray ;
+}
+

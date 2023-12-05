@@ -4,7 +4,7 @@ export interface Employee {
     lastName:any;
     phone: any;
     address:any;
-    birtDay: string | Date |null |undefined;
+    birthDay: string | Date |null |undefined;
     sexe: string | null |undefined;
     salary:any;
 }

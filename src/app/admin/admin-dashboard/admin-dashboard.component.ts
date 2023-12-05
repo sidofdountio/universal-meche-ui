@@ -14,7 +14,6 @@ import { InvoiceService } from 'src/app/service/invoice.service';
 import { Inventory } from 'src/app/model/inventory';
 import { InventoryService } from 'src/app/service/imventory.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DateAdapter } from '@angular/material/core';
 
 
 @Component({
@@ -23,10 +22,12 @@ import { DateAdapter } from '@angular/material/core';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+
   readonly SaleStatus = SaleStatus;
   productName: string[] = [];
   productQuantity: number[] = [];
   stockData: Inventory[] = [];
+  progresseBarPurchse:number = 0;
 
   sells: Sale[] = [];
   displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
@@ -49,8 +50,12 @@ export class AdminDashboardComponent implements OnInit {
 
   private breakpointObserver = inject(BreakpointObserver);
   totalAmountSalePerDay: number = 0;
+  totalItemSalePerDay: number = 0;
+  totalAmountSalePerDayProgresseBar: number = 0;
+  
   totalSalePerDay: number = 0;
   currentDate!: string|number|Date;
+  purchaseAmountProgressBar: number = 0;
   constructor( 
     private purchaseService: PurcharseService,
     private router: Router, 
@@ -89,10 +94,11 @@ export class AdminDashboardComponent implements OnInit {
     this.saleService.getSaleDay().subscribe(
       (response) => {
         this.totalSalePerDay = response.length;
-        this.totalAmountSalePerDay = response.length;
+        this.totalItemSalePerDay = response.length;
         for (const item of response) {
           this.totalAmountSalePerDay += item.amount;
         }
+        this.totalAmountSalePerDayProgresseBar = this.totalAmountSalePerDay / 500000;
       },() => {
       }
     )
@@ -104,8 +110,12 @@ export class AdminDashboardComponent implements OnInit {
         this.purchaseAmountSize = response.length;
         for (let purchase of response) {
           this.purchaseAmount += purchase.amount;
-          this.purchaseAmount = this.purchaseAmount / 1000;
         }
+
+          
+
+       
+        this.progresseBarPurchse = this.purchaseAmount/2000000;
       }
     )
   }
@@ -117,7 +127,7 @@ export class AdminDashboardComponent implements OnInit {
         for (var item of response){
           if(item.up){
             this.productName.push(item.productName);
-            this.data.push(item.newQuantity);   
+            this.productQuantity.push(item.newQuantity);   
           }
         }
 

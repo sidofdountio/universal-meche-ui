@@ -20,20 +20,6 @@
                                         <mat-hint>Ex. Mèches synthétiques</mat-hint>
                                     </mat-form-field>
                                 </div>
-                                <div class="col">
-                                    <div  formGroupName="categoryTypeForm" class="select">
-                                        <mat-form-field appearance="outline">
-                                            <mat-label>Type De La  Mèches</mat-label>
-                                            <mat-select formControlName="id">
-                                                <mat-option *ngFor="let type of categoryTypeList" [value]="type.id">
-                                                    {{type.name}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-hint>Ex. Kanekalon</mat-hint>
-                                        </mat-form-field>
-                                    </div>  
-                                </div>
-                               
                             </div>
                             <div class="mb-2">
                                 <button mat-flat-button color="accent" type="submit"
@@ -58,7 +44,7 @@
         </div><!-- Product product category end -->
 
         <!-- Category Type -->
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <mat-card>
                 <mat-card-content>
                     <h3 class="mat-h3">Ajouter Une Nouvelle Catégorie Des Types De Mèches </h3>
@@ -86,6 +72,34 @@
                     </form>
                 </mat-card-content>
             </mat-card>
-        </div><!-- Category Type -->
+        </div> -->
+        <!-- Category Type -->
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="table-responsive">
+                <h1 class="mat-h3">Liste </h1>
+                <table class="table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col"># </th>
+                      <th scope="col">Nom</th>
+                     
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let category of categorys">
+                      <th scope="row">{{ category.id }}</th>
+                      <td>{{ category.name }}</td>
+                      
+                      <td>
+                       
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+        </div>
     </div>
 </div>

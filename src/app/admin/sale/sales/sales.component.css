@@ -18,10 +18,14 @@ table {
 .badge-danger {
   color: white;
   background-color: #f44336;
-  /* background-color: #d29922; */
   font-weight: bold;
   padding: 8px;
   border-radius: 15px;
+}
+
+.excel {
+  color: #209e62;
+  border: 1px solid #209e62;
 }
 
 .spinner {

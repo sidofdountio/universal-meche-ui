@@ -1,0 +1,27 @@
+mat-form-field {
+    position: relative;
+    display: block;
+    padding: 4px;
+}
+
+
+button {
+    width: 100%;
+    padding: 20px;
+}
+
+.form {
+    -webkit-box-shadow: 0 0 14px rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 0 14px rgba(0, 0, 0, .1);
+    box-shadow: 5px 5px 10px #333;
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #eee;
+    background: white;
+    top: 50px;
+    width: 500px;
+    position: relative;
+    left: 23rem;
+}
+
+@media screen and (max-width: 575px) {}

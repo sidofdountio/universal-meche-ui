@@ -10,6 +10,8 @@ import { AddProductComponent } from '../add-product/add-product.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UpdateProductComponent } from '../update-product/update-product.component';
 import { DialogService } from 'src/app/service/dialog.service';
+import { WorkBook, WorkSheet, read, utils, writeFile } from 'xlsx';
+
 
 @Component({
   selector: 'app-product-list',
@@ -18,8 +20,9 @@ import { DialogService } from 'src/app/service/dialog.service';
 })
 export class ProductListComponent implements OnInit, AfterViewInit {
 
-  PRODUCTS: Product[] = [];
-  displayedColumns: string[] = ['id', 'name', 'price','salePrice', 'color','lenght','code', 'action'];
+  products: Product[] | any[] = [];
+  displayedColumns: string[] = ['id', 'name', 'price', 'salePrice', 'color', 'lenght', 'code', 'action'];
+
   dataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -29,7 +32,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     private snacbarService: SnabarService, private dialogService: DialogService) { }
 
   ngOnInit(): void {
-   this.onGetProducts();
+    this.onGetProducts();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -37,7 +40,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   addNewProduct() {
-    let product:Product = {
+    let product: Product = {
       id: undefined,
       name: '',
       price: 0,
@@ -48,11 +51,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       length: 0,
       productCategory: {
         id: undefined,
-        name: '',
-        categoryType: {
-          id: undefined,
-          name: ''
-        }
+        name: ''
       },
     }
     const configDialog = new MatDialogConfig();
@@ -78,7 +77,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.onGetProducts();
         },
         () => {
-          this.snacbarService.openSnackBarError("Vous Avez Annuler Cette Opperation", "close");
+          this.snacbarService.openSnackBarError("Une erreur est suvenue", "close");
         }
       );
   }
@@ -88,7 +87,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       subscribe(
         (response) => {
           this.dataSource.data = response;
-          this.snacbarService.openSnackBar("Product Loaded", "Fermer");
+          this.products = response;
+          this.snacbarService.openSnackBarSuccess("Produit Affichee", "Fermer");
         },
         ((error: HttpErrorResponse) => {
           this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
@@ -98,13 +98,13 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   // Edite product
-  onEdit(product:Product) {
+  onEdit(product: Product) {
     // matDialog confi
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
     configDialog.disableClose = true;
     configDialog.data = product;
-    
+
     // passing matDialogue and config to open 
     const dialogRef = this.dialog.open(UpdateProductComponent, configDialog);
     dialogRef.afterClosed()
@@ -156,5 +156,29 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       );
   }
 
+  printReportProduct() {
+    // let dataType = 'application/vnd.ms-excel.sheet.macroEnabled.12';
+    // let tableSelect = document.getElementById('product-table');
+    // let tableHtml = tableSelect?.outerHTML.replace(/ /g, '%20');
+    // let downloadLink = document.createElement('a');
+    // document.body.appendChild(downloadLink);
+    // downloadLink.href = 'data: ' + dataType + ',' + this.dataSource;
+    // downloadLink.download = 'liste-produits.xls';
+    // downloadLink.click();
+    // document.body.removeChild(downloadLink);
+
+    this.export();
+  }
+
+  export(): void {
+    /* generate worksheet */
+    const ws: WorkSheet = utils.json_to_sheet(this.products);
+
+    /* generate workbook and add the worksheet */
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* save to file */
+    writeFile(wb, "liste-produits.xlsx");
+  }
 
 }

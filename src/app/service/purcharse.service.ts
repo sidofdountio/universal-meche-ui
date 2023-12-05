@@ -3,40 +3,40 @@ import { Purchase } from '../model/purchase';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, catchError } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PurcharseService {
 
+  private readonly URL = environment.URL;
 
-  readonly URL = environment.URL;
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   getPurchase(): Observable<Purchase[]> {
-    return this.http.get<Purchase[]> (`${this.URL}/purchase`).pipe(
+    return this.http.get<Purchase[]> (`${this.URL}/purchase`,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
 
   getPurchasePerMonth(): Observable<Purchase[]> {
-    return this.http.get<Purchase[]> (`${this.URL}/purchase/month`).pipe(
+    return this.http.get<Purchase[]> (`${this.URL}/purchase/month`,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )
   }
   // TODO removed type null here
   addPurchase(purchaseToAdd: Purchase): Observable<Purchase> {
-    return this.http.post<Purchase>(`${this.URL}/purchase`, purchaseToAdd).pipe(
+    return this.http.post<Purchase>(`${this.URL}/purchase`, purchaseToAdd,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
     );
   }
 
   editePurchase(puchaseToUpdate: Purchase) {
-    return this.http.put<Purchase>(`${this.URL}/purchase`, puchaseToUpdate)
+    return this.http.put<Purchase>(`${this.URL}/purchase`, puchaseToUpdate,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -44,7 +44,7 @@ export class PurcharseService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.URL}/purchase/${id}`)
+    return this.http.delete(`${this.URL}/purchase/${id}`,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log)
       );

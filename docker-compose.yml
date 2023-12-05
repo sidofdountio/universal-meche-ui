@@ -1,0 +1,16 @@
+services:
+  universalhair_ui:
+    container_name: universalhairuicontainer
+    build: .
+    image: universalhair_ui:v1
+    restart: unless-stopped
+    ports:
+      - 80:80
+    expose:
+      - 80
+    networks:
+      - internalnet
+    
+networks:
+  internalnet:
+    driver: bridge

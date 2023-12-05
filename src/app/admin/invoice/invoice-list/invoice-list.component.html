@@ -13,7 +13,7 @@
                     <div class="col">
                         <mat-form-field appearance="outline">
                             <mat-label>Filtre</mat-label>
-                            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. La date" #input>
                             <mat-hint>Entrer Le Nom De La Recherche</mat-hint>
                         </mat-form-field>
 
@@ -28,33 +28,13 @@
                 </div>
 
                 <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource" matSort>
-                       
-                        <!-- ID Column -->
-                        <!-- <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero De La Commande </th>
-                            <td mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </td>
-                        </ng-container> -->
-
-
+                    <table mat-table [dataSource]="dataSource" matSort id="invoice-table">
+                
                         <!-- ID Column -->
                         <ng-container matColumnDef="invoiceNumber">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero De La Commande </th>
                             <td mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </td>
                         </ng-container>
-
-                        <!-- Progress Column -->
-                       
-
-                        <!-- Name Column -->
-                        <!-- <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                            <td mat-cell *matCellDef="let row">
-                                <span
-                                    [ngClass]="[row.status === SaleStatus.PENDING ? 'badge-danger': 'badge-success'] ">
-                                    {{row.status}}</span>
-                            </td>
-                        </ng-container> -->
 
                         <!-- Fruit Column -->
                         <ng-container matColumnDef="date">
@@ -72,9 +52,9 @@
                         <ng-container matColumnDef="action">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Voir La Facture Facture</th>
                             <td mat-cell *matCellDef="let row">
-                                <button mat-icon-button color="" (click)="onInvoice(row.invoiceNumber)"
-                                    matTooltip="Voir Les Detailles De Cette Vente">
-                                    <mat-icon>more_vert</mat-icon>
+                                <button mat-raised-button color="accent" (click)="onInvoice(row.invoiceNumber)"
+                                    matTooltip="Voir Les Detailles De Cette Vente" class="text-uppercase">
+                                   voir la facture
                                 </button>
                             </td>
                         </ng-container>

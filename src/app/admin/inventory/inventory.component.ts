@@ -47,7 +47,7 @@ export class InventoryComponent implements OnInit, AfterViewInit {
       },
       () => {
         this.state = DataState.ERROR_STATE;
-        this.snackbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
 
       }
     )

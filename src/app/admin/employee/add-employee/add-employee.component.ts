@@ -16,7 +16,7 @@ export class AddEmployeeComponent implements OnInit {
     lastName: "",
     phone: "",
     address: "",
-    birtDay: '',
+    birthDay: '',
     sexe: '',
     salary: ""
   }
@@ -49,7 +49,7 @@ export class AddEmployeeComponent implements OnInit {
       lastName: this.formEmployee.value.lastName,
       phone: this.formEmployee.value.phone,
       address: this.formEmployee.value.address,
-      birtDay: this.formEmployee.value.birthDay,
+      birthDay: this.formEmployee.value.birthDay,
       sexe: this.formEmployee.value.sexe,
       salary: this.formEmployee.value.salary
     }

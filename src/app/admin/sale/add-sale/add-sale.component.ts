@@ -36,11 +36,7 @@ export class AddSaleComponent implements OnInit {
       description: '',
       productCategory: {
         id: undefined,
-        name: '',
-        categoryType: {
-          id: undefined,
-          name: ''
-        }
+        name: ''
       }
     },
     customer: {
@@ -127,11 +123,7 @@ export class AddSaleComponent implements OnInit {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: this.customerName
-          }
+          name: ''
         }
       },
       customer: {

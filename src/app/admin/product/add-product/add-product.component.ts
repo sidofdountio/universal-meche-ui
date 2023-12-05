@@ -20,7 +20,7 @@ export class AddProductComponent {
     code: ['', Validators.required],
     description: [''],
     color: [''],
-    size: ['', ],
+    size: ['',],
     categoryTypeForm: this.formBuild.group({
       id: ['', Validators.required]
     })
@@ -55,13 +55,10 @@ export class AddProductComponent {
       description: this.productToSave.value.description as string,
       productCategory: {
         id: this.productToSave.value.categoryTypeForm?.id as any,
-        name: '',
-        categoryType: {
-          name: '',
-          id: undefined
-        }
+        name: ''
       }
     };
+    console.log(product);
     this.dialogRef.close(product);
   }
 

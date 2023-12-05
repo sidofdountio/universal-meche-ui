@@ -25,7 +25,7 @@ h6 {
 
 p {
   margin: 0;
-  font-family:  Archivo;
+  font-family: Archivo;
 }
 
 
@@ -37,9 +37,10 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
 }
 
-.delete{
+.delete {
   color: #f85149
 }
 
@@ -71,12 +72,25 @@ body {
   left: 30rem;
 }
 
+.excel {
+  color: #209e62;
+  border: 1px solid #209e62;
+}
+
+.green {
+  color: #238636;
+}
+
+.warn {
+  color: #f44336;
+}
+
 
 .badge-success {
   color: white;
-  /* background-color: rgb(13, 102, 32); */
+
   background-color: #238636;
-  /* background-color: #2a963e; */
+ 
   text-align: center;
   border: 1px solid #238636;
   font-weight: bold;
@@ -86,9 +100,6 @@ body {
 
 .badge-danger {
   color: white;
-  /* background-color: #8957e5; 
-  background-color: #d29922;
-  */
   background-color: #f44336;
   text-align: center;
   border: 1px solid #f44336;

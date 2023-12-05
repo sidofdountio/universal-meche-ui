@@ -15,10 +15,10 @@ import { SaleRequest } from 'src/app/model/sale-request';
 import { BehaviorSubject } from 'rxjs';
 import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { DataState } from 'src/app/model/enume/data-state';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { PaymentMethod } from 'src/app/model/paymentMethod';
-import { E } from '@angular/cdk/keycodes';
 import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
+import { WorkSheet, utils, WorkBook, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-sales',
@@ -39,7 +39,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
   spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
-  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
+  displayedColumns: string[] = ['id', 'createAt', 'month','paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -96,12 +96,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productService.getProducts().subscribe(
       (response) => {
         this.products = response;
-        this.snacbarService.openSnackBarSuccess("Product Loading", "Fermer");
+        this.snacbarService.openSnackBarSuccess("Produit Affiche", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
       () => {
         this.appState.next(DataState.ERROR_STATE);
-        this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
+        this.snacbarService.openSnackBarError("Error Due Loading", "Fermer");
       }
     );
   }
@@ -116,7 +116,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       () => {
         this.state = DataState.ERROR_STATE;
-        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
       }
     )
   }
@@ -125,7 +125,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentSelected = true;
     this.paymentTypeValue.next(event);
     this.getPaymentType(event);
-    console.log("type %s", event);
+    
   }
   /** Start sale product here
    * First Get product by id when they click on button */
@@ -139,7 +139,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.afterClosed()
       .subscribe(
         (response: SaleRequest) => {
-          console.log(response);
           // Call ProcessToSave. 
           this.processToSaveSale(response);
         });
@@ -164,11 +163,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: ''
-          }
+          name: ''
         }
       },
       customer: {
@@ -207,11 +202,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            name: '',
-            id: undefined
-          }
+          name: ''
         }
       },
       customer: {
@@ -296,7 +287,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private validSale(sale: Sale, valid: boolean) {
     if (valid) {
-      console.log("status 1 %s", valid);
       this.saleService.validSale(sale).subscribe(
         () => {
           this.saleService.validSale(sale);
@@ -323,6 +313,20 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  printReportSale() {
+    this.export();
+  }
+  export(): void {
+    /* generate worksheet */
+    const ws: WorkSheet = utils.json_to_sheet(this.dataSource.data);
+
+    /* generate workbook and add the worksheet */
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* save to file */
+    writeFile(wb, "liste-des-vente.xlsx");
   }
 
   ngOnDestroy(): void {

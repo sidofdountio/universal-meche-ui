@@ -28,7 +28,8 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   purchases:Purchase[]=[];
   // displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
   displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
-  dataSource = new  MatTableDataSource<Purchase>(this.purchases);
+  dataSource!: MatTableDataSource<Purchase>;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -40,7 +41,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
     private purchaseService: PurcharseService) {
-
+      this.dataSource = new MatTableDataSource(this.purchases);
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -65,8 +66,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     this.appState.next(DataState.LOADING_STATE);
     this.purchaseService.getPurchase().subscribe(
       (response) => {
-        this.dataSource.data =response;
-        this.purchases = response;
+        this.dataSource = new MatTableDataSource(response);
         this.snacbarService.openSnackBarSuccess("Commande Afichee", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
@@ -138,7 +138,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
         });
   }
 
-  editePurchase(purchase: Purchase) {
+  private editePurchase(purchase: Purchase) {
     this.purchaseService.editePurchase(purchase).subscribe(
       () => {
         this.snacbarService.openSnackBarSuccess("Achat Modifier", "Fermer");

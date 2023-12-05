@@ -2,13 +2,7 @@
     <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Billan</h1>
 
-    <!-- <ng-container> -->
-    <button matTooltip="Billan Mensuel" mat-raised-button class="text-uppercase" (click)="billanMensuel()">Billan
-        Mensuel</button>&nbsp;
-    <button matTooltip="Billan Annuelle" mat-raised-button class="text-uppercase" (click)="billanAnnuelle()">Billan
-        Mensuel</button>&nbsp;
-    <button matTooltip="Historique" color="warn" mat-raised-button class="text-uppercase" (click)="billan()">exporter
-        tout les transactions</button>
+
     <ng-container *ngIf="state === DataState.LOADED_STATE">
         <div class="row mt-3">
             <div class="col-md-12">
@@ -38,7 +32,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label"> Gain Possible Du Moi</label>
-                            <input class="form-control number" [value]="earn" disabled>
+                            <input class="form-control" [ngClass]="earn > 0 ? 'number' : 'negative'" [value]="earn" disabled>
                         </div>
                     </div>
 

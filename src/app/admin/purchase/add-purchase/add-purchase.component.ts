@@ -72,11 +72,7 @@ export class AddPurchaseComponent implements OnInit {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: ''
-          }
+          name: ''
         }
       }
     }

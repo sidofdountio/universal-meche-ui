@@ -2,209 +2,227 @@
   <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
       matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Vente</h1>
 
-  <div class="row">
-    <div class="col-lg-12 mb-3">
+  <div class="row mb-3">
+    <div class="col-md-12">
       <h3 class="mat-h3">Selectioner Le Produit A Vendre</h3>
-      <!-- Product list start -->
-      <div class="row mb-3">
-        <div class="col-md-5">
-          <div class="mb-2">
-              <!-- payment type selected -->
-              <form [formGroup]="paymentForm">
-                <div formGroupName="type">
-                  <mat-form-field appearance="outline">
-                    <mat-label class="example-margin">Moyen De Paiyement :</mat-label>
-                    <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
-                      <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{type.type}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </form>
-              <!-- End payment type selected -->
-    
-            &nbsp;
-            <button (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button matBadge="{{ item }}"
-              *ngIf="!(isLoading$ | async) " [disabled]=" item === 0 || !paymentSelected" matBadgePosition="after"
-              matBadgeColor="primary">VALIDER LA VENTE</button>
-            &nbsp;
-            <button [disabled]="!item" color="warn" matTooltip="Annuler La vente" mat-raised-button type="button"
-              (click)="clear()" *ngIf="!(isLoading$ | async)">
-              <mat-icon>block</mat-icon> ANNULER LA VENTE
-            </button>
-            &nbsp;
-            <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Loading...
-            </button>
+      <ng-container *ngIf="appState$ | async as dataState" [ngSwitch]="dataState">
+        <ng-container *ngSwitchCase="DataState.LOADING_STATE">
+          <div class="" align="center">
+            <mat-spinner></mat-spinner>
           </div>
-        </div>
-        <div class="col-md-7">
-          <h3 class="mat-h3">Liste Des Poduits</h3>
-          <ng-container *ngIf="appState$ | async as dataState" [ngSwitch]="dataState">
-            <ng-container *ngSwitchCase="DataState.LOADING_STATE">
-              <div class="">
-                <mat-spinner></mat-spinner>
-              </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="DataState.LOADED_STATE">
+        </ng-container>
+        <ng-container *ngSwitchCase="DataState.LOADED_STATE">
 
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class="table-dark">
-                    <tr>
-                      <th scope="col"># </th>
-                      <th scope="col">Nom</th>
-                      <th scope="col">Couleur</th>
-                      <th scope="col">Taille</th>
-                      <th scope="col">Code</th>
-                      <th scope="col">Prix de vente</th>
-                      <th scope="col">Categorie</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let product of products">
-                      <th scope="row">{{ product.id }}</th>
-                      <td>{{ product.name }}</td>
-                      <td>{{ product.color }}</td>
-                      <td>{{ product.length}}</td>
-                      <td>{{ product.code }}</td>
-                      <td>{{ product.salePrice }}</td>
-                      <td>{{ product.productCategory.name }}</td>
-                      <td>
-                        <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(product)" class="text-primary text-uppercase"> 
-                          VENDRE </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="DataState.ERROR_STATE">
-              <div class="container">
-                <div class="error">
-                  Une erreur s'est produite. Veuillez recharger L'Application.
-                </div>
-              </div>
-            </ng-container>
-
-          </ng-container>
-          <!-- Product list end-->
-        </div>
-      </div>
-    </div>
-    <!-- Sale start -->
-    <div class="row mb-3">
-      <div class="col-md-12">
-        <h3 class="mat-h1">Liste Des Produits Achetes</h3>
-        <!-- Table sale -->
-        <mat-form-field appearance="outline" class="mb-4">
-          <mat-label>Recherche</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. " #input>
-          <mat-hint>Entrer Le Nom De La Recherche</mat-hint>
-        </mat-form-field>
-
-        <ng-container *ngIf="state === DataState.LOADED_STATE">
-          <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource" matSort>
-
-              <!-- Position Column -->
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-                <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="paymentType">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Moyen De Payment </th>
-                <td mat-cell *matCellDef="let element"> {{ element.paymentType }} </td>
-              </ng-container>
-
-              <!-- Position Column -->
-              <ng-container matColumnDef="product">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Produit </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.product.name }}
-                </td>
-              </ng-container>
-
-              <!-- Name Column -->
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Client </th>
-                <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
-              </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="quantity">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantite </th>
-                  <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="price">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
-                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
-                </ng-container>
-
-              <!-- Weight Column -->
-              <ng-container matColumnDef="amount">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Montant </th>
-                <td mat-cell *matCellDef="let element"> {{element.amount | CustomCurrency }} </td>
-              </ng-container>
-
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                <td mat-cell *matCellDef="let element">
-                  <span [ngClass]="[element.status === status.PENDING ? 'badge-danger': 'badge-success'] ">
-                    {{element.status}}</span>
-                </td>
-              </ng-container>
-
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef> Validez La Vente</th>
-                <td mat-cell *matCellDef="let element">
-                  <button *ngIf="element.status === status.PENDING" matTooltip="Valider Cette Vente" mat-icon-button
-                    color="primary" (click)="changeSaleStatus(element)">
-                    <mat-icon>sync</mat-icon>
-                  </button>
-                  <button *ngIf="element.status !== status.PENDING" mat-icon-button color="accent" disabled>
-                    <mat-icon>sync_disabled</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
-
-              <!-- Checkbox Column -->
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-              <!-- Row shown when there is no matching data. -->
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-              </tr>
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Couleur</th>
+                  <th scope="col">Taille</th>
+                  <th scope="col">Code</th>
+                  <th scope="col">Prix de vente</th>
+                  <th scope="col">Categorie</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of products">
+                  <th scope="row">{{ product.id }}</th>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.color }}</td>
+                  <td>{{ product.length}}</td>
+                  <td>{{ product.code }}</td>
+                  <td>{{ product.salePrice }}</td>
+                  <td>{{ product.productCategory.name }}</td>
+                  <td>
+                    <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(product)"
+                      class="text-primary text-uppercase">
+                      VENDRE </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-              aria-label="Select page of periodic elements">
-            </mat-paginator>
-
-          </div><!-- End Table sale -->
-        </ng-container>
-        <ng-container *ngIf="state === DataState.LOADING_STATE">
-          <div>
-            <div class="">
-              <mat-spinner></mat-spinner>
-            </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="state === DataState.ERROR_STATE">
-          <div class="col-md-12">
+        <ng-container *ngSwitchCase="DataState.ERROR_STATE">
+          <div class="container">
             <div class="error">
               Une erreur s'est produite. Veuillez recharger L'Application.
             </div>
           </div>
         </ng-container>
 
-      </div>
-      <!-- Sale End -->
+      </ng-container>
     </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <div align="" class="mb-2">
+        <!-- payment type selected -->
+        <div class="col-4">
+          <form [formGroup]="paymentForm">
+            <div formGroupName="type">
+              <mat-form-field appearance="outline">
+                <mat-label class="example-margin">Moyen De Payement :</mat-label>
+                <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
+                  <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{type.type}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+        <!-- End payment type selected -->
+        <div class="mb-3" class="sale-button">
+          <button (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button matBadge="{{ item }}"
+            *ngIf="!(isLoading$ | async) " [disabled]=" item === 0 || !paymentSelected" matBadgePosition="after"
+            matBadgeColor="primary">VALIDER LA VENTE</button>
+          &nbsp;
+          <button [disabled]="!item" color="warn" matTooltip="Annuler La vente" mat-raised-button type="button"
+            (click)="clear()" *ngIf="!(isLoading$ | async)">
+            <mat-icon>block</mat-icon> ANNULER LA VENTE
+          </button>
+          &nbsp;
+          <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Vente encours...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sale start -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <h3 class="mat-h1">Liste Des Produits Achetes</h3>
+      <!-- Table sale -->
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="mb-4">
+            <mat-label>Recherche</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. " #input>
+            <mat-hint>Entrer Le Nom De La Recherche</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <button class="mb-3 excel" matTooltip="Telechrger La Liste Des Vente" (click)="printReportSale()"
+            mat-icon-button color=""><i class="fa-solid fa-file-excel"></i></button>
+        </div>
+      </div>
+
+
+      <ng-container *ngIf="state === DataState.LOADED_STATE">
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort id="sale-table">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="createAt">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+              <td mat-cell *matCellDef="let element"> {{ element.createAt | date:'short' }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="month">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Moi </th>
+              <td mat-cell *matCellDef="let element"> {{ element.month }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="paymentType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Moyen De Payment </th>
+              <td mat-cell *matCellDef="let element"> {{ element.paymentType }} </td>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="product">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Produit </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.product.name }}
+              </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Client </th>
+              <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantite </th>
+              <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix </th>
+              <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Montant </th>
+              <td mat-cell *matCellDef="let element"> {{element.amount | CustomCurrency }} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let element">
+                <span [ngClass]="[element.status === status.PENDING ? 'badge-danger': 'badge-success'] ">
+                  {{element.status}}</span>
+              </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef> Validez La Vente</th>
+              <td mat-cell *matCellDef="let element">
+                <button *ngIf="element.status === status.PENDING" matTooltip="Valider Cette Vente" mat-icon-button
+                  color="primary" (click)="changeSaleStatus(element)">
+                  <mat-icon>sync</mat-icon>
+                </button>
+                <button *ngIf="element.status !== status.PENDING" mat-icon-button color="accent" disabled>
+                  <mat-icon>sync_disabled</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Checkbox Column -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">Aucune vente Trouver Pour "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+
+        </div><!-- End Table sale -->
+      </ng-container>
+      <ng-container *ngIf="state === DataState.LOADING_STATE">
+        <div>
+          <div class="" align="center">
+            <mat-spinner></mat-spinner>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="state === DataState.ERROR_STATE">
+        <div class="col-md-12">
+          <div class="error">
+            Une erreur s'est produite. Veuillez recharger L'Application.
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+    <!-- Sale End -->
   </div>
 </div>
