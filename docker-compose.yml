@@ -1,6 +1,6 @@
 services:
   universalhair_ui:
-    container_name: universalhairuicontainer
+    container_name: universalhair_ui
     build: .
     image: universalhair_ui:v1
     restart: unless-stopped

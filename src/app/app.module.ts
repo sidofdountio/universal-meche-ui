@@ -24,7 +24,6 @@ import { SnackBarComponent } from './message/snack-bar/snack-bar.component';
 import { DialogMessageComponent } from './message/dialog-message/dialog-message.component';
 import { SnackbarErrorComponent } from './message/snackbar-error/snackbar-error.component';
 import { AuthModule } from './auth/auth.module';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     
@@ -46,7 +45,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserModule,
     MatToolbarModule,
     MatSidenavModule,
-    FontAwesomeModule,
     MatIconModule,
     MatListModule,
     AuthModule,

@@ -6,6 +6,8 @@ import { ChargeService } from 'src/app/service/charge.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { EmployeeService } from 'src/app/service/employee.service';
 import { BehaviorSubject } from 'rxjs';
+import Chart from 'chart.js/auto';
+
 
 @Component({
   selector: 'app-billan',
@@ -15,7 +17,7 @@ import { BehaviorSubject } from 'rxjs';
 export class BillanComponent implements OnInit, AfterViewInit {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
-
+  // COPY default.conf /etc/nginx/conf.d
   totalAmountSalePerMonth: number = 0;
   totalAmountPurchasePerMonth: number = 0;
   totalSalePerDay: number = 0;
@@ -154,7 +156,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
         }
 
         let monthName = generateMonthArray();
-        // totalSaleAmountPerMonth(monthName, monthAmounts);
+        totalSaleAmountPerMonth(monthName, monthAmounts);
       }
     )
   }
@@ -212,62 +214,59 @@ export class BillanComponent implements OnInit, AfterViewInit {
             amountDay[day] = this.amounDaySujet.value;
           }
         }
-
-        // totalSaleAmountPerDay(dayOfMonthArray,amountDay);
+        totalSaleAmountPerDay(dayOfMonthArray,amountDay);
       },
       () => {
       }
     )
   }
-
-
 }
 
-// function totalSaleAmountPerDay(day: string[], amountPerday: any[]) {
-//   const ctx: any = document.getElementById('myChart');
-//   const myChart = new Chart(ctx, {
-//     type: 'line',
-//     data: {
-//       labels: day,
-//       datasets: [{
-//         label: '# MONITORING',
-//         data: amountPerday,
-//         backgroundColor: 'rgba(0, 123, 255, 0.2)', // Customize the background color
-//         borderColor: '#007bff', // Customize the line color
-//         pointBorderColor: '#007bff', // Customize the point border color
-//         pointBackgroundColor: '#007bff', // Customize the point fill color
-//         fill: true, // Enable area fill
-//         pointHoverBackgroundColor: '#007bff', // Customize the point hover fill color
-//         pointHoverBorderColor: '#007bff' // Customize the point hover border color
-//       }]
-//     },
-//     options: {
-//       scales: {
-//         x: {
-//           beginAtZero: true
-//         },
-//         y: {
-//           beginAtZero: true,
-//           suggestedMax: 50 // Customize the maximum value on the y-axis
-//         }
-//       },
-//       plugins: {
-//         title: {
-//           display: true,
-//           text: 'Total Sale Amount Per Day', // Customize the chart title
-//           font: {
-//             size: 18 // Customize the font size of the chart title
-//           }
-//         },
-//         legend: {
-//           display: true,
-//           position: 'bottom' // Customize the legend position
-//         }
-//       }
-//     }
-//   });
-//   return myChart;
-// }
+function totalSaleAmountPerDay(day: string[], amountPerday: any[]) {
+  const ctx: any = document.getElementById('myChart');
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: day,
+      datasets: [{
+        label: '# MONITORING',
+        data: amountPerday,
+        backgroundColor: 'rgba(0, 123, 255, 0.2)', // Customize the background color
+        borderColor: '#007bff', // Customize the line color
+        pointBorderColor: '#007bff', // Customize the point border color
+        pointBackgroundColor: '#007bff', // Customize the point fill color
+        fill: true, // Enable area fill
+        pointHoverBackgroundColor: '#007bff', // Customize the point hover fill color
+        pointHoverBorderColor: '#007bff' // Customize the point hover border color
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          beginAtZero: true
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax: 50 // Customize the maximum value on the y-axis
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Total Sale Amount Per Day', // Customize the chart title
+          font: {
+            size: 18 // Customize the font size of the chart title
+          }
+        },
+        legend: {
+          display: true,
+          position: 'bottom' // Customize the legend position
+        }
+      }
+    }
+  });
+  return myChart;
+}
 
 export interface MonthAmount {
   month: string;
@@ -280,71 +279,71 @@ export interface DaylySale {
 }
 
 
-// function totalSaleAmountPerMonth(months: string[], totalSalePerMonth: number[]) {
-//   const ctx: any = document.getElementById('salePermonth');
-//   const myChart = new Chart(ctx, {
-//     type: 'bar',
-//     data: {
-//       labels: months,
-//       datasets: [{
-//         label: 'Total Sale Amount per Month',
-//         data: totalSalePerMonth,
-//         backgroundColor: 'rgba(0, 123, 255, 0.2)',
-//         borderColor: '#007bff',
-//         borderWidth: 2
-//       }]
-//     },
-//     options: {
-//       scales: {
-//         y: {
-//           beginAtZero: true,
-//           suggestedMax: Math.max(...totalSalePerMonth) + 100,
-//           grid: {
-//             color: 'rgba(0, 0, 0, 0.1)'
-//           },
-//           ticks: {
-//             font: {
-//               size: 12,
-//               weight: 'bold'
-//             }
-//           }
-//         },
-//         x: {
-//           grid: {
-//             display: false
-//           },
-//           ticks: {
-//             font: {
-//               size: 12,
-//               weight: 'bold'
-//             }
-//           }
-//         }
-//       },
-//       plugins: {
-//         title: {
-//           display: true,
-//           text: 'Total Sale Amount per Month',
-//           font: {
-//             size: 18,
-//             weight: 'bold'
-//           }
-//         },
-//         legend: {
-//           display: true,
-//           position: 'bottom',
-//           labels: {
-//             font: {
-//               size: 12
-//             }
-//           }
-//         }
-//       }
-//     }
-//   });
+function totalSaleAmountPerMonth(months: string[], totalSalePerMonth: number[]) {
+  const ctx: any = document.getElementById('salePermonth');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Total Sale Amount per Month',
+        data: totalSalePerMonth,
+        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+        borderColor: '#007bff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: Math.max(...totalSalePerMonth) + 100,
+          grid: {
+            color: 'rgba(0, 0, 0, 0.1)'
+          },
+          ticks: {
+            font: {
+              size: 12,
+              weight: 'bold'
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            font: {
+              size: 12,
+              weight: 'bold'
+            }
+          }
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Total Sale Amount per Month',
+          font: {
+            size: 18,
+            weight: 'bold'
+          }
+        },
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            font: {
+              size: 12
+            }
+          }
+        }
+      }
+    }
+  });
 
-//   return myChart;
-// }
+  return myChart;
+}
 
 function calculateTotalSalePerMonth(dailySales: DaylySale[]) {
   const totalSalePerMonth = Array(12).fill(0); // Initialize an array with 12 elements, each set to 0

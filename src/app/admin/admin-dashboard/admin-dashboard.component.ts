@@ -13,6 +13,7 @@ import { InvoiceService } from 'src/app/service/invoice.service';
 import { Inventory } from 'src/app/model/inventory';
 import { InventoryService } from 'src/app/service/imventory.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import {Chart} from 'chart.js/auto';
 
 
 @Component({
@@ -130,7 +131,7 @@ export class AdminDashboardComponent implements OnInit {
           }
         }
 
-        // stockProductState(this.productName, this.productQuantity);
+        stockProductState(this.productName, this.productQuantity);
       },
       (error: HttpErrorResponse) => {
         console.log("error status :  %s", error.status);
@@ -141,29 +142,29 @@ export class AdminDashboardComponent implements OnInit {
 }
 
 
-// function stockProductState(productName: string[], productQuantity: number[]) {
-//   const stock: any = document.getElementById("stock");
+function stockProductState(productName: string[], productQuantity: number[]) {
+  const stock: any = document.getElementById("stock");
 
-//   var donutData = {
-//     labels: productName,
-//     datasets: [
-//       {
-//         data: productQuantity,
-//         backgroundColor: ['#f56954', '#00a65a', '#00b64a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#d1d6df','#d1d6ed', '#a1d6de',, '#3d7dbc','#f39c47','#f39c18','#11c0ef','#22c0ef','#23c0ef','#33c0ef','#45c0ea','#10c0ew'],
-//       }
-//     ]
-//   }
-//   var donutOptions = {
-//     maintainAspectRatio: false,
-//     responsive: true,
-//   }
-//   //Create pie or douhnut chart
-//   // You can switch between pie and douhnut using the method below.
-//   var donutChart = new Chart(stock, {
-//     type: 'doughnut',
-//     data: donutData,
-//     options: donutOptions
-//   })
-// }
+  var donutData = {
+    labels: productName,
+    datasets: [
+      {
+        data: productQuantity,
+        backgroundColor: ['#f56954', '#00a65a', '#00b64a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#d1d6df','#d1d6ed', '#a1d6de',, '#3d7dbc','#f39c47','#f39c18','#11c0ef','#22c0ef','#23c0ef','#33c0ef','#45c0ea','#10c0ew'],
+      }
+    ]
+  }
+  var donutOptions = {
+    maintainAspectRatio: false,
+    responsive: true,
+  }
+  //Create pie or douhnut chart
+  // You can switch between pie and douhnut using the method below.
+  var donutChart = new Chart(stock, {
+    type: 'doughnut',
+    data: donutData,
+    options: donutOptions
+  })
+}
 
 
