@@ -22,11 +22,11 @@ export class LoginComponent {
     }),
     password: ['', [Validators.required, Validators.minLength(8)]]
   });
-  constructor(private router: Router, 
-    private snackbarServie:SnabarService,
-    private authService: AuthService,private fb: FormBuilder) { }
+  constructor(private router: Router,
+    private snackbarServie: SnabarService,
+    private authService: AuthService, private fb: FormBuilder) { }
 
-  
+
 
   onLog() {
     this.authService.login().subscribe(
@@ -49,6 +49,7 @@ export class LoginComponent {
       .subscribe(
         (response => {
           this.isLoading.next(false);
+          console.log(response)
           this.router.navigate(['/admin'])
         }),
         (() => {
@@ -57,7 +58,7 @@ export class LoginComponent {
         })
       )
   }
-  
+
   onLogout() {
     this.authService.logout$;
   }

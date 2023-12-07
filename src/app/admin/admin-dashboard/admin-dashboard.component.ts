@@ -111,10 +111,6 @@ export class AdminDashboardComponent implements OnInit {
         for (let purchase of response) {
           this.purchaseAmount += purchase.amount;
         }
-
-          
-
-       
         this.progresseBarPurchse = this.purchaseAmount/2000000;
       }
     )
