@@ -11,23 +11,29 @@ import { RegisterRequest } from '../model/register-request';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService{
+export class AuthService {
   isLoggedIn = false;
   private readonly baseUrl: string = environment.URL;
   private readonly API_TOKEN: string = 'API_TOKEN';
   tokenValid$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient,private router:Router ) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(): Observable<boolean> {
     return of(true).pipe(
-  
+
       tap(() => this.isLoggedIn = true)
     );
   }
 
   login$ = (userRequest: AuthenticationRequest) => <Observable<AuthenticationResponse>>this.http
-    .post<AuthenticationResponse>(`${this.baseUrl}/auth/authenticate`, userRequest)
+    .post<AuthenticationResponse>(`${this.baseUrl}/auth/authenticate`, userRequest,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        })
+      })
     .pipe(
       map(response => {
         const token = response.token;
@@ -39,8 +45,13 @@ export class AuthService{
       catchError(this.handlerError)
     );
 
-  register$ = (userRequest: RegisterRequest ) => <Observable<AuthenticationResponse>>this.http
-    .post<AuthenticationResponse>(`${this.baseUrl}/auth/register`, userRequest)
+  register$ = (userRequest: RegisterRequest) => <Observable<AuthenticationResponse>>this.http
+    .post<AuthenticationResponse>(`${this.baseUrl}/auth/register`, userRequest,
+      {
+        headers: new HttpHeaders({
+          'Access-Control-Allow-Origin': ' http://localhost:8080'
+        })
+      })
     .pipe(
       map(response => {
         const token = response.token;
@@ -65,20 +76,26 @@ export class AuthService{
     const token = this.getAuthToken();
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json',
+        'Content-Type': 'application/json',
+        ' Access-Control-Allow-Origin': 'http://localhost:8080',
         Authorization: `Bearer ${token}`
       })
     };
     const isTokenExpired = this.isAuthenticated();
-    if (!isTokenExpired){
-      httpOptions.headers = httpOptions.headers.set('Authorization',`Bearer ${token}`)
+    if (!isTokenExpired) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', `Bearer ${token}`)
     }
     return httpOptions.headers;
   }
 
   // valid token
   isTokenExpired$ = (token: string | null) => <Observable<boolean>>
-    this.http.get<boolean>(`${this.baseUrl}/auth/isTokenValid/${token}`)
+    this.http.get<boolean>(`${this.baseUrl}/auth/isTokenValid/${token}`,
+      {
+        headers: new HttpHeaders({
+          "Access-Control-Allow-Origin": "http://localhost:8080"
+        })
+      })
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -109,8 +126,8 @@ export class AuthService{
   logout$ = <Observable<string>>
     this.http.post<string>(`http://localhost:8080/logout`, {
       headers: new HttpHeaders({
-        "Authorization": `Bearer ${localStorage.getItem('API_TOKEN')
-          }`
+        "Authorization": `Bearer ${localStorage.getItem('API_TOKEN')}`,
+        "Access-Control-Allow-Origin": "http://localhost:8080"
       })
     }).pipe(
       tap(console.log)
