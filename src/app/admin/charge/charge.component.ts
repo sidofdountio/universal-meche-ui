@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, NgForm, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { Charge } from 'src/app/model/charge';
@@ -7,6 +7,7 @@ import { ChargeService } from 'src/app/service/charge.service';
 import { UpdateChargeComponent } from './update-charge/update-charge.component';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { EmployeeService } from 'src/app/service/employee.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-charge',
@@ -29,6 +30,9 @@ export class ChargeComponent implements OnInit {
     this.chargeService.getCharges().subscribe(
       (response) => {
         this.charge = response;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     );
   }
@@ -42,8 +46,6 @@ export class ChargeComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(
         (response) => {
-          console.log("toupdate")
-          console.log(response);
           this.saveChargeChange(response);
         },
         () => {

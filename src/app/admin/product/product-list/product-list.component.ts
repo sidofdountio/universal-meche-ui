@@ -10,7 +10,7 @@ import { AddProductComponent } from '../add-product/add-product.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UpdateProductComponent } from '../update-product/update-product.component';
 import { DialogService } from 'src/app/service/dialog.service';
-import { WorkBook, WorkSheet, read, utils, writeFile } from 'xlsx';
+import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
 
 
 @Component({
@@ -91,7 +91,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
           this.snacbarService.openSnackBarSuccess("Produit Affichee", "Fermer");
         },
         ((error: HttpErrorResponse) => {
-          this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
+          this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "Fermer");
           console.log("Error code : %s", error.status);
         })
       )

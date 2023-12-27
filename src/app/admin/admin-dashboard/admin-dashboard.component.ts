@@ -45,7 +45,6 @@ export class AdminDashboardComponent implements OnInit {
   // facture annuler;
   invoiceCancel: number = 1;
 
-
   data: number[] = [];
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -73,10 +72,11 @@ export class AdminDashboardComponent implements OnInit {
     this.saleService.getSales().subscribe(
       (response)=>{
         this.dataSource.data = response;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
-    
-   
   }
 
   ngAfterViewInit() {
@@ -99,7 +99,9 @@ export class AdminDashboardComponent implements OnInit {
           this.totalAmountSalePerDay += item.amount;
         }
         this.totalAmountSalePerDayProgresseBar = this.totalAmountSalePerDay / 500000;
-      },() => {
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
   }
@@ -112,7 +114,10 @@ export class AdminDashboardComponent implements OnInit {
           this.purchaseAmount += purchase.amount;
         }
         this.progresseBarPurchse = this.purchaseAmount/2000000;
-      }
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
+      }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     )
   }
 

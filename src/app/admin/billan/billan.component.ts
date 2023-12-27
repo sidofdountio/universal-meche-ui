@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataState } from 'src/app/model/enume/data-state';
 import { SaleService } from 'src/app/service/sale.service';
 import { PurcharseService } from 'src/app/service/purcharse.service';
@@ -7,6 +7,7 @@ import { SnabarService } from 'src/app/service/snabar.service';
 import { EmployeeService } from 'src/app/service/employee.service';
 import { BehaviorSubject } from 'rxjs';
 import Chart from 'chart.js/auto';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -14,10 +15,9 @@ import Chart from 'chart.js/auto';
   templateUrl: './billan.component.html',
   styleUrls: ['./billan.component.css']
 })
-export class BillanComponent implements OnInit, AfterViewInit {
+export class BillanComponent implements OnInit {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
-  // COPY default.conf /etc/nginx/conf.d
   totalAmountSalePerMonth: number = 0;
   totalAmountPurchasePerMonth: number = 0;
   totalSalePerDay: number = 0;
@@ -26,8 +26,8 @@ export class BillanComponent implements OnInit, AfterViewInit {
   charges: number = 0;
   billan: any;
   earn: number = 0;
-  daySujet = new BehaviorSubject<number| any>(1);
-  amounDaySujet = new BehaviorSubject<number| any>(1);
+  daySujet = new BehaviorSubject<number | any>(1);
+  amounDaySujet = new BehaviorSubject<number | any>(1);
 
   constructor(
     private saleService: SaleService,
@@ -35,11 +35,8 @@ export class BillanComponent implements OnInit, AfterViewInit {
     private charserService: ChargeService,
     private snabarService: SnabarService,
     private employeeService: EmployeeService
-  ) {
-  }
+  ) { }
 
-  ngAfterViewInit(): void {
-  }
 
   ngOnInit(): void {
     console.log(generateMonthArray());
@@ -48,15 +45,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
     this.getSaleByDay();
     this.getSales();
     this.getPurchasePerMonth();
-
   }
-  billanAnnuelle() {
-  }
-
-  billanMensuel() {
-
-  }
-
 
   onCharges() {
     this.charserService.getCharges().subscribe(
@@ -78,8 +67,10 @@ export class BillanComponent implements OnInit, AfterViewInit {
           electricity = item.electricity;
           anotherCharge = item.anotherCharge.amount;
         }
-        // 
         this.charges = impot + loyer + ration + electricity + anotherCharge + salary;
+      },
+      (error: HttpErrorResponse) => {
+        console.log("error %s", error.message);
       }
     )
   }
@@ -90,6 +81,9 @@ export class BillanComponent implements OnInit, AfterViewInit {
         for (let item of response) {
           this.totalSalary += item.salary;
         }
+      },
+      (error: HttpErrorResponse) => {
+        console.log("error %s", error.message);
       }
     )
   }
@@ -157,6 +151,9 @@ export class BillanComponent implements OnInit, AfterViewInit {
 
         let monthName = generateMonthArray();
         totalSaleAmountPerMonth(monthName, monthAmounts);
+      },
+      (error: HttpErrorResponse) => {
+        console.log("error %s", error.message);
       }
     )
   }
@@ -167,6 +164,9 @@ export class BillanComponent implements OnInit, AfterViewInit {
         for (let purchase of response) {
           this.totalAmountPurchasePerMonth += purchase.amount;
         }
+      },
+      (error: HttpErrorResponse) => {
+        console.log("error %s", error.message);
       }
     )
   }
@@ -175,7 +175,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
     this.state = DataState.LOADING_STATE;
     this.saleService.getSaleMonth().subscribe(
       (response) => {
-       
+
         for (let item of response) {
           this.totalAmountSalePerMonth += item.amount;
         }
@@ -201,22 +201,23 @@ export class BillanComponent implements OnInit, AfterViewInit {
       (sales) => {
         let amountDay: any[] = [];
         const dayOfMonthArray = getDayOfMonthArray();
-        
+
         this.totalSalePerDay = sales.length;
         for (var item of sales) {
           this.totalAmuntSalePerDay += item.amount;
           this.daySujet.next(item.day);
           this.amounDaySujet.next(this.totalAmuntSalePerDay);
         }
-       
+
         for (let day = 1; day < dayOfMonthArray.length; day++) {
-          if(day === this.daySujet.value){
+          if (day === this.daySujet.value) {
             amountDay[day] = this.amounDaySujet.value;
           }
         }
-        totalSaleAmountPerDay(dayOfMonthArray,amountDay);
+        totalSaleAmountPerDay(dayOfMonthArray, amountDay);
       },
-      () => {
+      (error: HttpErrorResponse) => {
+        console.log("error %s", error.message);
       }
     )
   }
@@ -385,6 +386,6 @@ function getDayOfMonthArray() {
       dayOfMonthArray.push(i.toString());
     }
   }
-  return dayOfMonthArray ;
+  return dayOfMonthArray;
 }
 

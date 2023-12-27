@@ -1,16 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 import { ProductCategory } from 'src/app/model/product-category';
-import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
-import { map, startWith } from 'rxjs/operators';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { CategoryType } from 'src/app/model/category-type';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { ProductCategoryTypeService } from 'src/app/service/product-category-type.service';
 import { ProductCategoryService } from 'src/app/service/product-category.service';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-category',
@@ -27,13 +23,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
       id: [''],
       name: ['']
     })
-
   });
  
-
-
-  @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
-  announcer = inject(LiveAnnouncer);
   categorys: ProductCategory[] = [];
 
   constructor(private fb: FormBuilder, private snackBarService: SnabarService
@@ -44,8 +35,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getProductCategory();
   }
-
-
 
   onSubmitProductCategory() {
     console.log(this.productCategoryForm.value);
@@ -75,6 +64,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.productCategoryService.getProductCategory().subscribe(
       (response) => {
         this.categorys = response;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
   }

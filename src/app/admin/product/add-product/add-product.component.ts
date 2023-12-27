@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -36,6 +37,9 @@ export class AddProductComponent {
     this.productCategoryService.getProductCategory().subscribe(
       (response) => {
         this.productCategorys = response;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
   }
@@ -58,7 +62,6 @@ export class AddProductComponent {
         name: ''
       }
     };
-    console.log(product);
     this.dialogRef.close(product);
   }
 
