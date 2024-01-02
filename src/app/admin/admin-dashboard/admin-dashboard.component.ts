@@ -131,7 +131,6 @@ export class AdminDashboardComponent implements OnInit {
             this.productQuantity.push(item.newQuantity);   
           }
         }
-
         stockProductState(this.productName, this.productQuantity);
       },
       (error: HttpErrorResponse) => {

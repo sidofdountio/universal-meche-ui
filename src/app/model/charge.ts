@@ -1,4 +1,3 @@
-import { AnotherCharge } from "./another-charge";
 
 export interface Charge {
     id:number;
@@ -8,5 +7,5 @@ export interface Charge {
     ration:any;
     transport:any;
     electricity:any;
-    anotherCharge:AnotherCharge;
+   
 }

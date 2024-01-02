@@ -42,7 +42,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['id', 'createAt', 'month','paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   // List Product
   products: Product[] = [];
   readonly paymentMethods: PaymentMethod[] = [
@@ -87,7 +86,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   /** Get Product */
@@ -141,6 +139,8 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         (response: SaleRequest) => {
           // Call ProcessToSave. 
           this.processToSaveSale(response);
+        },()=>{
+          
         });
   }
 

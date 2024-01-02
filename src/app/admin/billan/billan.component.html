@@ -17,7 +17,12 @@
                             <input class="form-control number" [value]="totalSalePerDay" disabled>
                         </div>
                         <div class="mb-3">
-                            <label for="" class="form-label">Achat ToTal Du Moi</label>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Achat Total Du Moi </mat-label>
+                                <mat-error>Entrer nombre valid</mat-error>
+                            </mat-form-field>
+
+                            <label for="" class="form-label">Achat Total Du Moi</label>
                             <input class="form-control number" [value]="totalAmountPurchasePerMonth" disabled>
                         </div>
                         <div class="mb-3">
@@ -54,15 +59,19 @@
         </div>
     </ng-container>
 
-    <div class="row">
-        <div class="col">
-            <mat-card>
+    <div class="row mb-4">
+        <div class="col day" >
+            <mat-card >
                 <mat-card-content>
                     <canvas id="myChart"></canvas>
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="col">
+      
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
             <mat-card>
                 <mat-card-content>
                     <canvas id="salePermonth"></canvas>

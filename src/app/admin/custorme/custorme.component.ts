@@ -42,7 +42,6 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
       
         (response) => {
           this.dataSource.data = response;
-          console.log(response);
         },
         () => {
           this.snackbarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");

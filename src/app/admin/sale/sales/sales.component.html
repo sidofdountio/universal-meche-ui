@@ -125,7 +125,7 @@
 
             <ng-container matColumnDef="createAt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-              <td mat-cell *matCellDef="let element"> {{ element.createAt | date:'short' }} </td>
+              <td mat-cell *matCellDef="let element"> {{ element.createAt | date }} </td>
             </ng-container>
 
             <ng-container matColumnDef="month">
@@ -134,13 +134,13 @@
             </ng-container>
 
             <ng-container matColumnDef="paymentType">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Moyen De Payment </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment </th>
               <td mat-cell *matCellDef="let element"> {{ element.paymentType }} </td>
             </ng-container>
 
             <!-- Position Column -->
             <ng-container matColumnDef="product">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Produit </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Produit </th>
               <td mat-cell *matCellDef="let element">
                 {{ element.product.name }}
               </td>
@@ -148,7 +148,7 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom Du Client </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Client </th>
               <td mat-cell *matCellDef="let element"> {{element.customer.name}} </td>
             </ng-container>
 
@@ -166,7 +166,7 @@
             <!-- Weight Column -->
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Montant </th>
-              <td mat-cell *matCellDef="let element"> {{element.amount | CustomCurrency }} </td>
+              <td mat-cell *matCellDef="let element"> {{element.amount }} </td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -180,7 +180,7 @@
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef> Validez La Vente</th>
+              <th mat-header-cell *matHeaderCellDef> Validez</th>
               <td mat-cell *matCellDef="let element">
                 <button *ngIf="element.status === status.PENDING" matTooltip="Valider Cette Vente" mat-icon-button
                   color="primary" (click)="changeSaleStatus(element)">

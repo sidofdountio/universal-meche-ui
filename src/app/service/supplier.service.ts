@@ -16,7 +16,7 @@ export class SupplierService {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   getSupplier(): Observable<Supplier[]> {
-    return this.http.get<Supplier[]>(`${this.URL}/supplier`,{headers: this.auth.createAuthorizationHeaders()})
+    return this.http.get<Supplier[]>(`${this.URL}/supplier`,{ headers: this.auth.createAuthorizationHeaders() })
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -24,7 +24,7 @@ export class SupplierService {
   }
 
   getSupplierById(id:number): Observable<Supplier> {
-    return this.http.get<Supplier>(`${this.URL}/supplier/${id}`,{headers: this.auth.createAuthorizationHeaders()})
+    return this.http.get<Supplier>(`${this.URL}/supplier/${id}`,{ headers: this.auth.createAuthorizationHeaders() })
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -38,7 +38,6 @@ export class SupplierService {
         catchError(this.handlerError)
       )
   }
-
 
   deleteSupplier(supplierId: number) {
     return this.http.delete(`${this.URL}/supplier/${supplierId}`,{headers: this.auth.createAuthorizationHeaders()})

@@ -14,7 +14,7 @@ import { RegisterRequest } from '../model/register-request';
 export class AuthService {
   isLoggedIn = false;
   private readonly baseUrl: string = environment.URL;
-  private readonly API_TOKEN: string = 'API_TOKEN';
+  private readonly API_TOKEN: string = 'API_TOKEN_HAIRE';
   tokenValid$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -76,7 +76,7 @@ export class AuthService {
     const token = this.getAuthToken();
     const httpOptions = {
       headers: new HttpHeaders({
-        ' Access-Control-Allow-Origin': 'http://localhost:8080',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       })
     };

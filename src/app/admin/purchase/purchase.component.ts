@@ -26,27 +26,29 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
   purchases:Purchase[]=[];
-  // displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
-  displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
-  dataSource!: MatTableDataSource<Purchase>;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   favoriteSeason: string = "Moi";
   purchaseBy: string = "Moi";
   filtre: string[] = ['Tout', 'Moi'];
   products: Product[] = [];
+  dataSource = new MatTableDataSource<Purchase>([]);
+  displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
+
+  ngOnInit(): void {
+    this.onGetProduct();
+    this.onGetPurchase();
+  }
+
+  
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
     private purchaseService: PurcharseService) {
-      this.dataSource = new MatTableDataSource(this.purchases);
+      
   }
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -55,25 +57,25 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
- 
-  ngOnInit(): void {
-    this.onGetProduct();
-    this.onGetPurchase();
-
-  }
 
   private onGetPurchase() {
     this.appState.next(DataState.LOADING_STATE);
     this.purchaseService.getPurchase().subscribe(
       (response) => {
-        this.dataSource = new MatTableDataSource(response);
-        this.snacbarService.openSnackBarSuccess("Commande Afichee", "Fermer");
+        // this.dataSource = new MatTableDataSource(response);
+        this.dataSource.data = response;
+        this.snacbarService.openSnackBarSuccess("Liste des achats Afichees", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
       () => {
-        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
+        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "fermer");
         this.appState.next(DataState.ERROR_STATE);
       });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   private onGetProduct() {
@@ -176,9 +178,12 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  ngOnDestroy(): void {
+  
 
+  ngOnDestroy(): void {
+    this.appState.unsubscribe();
   }
 
 
 }
+

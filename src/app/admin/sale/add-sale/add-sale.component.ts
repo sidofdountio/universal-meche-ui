@@ -80,7 +80,7 @@ export class AddSaleComponent implements OnInit {
     this.snacbarService.openSnackBar(`Vous Avez Choisir  ${this.custormeTypeSelected}`, "Fermer");
     if (typeSelected === "Grosiste") {
       this.formSale = this.fb.group({
-        price: [this.data.salePrice],
+        price: [this.data.salePrice, Validators.required],
         quantity: [, [Validators.required]],
         custormeType: ['Grosiste'],
         formCustomer: this.fb.group({
@@ -93,7 +93,7 @@ export class AddSaleComponent implements OnInit {
     }
     else {
       this.formSale = this.fb.group({
-        price: [this.data.salePrice],
+        price: [this.data.salePrice,Validators.required],
         quantity: [, [Validators.required]],
         custormeType: ['Client'],
         formCustomer: this.fb.group({
@@ -131,6 +131,7 @@ export class AddSaleComponent implements OnInit {
         name: ''
       }
     }
+    console.log(saleRequest);
     this.dialogRef.close(saleRequest);
   }
 

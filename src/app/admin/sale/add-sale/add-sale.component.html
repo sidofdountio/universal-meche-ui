@@ -17,11 +17,15 @@
 
     <div class="row">
         <div class="col">
-            <div class="mb-1">
-                <label class="form-label">Prix Unitaire </label>
-                <input class="form-control" [value]="data.salePrice" disabled>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Prix Unitaire </mat-label>
+                <input matInput formControlName="price">
+                <span matTextPrefix>FCFA&nbsp;</span>
+               
                 
-            </div>
+            </mat-form-field>
+            
         </div>
         <div class="col">
             <section class="example-section">

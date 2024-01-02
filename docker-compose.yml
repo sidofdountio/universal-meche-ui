@@ -1,16 +1,16 @@
 services:
   app_hair:
-    container_name: ui_hairapp
+    container_name: ui_hair_app
     build: .
-    image: ui_hair:v1
+    image: ui_hair_app:v1
     restart: unless-stopped
     ports:
       - 80:80
     expose:
       - 80
     networks:
-      - uinetwork
+      - hairnetwork
     
 networks:
-  uinetwork:
+  hairnetwork:
     driver: bridge

@@ -44,7 +44,7 @@ export class BillanComponent implements OnInit {
     this.getSaleByMonth();
     this.getSaleByDay();
     this.getSales();
-    this.getPurchasePerMonth();
+    this.getPurchasePerMonth(0);
   }
 
   onCharges() {
@@ -65,9 +65,10 @@ export class BillanComponent implements OnInit {
           ration = item.ration;
           transport = item.transport;
           electricity = item.electricity;
-          anotherCharge = item.anotherCharge.amount;
+     
+
         }
-        this.charges = impot + loyer + ration + electricity + anotherCharge + salary;
+        this.charges = impot + loyer + ration + electricity + salary + transport;
       },
       (error: HttpErrorResponse) => {
         console.log("error %s", error.message);
@@ -158,7 +159,7 @@ export class BillanComponent implements OnInit {
     )
   }
 
-  getPurchasePerMonth() {
+  getPurchasePerMonth(n:number) {
     this.purchaseService.getPurchasePerMonth().subscribe(
       (response) => {
         for (let purchase of response) {
@@ -175,7 +176,6 @@ export class BillanComponent implements OnInit {
     this.state = DataState.LOADING_STATE;
     this.saleService.getSaleMonth().subscribe(
       (response) => {
-
         for (let item of response) {
           this.totalAmountSalePerMonth += item.amount;
         }
@@ -183,8 +183,6 @@ export class BillanComponent implements OnInit {
         depenceTotal = this.charges + this.totalAmountPurchasePerMonth
         this.earn = this.totalAmountSalePerMonth - depenceTotal;
         this.state = DataState.LOADED_STATE;
-
-
       },
       () => {
         this.state = DataState.ERROR_STATE;
@@ -200,6 +198,7 @@ export class BillanComponent implements OnInit {
     this.saleService.getSaleDay().subscribe(
       (sales) => {
         let amountDay: any[] = [];
+        let amountDayVar: any[] = [];
         const dayOfMonthArray = getDayOfMonthArray();
 
         this.totalSalePerDay = sales.length;
@@ -211,9 +210,15 @@ export class BillanComponent implements OnInit {
 
         for (let day = 1; day < dayOfMonthArray.length; day++) {
           if (day === this.daySujet.value) {
-            amountDay[day] = this.amounDaySujet.value;
+            amountDayVar[day] = this.amounDaySujet.value;
+          
           }
         }
+        amountDay.push(amountDayVar);
+        console.log("==============-------------------------------======================");
+        console.log(amountDayVar)
+        console.log("==================----------------------------==================");
+      
         totalSaleAmountPerDay(dayOfMonthArray, amountDay);
       },
       (error: HttpErrorResponse) => {

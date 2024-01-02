@@ -10,16 +10,15 @@ table {
   color: white;
   /* background-color: rgb(13, 102, 32); */
   background-color: #238636;
-  font-weight: bold;
-  padding: 8px;
+  padding: 4px;
   border-radius: 15px;
+  font-size: 14px;
 }
 
 .badge-danger {
   color: white;
   background-color: #f44336;
-  font-weight: bold;
-  padding: 8px;
+  padding: 4px;
   border-radius: 15px;
 }
 

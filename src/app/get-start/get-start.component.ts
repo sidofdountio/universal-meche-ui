@@ -24,7 +24,8 @@ export class GetStartComponent implements OnInit,AfterViewInit{
   ngAfterViewInit(): void {
     this.loadindSuject.next(true);
     setTimeout(()=>{
-      this.loadindSuject.next(false)
+      this.loadindSuject.next(false);
+     
     },3000);
   }
   onGo() {

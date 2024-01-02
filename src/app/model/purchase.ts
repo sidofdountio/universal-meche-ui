@@ -11,8 +11,8 @@ export interface Purchase {
     amount: number;
     purchaseAt: string | Date;
     status?:SaleStatus;
-    supplier:Supplier;
-    product:Product;
+    supplier?:Supplier;
+    product?:Product;
     month?:any;
     year?:any;
     day?:number;

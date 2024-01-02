@@ -20,10 +20,7 @@
                                     <label for="totalSalaire" class="form-label">Loyer</label>
                                     <input type="number" class="form-control" value="{{ charge.loyer }}" disabled>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Charge Divers</label>
-                                    <input type="number" class="form-control" [value]="charge.anotherCharge.amount" disabled>
-                                </div>
+                            
                             </div> <!-- end -->
                             <!-- start -->
                             <div class="col">
@@ -72,7 +69,6 @@
                                     <td>{{ charge.electricity }}</td>
                                     <td>{{ charge.ration }}</td>
                                     <td>{{ charge.transport }}</td>
-                                    <td>{{ charge.anotherCharge.amount }}</td>
                                     <td>
                                         <button matTooltip="Modifier Les Valeurs Des Charges" mat-icon-button (click)="updateCharge(charge)"> <mat-icon>edit</mat-icon></button>
                                     </td>

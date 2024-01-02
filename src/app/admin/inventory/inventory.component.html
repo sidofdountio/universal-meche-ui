@@ -20,7 +20,7 @@
                         <!-- Position Column -->
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                            <td mat-cell *matCellDef="let element"> {{element.date | date }} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.date | date:'short' }} </td>
                         </ng-container>
 
                         <!-- Name Column -->
@@ -32,7 +32,7 @@
                         <!-- Weight Column -->
                         <ng-container matColumnDef="productName">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Produit </th>
-                            <td mat-cell *matCellDef="let element"> {{element.productName | uppercase }} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.productName }} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->
@@ -44,13 +44,13 @@
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="orldPrice">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix D'achat </th>
-                            <td mat-cell *matCellDef="let element"> {{element.orldPrice | CustomCurrency }} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.orldPrice  }} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="orldAmount">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
-                            <td mat-cell *matCellDef="let element"> {{element.oldAmount | CustomCurrency }} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total FCFA</th>
+                            <td mat-cell *matCellDef="let element"> {{element.oldAmount }} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->
@@ -65,15 +65,15 @@
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="newPrice">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix de Vente </th>
-                            <td mat-cell *matCellDef="let element"> {{element.newPrice | CustomCurrency }} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix Vente </th>
+                            <td mat-cell *matCellDef="let element"> {{element.newPrice  }} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="newAmount">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
-                            <td mat-cell *matCellDef="let element"> <span class="number"> {{element.newAmount |
-                                    CustomCurrency }}</span> </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total  FCFA</th>
+                            <td mat-cell *matCellDef="let element"> <span class="number"> {{element.newAmount
+                                    }}</span> </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
