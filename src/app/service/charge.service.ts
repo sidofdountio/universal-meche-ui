@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap,catchError } from 'rxjs/operators';
 import { Charge } from '../model/charge';
-import { AnotherCharge } from '../model/another-charge';
 import { environment } from 'src/environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 
@@ -32,20 +31,6 @@ export class ChargeService {
 
   saveCharge(charge:Charge): Observable<Charge> {
     return this.http.put<Charge>(`${this.URL}/charge`,charge,{headers: this.auth.createAuthorizationHeaders()}).pipe(
-      tap(console.log),
-      catchError(this.handlerError)
-    )
-  }
-
-  saveAnotherCharge(anotherCharge:AnotherCharge): Observable<AnotherCharge> {
-    return this.http.put<AnotherCharge>(`${this.URL}/saveAnotherCharge`,anotherCharge,{headers: this.auth.createAuthorizationHeaders()}).pipe(
-      tap(console.log),
-      catchError(this.handlerError)
-    )
-  }
-
-  getAnotherCharge(id:number): Observable<AnotherCharge> {
-    return this.http.get<AnotherCharge>(`${this.URL}/another/${id}`,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { DataState } from 'src/app/model/enume/data-state';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
-import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { Invoice } from 'src/app/model/invoice';
 import { Product } from 'src/app/model/product';
 import { InvoiceService } from 'src/app/service/invoice.service';

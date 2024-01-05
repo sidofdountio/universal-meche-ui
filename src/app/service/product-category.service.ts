@@ -20,8 +20,7 @@ export class ProductCategoryService {
     return this.http.get<ProductCategory[]>(`${this.URL}/product-category`,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
-    )
-  }
+    )}
 
   saveProductCategory(p:ProductCategory):Observable<ProductCategory[]> {
     return this.http.post<ProductCategory>(`${this.URL}/product-category`,p,{headers: this.auth.createAuthorizationHeaders()}).pipe(

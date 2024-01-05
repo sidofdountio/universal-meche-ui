@@ -113,7 +113,7 @@
       </div>
 
 
-      <ng-container *ngIf="state === DataState.LOADED_STATE">
+    
         <div class="mat-elevation-z8">
           <table mat-table [dataSource]="dataSource" matSort id="sale-table">
 
@@ -206,22 +206,6 @@
           </mat-paginator>
 
         </div><!-- End Table sale -->
-      </ng-container>
-      <ng-container *ngIf="state === DataState.LOADING_STATE">
-        <div>
-          <div class="" align="center">
-            <mat-spinner></mat-spinner>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="state === DataState.ERROR_STATE">
-        <div class="col-md-12">
-          <div class="error">
-            Une erreur s'est produite. Veuillez recharger L'Application.
-          </div>
-        </div>
-      </ng-container>
-
     </div>
     <!-- Sale End -->
   </div>

@@ -99,52 +99,52 @@ export class BillanComponent implements OnInit {
         for (let sale of sales) {
           if (sale.month === "January") {
             total += sale.amount;
-            monthAmounts[0] = total
+            monthAmounts[0] = total/1000
           }
           if (sale.month === "February") {
             total += sale.amount;
-            monthAmounts[1] = total
+            monthAmounts[1] = total/1000
           }
           if (sale.month === "March") {
             total += sale.amount;
-            monthAmounts[2] = total
+            monthAmounts[2] = total/1000
           }
           if (sale.month === "April") {
             total += sale.amount;
-            monthAmounts[3] = total
+            monthAmounts[3] = total/1000
           }
           if (sale.month === "May") {
             total += sale.amount;
-            monthAmounts[4] = total
+            monthAmounts[4] = total/1000
           }
           if (sale.month === "June") {
             total += sale.amount;
-            monthAmounts[5] = total
+            monthAmounts[5] = total/1000
           }
           if (sale.month === "July") {
             total += sale.amount;
-            monthAmounts[6] = total
+            monthAmounts[6] = total/1000
           }
           if (sale.month === "August") {
             total += sale.amount;
-            monthAmounts[7] = total
+            monthAmounts[7] = total/1000
           }
           if (sale.month === "September") {
             total += sale.amount;
-            monthAmounts[8] = total
+            monthAmounts[8] = total/1000
           }
           if (sale.month === "October") {
             total += sale.amount;
-            monthAmounts[9] = total
+            monthAmounts[9] = total/1000
           }
           if (sale.month === "November") {
             total += sale.amount;
-            monthAmounts[10] = total
+            monthAmounts[10] = total/1000
 
           }
           if (sale.month === "DECEMBER") {
             total += sale.amount;
-            monthAmounts[11] = total;
+            monthAmounts[11] = total/1000;
             console.log(sale.month)
           }
 

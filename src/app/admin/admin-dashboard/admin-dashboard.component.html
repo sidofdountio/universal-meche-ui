@@ -108,46 +108,8 @@
       </mat-card>
     </div><!--  End row Recent-->
     <div class="col-md-4">
-      <mat-card class="up-comming-card">
-        <mat-card-content>
-          <h2 class="example-h2">Annalyse</h2>
-          <!-- Montant des vente -->
-          <div class="example-section">
-            <p class="text-end "><small class="icon f-left">Montant Vendu</small><span
-                [ngClass]="totalAmountSalePerDay > 0 ? 'number' : 'negative' ">{{ totalAmountSalePerDay | CustomCurrency }}</span></p>
-            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="totalAmountSalePerDayProgresseBar"></mat-progress-bar>
-          </div>
-          <!-- Montant des achats -->
-          <div class="example-section">
-            <p class="text-end "><small class="icon f-left">Montant Des Achats</small><span
-                [ngClass]="purchaseAmount > 0 ? 'number' : 'negative' ">{{ purchaseAmount | CustomCurrency }}</span></p>
-            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="progresseBarPurchse"></mat-progress-bar>
-          </div>
-          <!-- Charge divers -->
-          <!-- <div class="example-section">
-            <p class="text-end "><small class="icon f-left">Montant Des Charges Divers</small><span
-                [ngClass]="miscellaneousLoad > 0 ? 'number' : 'negative' ">{{ miscellaneousLoad | currency }}</span></p>
-            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="miscellaneousLoad"></mat-progress-bar>
-          </div> -->
-          <!-- Gain possible -->
-          <!-- <div class="example-section">
-            <p class="text-end "><small class="icon f-left">Gain Possible</small><span
-                [ngClass]="receiveAmount > 0 ? 'number' : 'negative' ">{{ receiveAmount | currency }}</span></p>
-            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="receiveAmount"></mat-progress-bar>
-          </div> -->
-          <!--  -->
-          <div class="example-section">
-            <p class="text-end "><small class="icon f-left">Facture Annuler</small><span
-                [ngClass]="invoiceCancel > 0 ? 'number' : 'negative' ">{{ invoiceCancel }}</span></p>
-            <mat-progress-bar class="example-margin" color="primary" mode="determinate"
-              [value]="invoiceCancel"></mat-progress-bar>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      
+        
     </div>
   </div><!--  -->
   <!--  -->

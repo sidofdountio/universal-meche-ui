@@ -1,7 +1,7 @@
 <div class="grid-container">
     <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button matTooltip="Retour">
             <mat-icon>arrow_back</mat-icon></button>Etat Des Stocks</h1>
-    <ng-container *ngIf="state === DataState.LOADED_STATE">
+    
         <div class="row">
             <div class="col-md-12">
                 <div class="mat-elevation-z8">
@@ -87,24 +87,4 @@
 
             </div>
         </div>
-    </ng-container>
-
-    <ng-container *ngIf="state === DataState.LOADING_STATE">
-        <div class="col-md-12">
-            <div class="spinner">
-                <mat-spinner></mat-spinner>
-            </div>
-            <div class="">
-                Etat de stock ...
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="state === DataState.ERROR_STATE">
-        <div class="col-md-12">
-            <div class="error">
-                Une erreur s'est produite. Veuillez recharger l'application.
-                <i class="fa-solid fa-face-pensive"></i>
-            </div>
-        </div>
-    </ng-container>
 </div>

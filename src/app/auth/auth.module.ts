@@ -23,7 +23,7 @@ import { RegisterComponent } from "./register/register.component";
         CommonModule,
         FormsModule,
         MatButtonModule,
-        AuthRoutingModule,
+        AuthRoutingModule
     ],
     declarations: [
         LoginComponent,

@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { ProductCategory } from 'src/app/model/product-category';
-import { CategoryType } from 'src/app/model/category-type';
 import { SnabarService } from 'src/app/service/snabar.service';
-import { ProductCategoryTypeService } from 'src/app/service/product-category-type.service';
 import { ProductCategoryService } from 'src/app/service/product-category.service';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
@@ -27,8 +25,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
  
   categorys: ProductCategory[] = [];
 
-  constructor(private fb: FormBuilder, private snackBarService: SnabarService
-    , private productCategoryTypeServive: ProductCategoryTypeService,
+  constructor(private fb: FormBuilder, private snackBarService: SnabarService,
     private productCategoryService: ProductCategoryService) {
   }
 
@@ -70,17 +67,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       }
     )
   }
-
-  onSaveProductCategoryType(p: CategoryType) {
-    this.productCategoryTypeServive.saveProductCategoryType(p).subscribe(
-      () => {
-        this.snackBarService.openSnackBar("Catégorie Ajoutée", "Fermer");
-      }, () => {
-        this.snackBarService.openSnackBar("Erreur", "Fermer");
-      }
-    )
-  }
-
 
 
   ngOnDestroy(): void {

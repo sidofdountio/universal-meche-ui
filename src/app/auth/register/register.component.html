@@ -1,1 +1,40 @@
-<p>register works!</p>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="form">
+                <div class="text-center">
+                    <h2 class="text-uppercase">UNIVERSAL MECHE</h2>
+                    <h3>CREER UN COMPTE</h3>
+
+                </div>
+                <form [formGroup]="registerForm" class="mb-2">
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput formControlName="username">
+                        <mat-error>Please enter valid username</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email">
+                        <mat-error>Please enter valid email</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput formControlName="password">
+                        <mat-error>Please provide a valid password</mat-error>
+                    </mat-form-field>
+                    <button class="text-uppercase" type="button" mat-raised-button color="warn"
+                        [disabled]="!registerForm.valid" (click)="onRegister()">CREER UN NOUVEAU COMPTE</button>
+                </form>
+                <div>
+                    <button mat-raised-button color="primary" routerLink="/login" routerLinkActive="active">Se connecter
+                        si tu as un compte</button>
+                    <hr>
+                    <p class="text-center">&COPY; All right UNIVERSAL MECHE</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
