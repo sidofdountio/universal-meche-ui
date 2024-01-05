@@ -42,8 +42,8 @@
                                         <td>{{ product.salePrice | CustomCurrency }}</td>
                                         <td>{{ product.productCategory.name }}</td>
                                         <td>
-                                            <button matTooltip="Vendre Ce Produit" mat-raised-button class="text-uppercase text-primary"
-                                                (click)="buyNewProduct(product)">ACHECTER CE PRODUIT</button>
+                                            <button matTooltip="Vendre Ce Produit" mat-raised-button class="text-uppercase"
+                                                (click)="buyNewProduct(product)">ACHECTER</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -60,13 +60,10 @@
         <div class="col-md-12">
             <h3 class="mat-h3">Liste Des Prduits Achetes</h3>
             <!-- Purchase -->
-            <ng-container *ngIf="appState$ | async as dataState" [ngSwitch]="dataState">
-                <!-- LOADIND -->
-                <ng-container *ngSwitchCase="DataState.LOADING_STATE">
-                    <mat-spinner></mat-spinner>
-                </ng-container>
+            <ng-container >
+                
                 <!-- LOADED -->
-                <ng-container *ngSwitchCase="DataState.LOADED_STATE">
+                <ng-container >
                     <!-- Purchase table start -->
                     <mat-form-field appearance="outline">
                         <mat-label>Recherche </mat-label>
@@ -128,13 +125,7 @@
                     <!-- end purchase table -->
                 </ng-container>
                 <!-- ERROR -->
-                <ng-container *ngSwitchCase="DataState.ERROR_STATE">
-                    <div class="container">
-                        <div class="error">
-                            Une erreur s'est produite. Veuillez recharger L'Application.
-                        </div>
-                    </div>
-                </ng-container>
+              
             </ng-container>
         </div>
         <!-- purchase end -->

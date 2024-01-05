@@ -28,7 +28,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   purchases:Purchase[]=[];
   // displayedPurchaseColumns: string[] = ['purchaseAt', 'name', 'price', 'quantity', 'amount', 'supplierName', 'action'];
   displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
-  dataSource = new  MatTableDataSource<Purchase>(this.purchases);
+  dataSource = new  MatTableDataSource<Purchase>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -66,7 +66,6 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     this.purchaseService.getPurchase().subscribe(
       (response) => {
         this.dataSource.data =response;
-        this.purchases = response;
         this.snacbarService.openSnackBarSuccess("Commande Afichee", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
@@ -117,7 +116,7 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
           
           this.snacbarService.openSnackBarSuccess("Achat Enregistrer", "Fermer");
           this.onGetPurchase();
-          this.onGetProduct();
+          // this.onGetProduct();
         },
         () => {
           this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");

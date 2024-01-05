@@ -2,7 +2,8 @@
     <h1 class="mat-h1">
         <button routerLink="../product" routerLinkActive="active" mat-icon-button
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>
-        Catégorie</h1>
+        Catégorie
+    </h1>
     <div class="row">
         <!-- Product category -->
         <div class="col-md-6">
@@ -20,20 +21,8 @@
                                         <mat-hint>Ex. Mèches synthétiques</mat-hint>
                                     </mat-form-field>
                                 </div>
-                                <div class="col">
-                                    <div  formGroupName="categoryTypeForm" class="select">
-                                        <mat-form-field appearance="outline">
-                                            <mat-label>Type De La  Mèches</mat-label>
-                                            <mat-select formControlName="id">
-                                                <mat-option *ngFor="let type of categoryTypeList" [value]="type.id">
-                                                    {{type.name}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-hint>Ex. Kanekalon</mat-hint>
-                                        </mat-form-field>
-                                    </div>  
-                                </div>
-                               
+
+
                             </div>
                             <div class="mb-2">
                                 <button mat-flat-button color="accent" type="submit"
@@ -52,40 +41,9 @@
             </mat-card>
             <!-- List product category start -->
             <div class="mb-3">
-
             </div><!-- List product category end -->
-
         </div><!-- Product product category end -->
-
         <!-- Category Type -->
-        <div class="col-md-6">
-            <mat-card>
-                <mat-card-content>
-                    <h3 class="mat-h3">Ajouter Une Nouvelle Catégorie Des Types De Mèches </h3>
-                    <form>
-                        <mat-form-field class="example-chip-list">
-                            <mat-label>Les Différents Types De Mèches</mat-label>
-                            <mat-chip-grid #chipGrid aria-label="Fruit selection">
-                                <mat-chip-row *ngFor="let type of categoryTypes" (removed)="remove(type)">
-                                    {{type}}
-                                    <button matChipRemove [attr.aria-label]="'remove ' + type">
-                                        <mat-icon>cancel</mat-icon>
-                                    </button>
-                                </mat-chip-row>
-                            </mat-chip-grid>
-                            <input placeholder="Nouvelle Catégorie De Types de Mèches..." #fruitInput
-                                [formControl]="categoryTypeCtrl" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                (matChipInputTokenEnd)="add($event)" />
-                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                <mat-option *ngFor="let fruit of filteredCategoryTypes | async" [value]="fruit">
-                                    {{fruit}}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </mat-form-field>
-                    </form>
-                </mat-card-content>
-            </mat-card>
-        </div><!-- Category Type -->
+        <!-- Category Type -->
     </div>
 </div>

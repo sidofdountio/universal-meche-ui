@@ -3,32 +3,19 @@
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Billan</h1>
 
     <!-- <ng-container> -->
-    <button matTooltip="Billan Mensuel" mat-raised-button class="text-uppercase" (click)="billanMensuel()">Billan
-        Mensuel</button>&nbsp;
-    <button matTooltip="Billan Annuelle" mat-raised-button class="text-uppercase" (click)="billanAnnuelle()">Billan
-        Mensuel</button>&nbsp;
-    <button matTooltip="Historique" color="warn" mat-raised-button class="text-uppercase" (click)="billan()">exporter
-        tout les transactions</button>
-    <ng-container *ngIf="state === DataState.LOADED_STATE">
+    
+    <ng-container>
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col">
-                        <div class="mb-3">
-                            <label for="" class="form-label">Nombre de Vente Du Jours</label>
-                            <input class="form-control number" [value]="totalAmuntSalePerDay" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Total Vente Du Jours</label>
-                            <input class="form-control number" [value]="totalSalePerDay" disabled>
-                        </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Achat ToTal Du Moi</label>
                             <input class="form-control number" [value]="totalAmountPurchasePerMonth" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Total Des Charges Du Moi</label>
-                            <input class="form-control number" [value]="charges" disabled>
+                            <input class="form-control number" [value]="chargesTotal" disabled>
                         </div>
                     </div>
                     <div class="col">
@@ -46,19 +33,7 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="state === DataState.LOADING_STATE">
-        <div class="pt-4" align="center">
-            <mat-spinner></mat-spinner>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="state === DataState.ERROR_STATE">
-        <div class="col-md-12">
-            <div class="error">
-                Une erreur s'est produite. Veuillez recharger l'application.
-                <i class="fa-solid fa-face-pensive"></i>
-            </div>
-        </div>
-    </ng-container>
+    
 
     <div class="row">
         <div class="col">

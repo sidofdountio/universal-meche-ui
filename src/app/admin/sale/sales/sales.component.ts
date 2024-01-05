@@ -8,16 +8,14 @@ import { AddSaleComponent } from '../add-sale/add-sale.component';
 import { Sale } from 'src/app/model/sale';
 import { Product } from 'src/app/model/product';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleRequest } from 'src/app/model/sale-request';
 import { BehaviorSubject } from 'rxjs';
 import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { DataState } from 'src/app/model/enume/data-state';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { PaymentMethod } from 'src/app/model/paymentMethod';
-import { E } from '@angular/cdk/keycodes';
 import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
 
 @Component({
@@ -39,10 +37,11 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
   spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
-  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
+  readonly SaleStatus = SaleStatus;
+  displayedColumns: string[] = ['product', 'createAt', 'name','quantity','price', 'amount', 'saleStatus','action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+ 
   // List Product
   products: Product[] = [];
   readonly paymentMethods: PaymentMethod[] = [
@@ -73,7 +72,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
   productInSale: Product[] = [];
 
-
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
     private saleService: SaleService, private fb: FormBuilder) {
@@ -82,12 +80,26 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // fetch product
     this.getProducts();
-    this.onGetSales();
+    
+    this.state = DataState.LOADING_STATE;
+    this.saleService.getSales().subscribe(
+      (response) => {
+        this.dataSource.data = response;
+        this.state = DataState.LOADED_STATE;
+        this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
+      },
+      () => {
+        this.state = DataState.ERROR_STATE;
+        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+      }
+    )
+   
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
+    
   }
 
   /** Get Product */
@@ -96,7 +108,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productService.getProducts().subscribe(
       (response) => {
         this.products = response;
-        this.snacbarService.openSnackBarSuccess("Product Loading", "Fermer");
+        this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
       () => {
@@ -109,7 +121,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   onGetSales(): void {
     this.state = DataState.LOADING_STATE;
     this.saleService.getSales().subscribe(
-      (response: Sale[]) => {
+      (response) => {
         this.dataSource.data = response;
         this.state = DataState.LOADED_STATE;
         this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
@@ -164,11 +176,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: ''
-          }
+          name: ''
         }
       },
       customer: {
@@ -189,7 +197,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: "LIQUIDE"
     };
     const quantity = saleRequest.quantity;
@@ -207,11 +215,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            name: '',
-            id: undefined
-          }
+          name: ''
         }
       },
       customer: {
@@ -232,7 +236,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       createAt: '',
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: this.paymentTypeValue.value
     };
     this.saleToSaves.push(saleToSave);
@@ -256,7 +260,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.onGetSales();
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
-          this.clear();
+          this.saleToSaves.splice(0);
         },
         () => {
           this.isLoadingSubject.next(false);

@@ -1,7 +1,7 @@
 <div class="grid-container">
     <h1 class="mat-h1"> <button routerLink="../" routerLinkActive="active" mat-icon-button
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Facture</h1>
-    <ng-container *ngIf="state === DataState.LOADED_STATE">
+   
         <div class="row">
             <div class="col-md-12">
                 <div>
@@ -43,19 +43,6 @@
                             <td mat-cell *matCellDef="let row"> {{row.invoiceNumber}} </td>
                         </ng-container>
 
-                        <!-- Progress Column -->
-                       
-
-                        <!-- Name Column -->
-                        <!-- <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                            <td mat-cell *matCellDef="let row">
-                                <span
-                                    [ngClass]="[row.status === SaleStatus.PENDING ? 'badge-danger': 'badge-success'] ">
-                                    {{row.status}}</span>
-                            </td>
-                        </ng-container> -->
-
                         <!-- Fruit Column -->
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
@@ -72,9 +59,9 @@
                         <ng-container matColumnDef="action">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Voir La Facture Facture</th>
                             <td mat-cell *matCellDef="let row">
-                                <button mat-icon-button color="" (click)="onInvoice(row.invoiceNumber)"
+                                <button mat-raised-button color="warn" class="text-uppercase" (click)="onInvoice(row.invoiceNumber)"
                                     matTooltip="Voir Les Detailles De Cette Vente">
-                                    <mat-icon>more_vert</mat-icon>
+                                    voir la facture
                                 </button>
                             </td>
                         </ng-container>
@@ -94,20 +81,5 @@
                 <!-- Table end -->
             </div>
         </div>
-    </ng-container>
-    <ng-container *ngIf="state === DataState.LOADING_STATE">
-        <div class="col-md-12">
-            <div class="spinner" >
-                <mat-spinner></mat-spinner>
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="state === DataState.ERROR_STATE">
-        <div class="col-md-12">
-            <div class="error">
-                Une erreur s'est produite. Veuillez recharger l'application.
-                <i class="fa-solid fa-face-pensive"></i>
-            </div>
-        </div>
-    </ng-container>
+   
 </div>

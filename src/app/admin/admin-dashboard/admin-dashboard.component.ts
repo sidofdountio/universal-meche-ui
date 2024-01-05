@@ -2,7 +2,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { Sale } from 'src/app/model/sale';
 import { DialogService } from 'src/app/service/dialog.service';
 import { SnabarService } from 'src/app/service/snabar.service';
@@ -10,11 +9,9 @@ import { Chart } from 'chart.js/auto';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleService } from 'src/app/service/sale.service';
 import { PurcharseService } from 'src/app/service/purcharse.service';
-import { InvoiceService } from 'src/app/service/invoice.service';
 import { Inventory } from 'src/app/model/inventory';
 import { InventoryService } from 'src/app/service/imventory.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DateAdapter } from '@angular/material/core';
 
 
 @Component({
@@ -52,12 +49,10 @@ export class AdminDashboardComponent implements OnInit {
   totalSalePerDay: number = 0;
   currentDate!: string|number|Date;
   constructor( 
-    private purchaseService: PurcharseService,
-    private router: Router, 
+    private purchaseService: PurcharseService, 
     private dialogService: DialogService, 
     private snacbarService: SnabarService,
     private saleService:SaleService,
-    private invoiceService:InvoiceService,
     private inventoryService:InventoryService) { }
 
   ngOnInit(): void {
@@ -65,13 +60,14 @@ export class AdminDashboardComponent implements OnInit {
     this.stockChart();
     this.getPurchasePerMonth();
     this. getSaleByDay();
+
     this.saleService.getSales().subscribe(
       (response)=>{
         this.dataSource.data = response;
+      },()=>{
+        
       }
     )
-    
-   
   }
 
   ngAfterViewInit() {

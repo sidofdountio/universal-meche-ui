@@ -19,7 +19,7 @@ import { DialogService } from 'src/app/service/dialog.service';
 export class ProductListComponent implements OnInit, AfterViewInit {
 
   PRODUCTS: Product[] = [];
-  displayedColumns: string[] = ['id', 'name', 'price','salePrice', 'color','lenght','code', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'price','salePrice', 'color','lenght','code','volume', 'action'];
   dataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -48,12 +48,9 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       length: 0,
       productCategory: {
         id: undefined,
-        name: '',
-        categoryType: {
-          id: undefined,
-          name: ''
-        }
+        name: ''
       },
+      volume: ''
     }
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
@@ -88,7 +85,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
       subscribe(
         (response) => {
           this.dataSource.data = response;
-          this.snacbarService.openSnackBar("Product Loaded", "Fermer");
+          this.snacbarService.openSnackBar("Produit affiche", "Fermer");
         },
         ((error: HttpErrorResponse) => {
           this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");

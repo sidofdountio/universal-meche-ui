@@ -6,7 +6,7 @@ import { PurcharseService } from 'src/app/service/purcharse.service';
 import { ChargeService } from 'src/app/service/charge.service';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { EmployeeService } from 'src/app/service/employee.service';
-
+import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-billan',
   templateUrl: './billan.component.html',
@@ -18,12 +18,17 @@ export class BillanComponent implements OnInit, AfterViewInit {
 
   totalAmountSalePerMonth: number = 0;
   totalAmountPurchasePerMonth: number = 0;
-  totalSalePerDay: number = 0;
-  totalAmuntSalePerDay: number = 0;
+  totalAmountPurchasePerMonthSuject = new BehaviorSubject<number>(0);
+  chargeTotalSuject = new BehaviorSubject<number>(0);
+  depenceTotalSuject = new BehaviorSubject<number>(0);
+  totalSalarySuject = new BehaviorSubject<number>(0);
+  totalAmountSalePerMonthSuject = new BehaviorSubject(0);
+
   totalSalary: number = 0;
-  charges: number = 0;
+  chargesTotal: number = 0;
   billan: any;
   earn:number = 0;
+  depenceTotal : number = 0;
 
   constructor(
     private saleService: SaleService,
@@ -40,19 +45,10 @@ export class BillanComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.onCharges();
     this.getSaleByMonth();
-    this.getSaleByDay();
-    this.getSales();
     this.getPurchasePerMonth();
-
+    this.employees();
+    this.onWine();
   }
-
-  billanAnnuelle() {
-  }
-
-  billanMensuel() {
-
-  }
-
 
   onCharges() {
     this.charserService.getCharges().subscribe(
@@ -63,7 +59,6 @@ export class BillanComponent implements OnInit, AfterViewInit {
         let ration: number =0;
         let transport: number=0;
         let electricity: number =0;
-        let anotherCharge:number=0;
         // let anotherCharge: AnotherCharge;
         for (let item of response) {
           salary = item.totalSalary;
@@ -72,96 +67,71 @@ export class BillanComponent implements OnInit, AfterViewInit {
           ration = item.ration;
           transport = item.transport;
           electricity  = item.electricity;
-          anotherCharge=item.anotherCharge.amount;
         }
-// 
-        this.charges = impot + loyer + ration +electricity +anotherCharge +salary;
+        let sumCharge = 0;
+        sumCharge = impot + loyer + ration + electricity  + salary;
+        this.chargesTotal = sumCharge;
+        this.chargeTotalSuject.next(sumCharge)
+        
       }
     )
+   
   }
 
   employees() {
     this.employeeService.employees().subscribe(
       (response) => {
-        
-
+        let salary = 0;
         for (let item of response) {
-          this.totalSalary += item.salary;
+          salary += item.salary
         }
-
-        
+        this.totalSalary = salary;
+        this.totalSalarySuject.next(this.totalSalary);
       }
     )
   }
 
-  getSales() {
-    this.saleService.getSales().subscribe(
-      (sales) => {
-        let monthName:string = '';
-        let monthAmounts:MonthAmount[]=[];
-        for (let sale of sales){
-
-        }
-        let months:string[]=[];
-        let totalSalePerMonth:number[] = [];
-        for (let i = 0; i < sales.length; i++) {
-          monthName = sales[i].month;
-          for (let j = 0; j < 12; j++) {
-            if (months[j] === monthName){
-              totalSalePerMonth[j] += sales[i].amount;
-            }else{
-              months[j] = sales[i].month;
-              totalSalePerMonth[j]= sales[i].amount
-            }
-
-
-          }
-          
-        }
-        totalSaleAmountPerMonth(months, totalSalePerMonth);
-      }
-    )
-  }
-
-  getSaleByMonth() {
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSaleMonth().subscribe(
-      (response) => {
-        for (let item of response) {
-          this.totalAmountSalePerMonth += item.amount;
-          this.earn = this.charges - this.totalAmountSalePerMonth;
-        }
-        this.state = DataState.LOADED_STATE;
-      },
-      () => {
-        this.state = DataState.ERROR_STATE;
-        this.snabarService.openSnackBar("Une erreur", "Fermer");
-      }
-    )
-  }
-
-  getSaleByDay() {
-    this.saleService.getSaleDay().subscribe(
-      (response) => {
-        this.totalSalePerDay = response.length;
-        for (const item of response) {
-          this.totalAmuntSalePerDay += item.amount;
-        }
-      },() => {
-      }
-    )
-  }
 
   getPurchasePerMonth() {
     this.purchaseService.getPurchasePerMonth().subscribe(
       (response) => {
         for (let purchase of response) {
           this.totalAmountPurchasePerMonth += purchase.amount;
+          
         }
+        this.totalAmountPurchasePerMonthSuject.next(this.totalAmountPurchasePerMonth);
+        console.log("amount %d",this.totalAmountPurchasePerMonth)
       }
     )
   }
+
+  getSaleByMonth() {
+    this.saleService.getSaleMonth().subscribe(
+      (response) => {
+        let saleAmount = 0;
+        for (let item of response) {
+          saleAmount += item.amount;
+        }
+        this.totalAmountSalePerMonth = saleAmount;
+        console.log("sale %d",this.totalAmountSalePerMonth)
+        console.log("amount %d",this.depenceTotal);
+      },
+      () => {
+        this.snabarService.openSnackBar("Une erreur", "Fermer");
+      }
+    )
+  }
+
+  onWine(){
+    this.depenceTotal = this.totalAmountPurchasePerMonth + this.chargesTotal + this.totalSalary;
+    this.earn =  this.totalAmountSalePerMonth - this.depenceTotal;
+    console.log("=======================");
+    console.log("sale %d",this.totalAmountSalePerMonth)
+    
+   
+  }
 }
+
 
 function totalSaleAmountPerDay(day: number[], totalAmountPerDay: number[]) {
   const ctx: any = document.getElementById('myChart');

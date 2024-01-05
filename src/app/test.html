@@ -1,0 +1,16 @@
+<ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Validez La Vente</th>
+    <td mat-cell *matCellDef="let element">
+      <button *ngIf="element.status === status.PENDING" matTooltip="Valider Cette Vente" mat-icon-button
+        color="primary" (click)="changeSaleStatus(element)">
+        <mat-icon>sync</mat-icon>
+      </button>
+      <button *ngIf="element.status !== status.PENDING" mat-icon-button color="accent" disabled>
+        <mat-icon>sync_disabled</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+  </tr>

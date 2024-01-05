@@ -58,6 +58,7 @@ import { UpdateEmployeeComponent } from './employee/update-employee/update-emplo
 import { BillanComponent } from './billan/billan.component';
 import { CustomPipe } from './custome.pipe';
 import { ValidSaleComponent } from './sale/valid-sale/valid-sale.component';
+import { AddChargeComponent } from './charge/add-charge/add-charge.component';
 
 
 
@@ -88,7 +89,8 @@ import { ValidSaleComponent } from './sale/valid-sale/valid-sale.component';
     UpdateChargeComponent,
     UpdateEmployeeComponent,
     BillanComponent,
-    ValidSaleComponent
+    ValidSaleComponent,
+   
   ],
   imports: [
     FormsModule,

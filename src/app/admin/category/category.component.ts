@@ -1,15 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ProductCategory } from 'src/app/model/product-category';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { map, startWith } from 'rxjs/operators';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { CategoryType } from 'src/app/model/category-type';
 import { SnabarService } from 'src/app/service/snabar.service';
-import { ProductCategoryTypeService } from 'src/app/service/product-category-type.service';
 import { ProductCategoryService } from 'src/app/service/product-category.service';
 
 @Component({
@@ -29,22 +25,18 @@ export class CategoryComponent implements OnInit, OnDestroy {
     })
 
   });
-  categoryTypeList: CategoryType[] = [];
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   categoryTypeCtrl = new FormControl('');
   filteredCategoryTypes: Observable<string[]>;
   categoryTypes: string[] = [];
   allCategoryTpes: string[] = ['Kanekalon', 'Toyokalon', 'Modacrylique'];
-  categoryTypeToSave: CategoryType ={
-    id: 1,
-    name: ''
-  };
+  
 
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
   announcer = inject(LiveAnnouncer);
 
-  constructor(private fb: FormBuilder, private snackBarService: SnabarService
-    ,private productCategoryTypeServive:ProductCategoryTypeService,
+  constructor(private fb: FormBuilder, private snackBarService: SnabarService,
     private productCategoryService: ProductCategoryService) {
     this.filteredCategoryTypes = this.categoryTypeCtrl.valueChanges.pipe(
       startWith(null),
@@ -53,7 +45,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getProductCategoryType();
+  
   }
 
 
@@ -61,11 +53,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   onSubmitProductCategory() {
     console.log(this.productCategoryForm.value);
     let category:ProductCategory = {
-      name: this.productCategoryForm.value.name as string,
-      categoryType: {
-        id: this.productCategoryForm.value.categoryTypeForm?.id,
-        name: ''
-      }
+      name: this.productCategoryForm.value.name as string
     };
     this.addNewCategory(category);
     this.productCategoryForm.reset();
@@ -84,79 +72,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
     )
   }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    // Add our fruit
-    if (value) {
-      this.categoryTypes.push(value);
-      this.categoryTypeToSave={
-        id: undefined,
-        name:value,
-      }
-      this.onSaveProductCategoryType(this.categoryTypeToSave);
-      this.getProductCategoryType();
-      this.snackBarService.openSnackBar("Catégorie Ajoutée", "Fermer");
-    }
-    // Clear the input value
-    event.chipInput!.clear();
-    this.categoryTypeCtrl.setValue(null);
-  }
-
-  remove(categoryType: string): void {
-    const index = this.categoryTypes.indexOf(categoryType);
-
-    if (index >= 0) {
-      this.categoryTypes.splice(index, 1);
-      this.announcer.announce(`Removed ${categoryType}`);
-      this.snackBarService.openSnackBarSuccess("Catégorie Retirée", "close")
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.categoryTypeToSave={
-      id: undefined,
-      name:event.option.viewValue,
-    }
-    this.onSaveProductCategoryType(this.categoryTypeToSave);
-    this.getProductCategoryType();
-    this.categoryTypes.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.categoryTypeCtrl.setValue(null);
-  }
+  
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.allCategoryTpes.filter(categoryType => categoryType.toLowerCase().includes(filterValue));
   }
-
-  getProductCategoryType(){
-    this.productCategoryTypeServive.getProductCategoryType().subscribe(
-      (response)=>{
-       this.categoryTypeList = response;
-      }
-    )
-  }
-
-  onSaveProductCategoryType(p:CategoryType){
-    this.productCategoryTypeServive.saveProductCategoryType(p).subscribe(
-      ()=>{
-        this.snackBarService.openSnackBar("Catégorie Ajoutée", "Fermer");
-      },()=>{
-        this.snackBarService.openSnackBar("Erreur", "Fermer");
-      }
-    )
-  }
-
-  onDeleteProductCategoryType(id:number){
-    this.productCategoryTypeServive.delete(id).subscribe(
-      ()=>{
-        this.snackBarService.openSnackBar("Catégorie Supprimee", "Fermer");
-      }
-    )
-  }
-
-
+  
   ngOnDestroy(): void {
     this.isLoadingSubject.unsubscribe();
   }

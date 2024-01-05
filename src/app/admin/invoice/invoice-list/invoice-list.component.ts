@@ -42,7 +42,6 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
   }
 
   constructor(private invoiceService: InvoiceService,
-    private productService: ProductService,
     private snackbarService: SnabarService, private router: Router) { }
 
   applyFilter(event: Event) {

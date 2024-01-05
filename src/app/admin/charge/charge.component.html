@@ -3,53 +3,16 @@
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Les Charges</h1>
     <ng-container>
         <div class="row">
-            <div class="col-md-12">
-                <mat-card>
-                    <mat-card-content *ngFor="let charge of charge">
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Salaire Des Employes</label>
-                                    <input type="number" class="form-control" value="{{ charge.totalSalary }}" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Import</label>
-                                    <input type="number" class="form-control" value="{{ charge.impot }}" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Loyer</label>
-                                    <input type="number" class="form-control" value="{{ charge.loyer }}" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Charge Divers</label>
-                                    <input type="number" class="form-control" [value]="charge.anotherCharge.amount" disabled>
-                                </div>
-                            </div> <!-- end -->
-                            <!-- start -->
-                            <div class="col">
-                                <!-- elect -->
-                                <div class="mb-3">
-                                    <label for="totalSalaire" class="form-label">Electricite</label>
-                                    <input type="number" class="form-control" value="{{ charge.electricity }}" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ration" class="form-label">Ration</label>
-                                    <input type="number" class="form-control" value="{{ charge.ration }}" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="transport" class="form-label">Tranport</label>
-                                    <input type="number" class="form-control" value="{{ charge.transport }}" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-
-            </div><!-- end form charge -->
+            
             <!-- start list charge -->
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mat-h2">List Des Charges</h2>
+                    <div >
+                        <button *ngIf="charge.length === 0" matTooltip="Charges" mat-icon-button
+                        (click)="addCharge()"> <mat-icon>add</mat-icon></button>
+                    </div>
+                    
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="table-dark">
@@ -60,7 +23,6 @@
                                     <th scope="col">Electricite</th>
                                     <th scope="col">Ration</th>
                                     <th scope="col">Tranport</th>
-                                    <th scope="col">Autre Charge</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -72,9 +34,10 @@
                                     <td>{{ charge.electricity }}</td>
                                     <td>{{ charge.ration }}</td>
                                     <td>{{ charge.transport }}</td>
-                                    <td>{{ charge.anotherCharge.amount }}</td>
+
                                     <td>
-                                        <button matTooltip="Modifier Les Valeurs Des Charges" mat-icon-button (click)="updateCharge(charge)"> <mat-icon>edit</mat-icon></button>
+                                        <button matTooltip="Modifier Les Valeurs Des Charges" mat-icon-button
+                                            (click)="updateCharge(charge)"> <mat-icon>edit</mat-icon></button>
                                     </td>
                                 </tr>
                             </tbody>
