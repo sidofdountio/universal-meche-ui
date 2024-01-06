@@ -63,7 +63,7 @@ export class AddPurchaseComponent implements OnInit {
       },
       product: {
         id: this.formPurchase.value.formProduct?.id ,
-        name: '',
+        name: this.data.name,
         price: 0,
         salePrice: 0,
         code: '',

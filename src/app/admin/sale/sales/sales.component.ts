@@ -44,7 +44,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // List Product
   products: Product[] = [];
-  readonly months:string[] = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","NOVEMBER","DECEMBER"]
+  readonly months: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "NOVEMBER", "DECEMBER"]
   readonly paymentMethods: PaymentMethod[] = [
     {
       type: "LIQUIDE"
@@ -97,9 +97,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
   }
 
-  onSelectByMonth(month:any) {
-   console.log("was selected %s",month);
-   this.onGetSales(month, this.year);
+  onSelectByMonth(month: any) {
+    console.log("was selected %s", month);
+    this.onGetSales(month, this.year);
   }
 
   /** Get Product */
@@ -119,15 +119,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onGetSales(month: any, year: any): void {
-    this.state = DataState.LOADING_STATE;
     this.saleService.getSaleByMonthAndYear(month, year).subscribe(
       (response) => {
         this.dataSource.data = response;
-        this.state = DataState.LOADED_STATE;
         this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
       },
       () => {
-        this.state = DataState.ERROR_STATE;
         this.snacbarService.openSnackBarError("Nous ne pouvons pas afficher les ventes", "Fermer");
       }
     )
@@ -162,7 +159,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // This Method map with the output afterClosed method of saleNewSale provide.
   private processToSaveSale(saleRequest: SaleRequest) {
-
     let saleToSave: Sale = {
       product: {
         id: 1,
@@ -176,7 +172,8 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         productCategory: {
           id: undefined,
           name: ''
-        }
+        },
+        volume:''
       },
       customer: {
         id: 1,
@@ -215,7 +212,8 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         productCategory: {
           id: undefined,
           name: ''
-        }
+        },
+        volume: ''
       },
       customer: {
         id: saleRequest.customer.id,

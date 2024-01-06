@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Product } from 'src/app/model/product';
 import { Custormer } from 'src/app/model/custorme';
@@ -80,7 +80,7 @@ export class AddSaleComponent implements OnInit {
     this.snacbarService.openSnackBar(`Vous Avez Choisir  ${this.custormeTypeSelected}`, "Fermer");
     if (typeSelected === "Grosiste") {
       this.formSale = this.fb.group({
-        price: [this.data.salePrice, Validators.required],
+        price: [this.data.salePrice],
         quantity: [, [Validators.required]],
         custormeType: ['Grosiste'],
         formCustomer: this.fb.group({
@@ -93,7 +93,7 @@ export class AddSaleComponent implements OnInit {
     }
     else {
       this.formSale = this.fb.group({
-        price: [this.data.salePrice,Validators.required],
+        price: [this.data.salePrice],
         quantity: [, [Validators.required]],
         custormeType: ['Client'],
         formCustomer: this.fb.group({
@@ -131,7 +131,6 @@ export class AddSaleComponent implements OnInit {
         name: ''
       }
     }
-    console.log(saleRequest);
     this.dialogRef.close(saleRequest);
   }
 
@@ -140,6 +139,3 @@ export class AddSaleComponent implements OnInit {
   }
 
 }
-
-
-

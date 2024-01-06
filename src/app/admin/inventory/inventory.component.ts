@@ -37,16 +37,14 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   }
 
   onGetInventorie(): void {
-    this.state = DataState.LOADING_STATE;
+  
     this.inventoryService.getInventories().subscribe(
       (response: Inventory[]) => {
         this.dataSource.data = response;
         this.inventorySuject.next(response);
-        this.state = DataState.LOADED_STATE;
         this.snackbarService.openSnackBarSuccess("Etat De Stock Affiche", "Fermer");
       },
       () => {
-        this.state = DataState.ERROR_STATE;
         this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
 
       }
