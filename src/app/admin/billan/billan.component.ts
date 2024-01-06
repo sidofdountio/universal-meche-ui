@@ -113,8 +113,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
           saleAmount += item.amount;
         }
         this.totalAmountSalePerMonth = saleAmount;
-        console.log("sale %d",this.totalAmountSalePerMonth)
-        console.log("amount %d",this.depenceTotal);
+       
       },
       () => {
         this.snabarService.openSnackBar("Une erreur", "Fermer");
@@ -124,11 +123,7 @@ export class BillanComponent implements OnInit, AfterViewInit {
 
   onWine(){
     this.depenceTotal = this.totalAmountPurchasePerMonth + this.chargesTotal + this.totalSalary;
-    this.earn =  this.totalAmountSalePerMonth - this.depenceTotal;
-    console.log("=======================");
-    console.log("sale %d",this.totalAmountSalePerMonth)
-    
-   
+    this.earn =  this.totalAmountSalePerMonth - this.depenceTotal; 
   }
 }
 
@@ -273,7 +268,6 @@ function calculateTotalSalePerMonth(dailySales: DaylySale[]) {
 function generateMonthArray() {
   const months = [];
   const date = new Date();
-
   for (let i = 0; i < 12; i++) {
     date.setMonth(i);
     const monthName = date.toLocaleString('default', { month: 'long' }).slice(0, 3);

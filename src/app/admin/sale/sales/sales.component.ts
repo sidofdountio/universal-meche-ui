@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogService } from 'src/app/service/dialog.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SaleService } from 'src/app/service/sale.service';
 import { SnabarService } from 'src/app/service/snabar.service';
@@ -24,6 +23,7 @@ import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
+
   appState = new BehaviorSubject<DataState>(DataState.LOADING_STATE);
   appState$ = this.appState.asObservable();
   readonly DataState = DataState;
@@ -38,12 +38,13 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
   readonly SaleStatus = SaleStatus;
-  displayedColumns: string[] = ['product', 'createAt', 'name','quantity','price', 'amount', 'saleStatus','action'];
+  displayedColumns: string[] = ['product', 'createAt', 'name', 'quantity', 'price', 'amount', 'saleStatus', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
- 
+
   // List Product
   products: Product[] = [];
+  readonly months:string[] = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","NOVEMBER","DECEMBER"]
   readonly paymentMethods: PaymentMethod[] = [
     {
       type: "LIQUIDE"
@@ -60,6 +61,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       value: [""]
     })
   });
+
+  seletMonthForm = this.fb.group({
+    month: this.fb.group({
+      monthValue: [""]
+    })
+  });
   paymentSelected: boolean = false;
   private paymentTypeValue = new BehaviorSubject<string>("LIQUIDE");
   readonly status = SaleStatus;
@@ -71,35 +78,28 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   isDisabled$ = this.disableSujet.asObservable();
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
   productInSale: Product[] = [];
+  month: any = "null";
+  year: any = "";
 
   constructor(private dialog: MatDialog, private productService: ProductService,
-    private snacbarService: SnabarService, private dialogService: DialogService,
+    private snacbarService: SnabarService,
     private saleService: SaleService, private fb: FormBuilder) {
+    this.year = new Date().getFullYear();
   }
 
   ngOnInit(): void {
     // fetch product
     this.getProducts();
-    
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSales().subscribe(
-      (response) => {
-        this.dataSource.data = response;
-        this.state = DataState.LOADED_STATE;
-        this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
-      },
-      () => {
-        this.state = DataState.ERROR_STATE;
-        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
-      }
-    )
-   
+    this.onGetSales(this.month, this.year);
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
 
-    
+  onSelectByMonth(month:any) {
+   console.log("was selected %s",month);
+   this.onGetSales(month, this.year);
   }
 
   /** Get Product */
@@ -118,9 +118,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  onGetSales(): void {
+  onGetSales(month: any, year: any): void {
     this.state = DataState.LOADING_STATE;
-    this.saleService.getSales().subscribe(
+    this.saleService.getSaleByMonthAndYear(month, year).subscribe(
       (response) => {
         this.dataSource.data = response;
         this.state = DataState.LOADED_STATE;
@@ -128,7 +128,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       () => {
         this.state = DataState.ERROR_STATE;
-        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        this.snacbarService.openSnackBarError("Nous ne pouvons pas afficher les ventes", "Fermer");
       }
     )
   }
@@ -137,7 +137,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentSelected = true;
     this.paymentTypeValue.next(event);
     this.getPaymentType(event);
-    console.log("type %s", event);
   }
   /** Start sale product here
    * First Get product by id when they click on button */
@@ -256,8 +255,8 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingSubject.next(true);
     this.saleService.addSale(sales)
       .subscribe(
-        (response) => {
-          this.onGetSales();
+        () => {
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
           this.saleToSaves.splice(0);
@@ -305,7 +304,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         () => {
           this.saleService.validSale(sale);
           this.spinnerSaleStatusSubject.next(false);
-          this.onGetSales();
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
         },
         () => {

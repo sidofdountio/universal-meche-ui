@@ -9,18 +9,18 @@
       <div class="row mb-3">
         <div class="col-md-5">
           <div class="mb-2">
-              <!-- payment type selected -->
-              <form [formGroup]="paymentForm">
-                <div formGroupName="type">
-                  <mat-form-field appearance="outline">
-                    <mat-label class="example-margin">Moyen De Paiyement :</mat-label>
-                    <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
-                      <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{ type.type }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </form>
-              <!-- End payment type selected -->
+            <!-- payment type selected -->
+            <form [formGroup]="paymentForm">
+              <div formGroupName="type">
+                <mat-form-field appearance="outline">
+                  <mat-label class="example-margin">Moyen De Paiyement :</mat-label>
+                  <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
+                    <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{ type.type }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+            <!-- End payment type selected -->
             &nbsp;
             <button (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button matBadge="{{ item }}"
               *ngIf="!(isLoading$ | async) " [disabled]=" item === 0 || !paymentSelected" matBadgePosition="after"
@@ -71,7 +71,8 @@
                       <td>{{ product.salePrice }}</td>
                       <td>{{ product.productCategory.name }}</td>
                       <td>
-                        <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(product)" class="text-uppercase"> 
+                        <button matTooltip="Vendre Ce Produit" mat-raised-button (click)="saleNewProduct(product)"
+                          class="text-uppercase">
                           VENDRE </button>
                       </td>
                     </tr>
@@ -95,13 +96,30 @@
     <!-- Sale start -->
     <div class="row mb-3">
       <div class="col-md-12">
-        <h3 class="mat-h1">Liste Des Produits Achetes</h3>
         <!-- Table sale -->
-        <mat-form-field appearance="outline" class="mb-4">
-          <mat-label>Recherche</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. " #input>
-          <mat-hint>Entrer Le Nom De La Recherche</mat-hint>
-        </mat-form-field>
+        <div class="row">
+          <div class="col-md-8">
+            <mat-form-field appearance="outline" class="mb-4">
+              <mat-label>Recherche</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Ex. " #input>
+              <mat-hint>Entrer Le Nom De La Recherche</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <form [formGroup]="seletMonthForm">
+              <div formGroupName="month">
+                <mat-form-field>
+                  <mat-label> Recherche par moi</mat-label>
+                  <mat-select (ngModelChange)="onSelectByMonth($event)" formControlName="monthValue">
+                    <mat-option *ngFor="let month of months" [value]="month">
+                      {{month }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </div>
 
         <div>
           <div class="mat-elevation-z8">
@@ -167,12 +185,12 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-            aria-label="Select page of periodic elements">
-          </mat-paginator>
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
 
           </div><!-- End Table sale -->
         </div>
-       
+
 
       </div>
       <!-- Sale End -->
