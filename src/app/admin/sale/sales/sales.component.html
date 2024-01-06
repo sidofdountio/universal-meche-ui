@@ -5,40 +5,8 @@
   <div class="row">
     <div class="col-lg-12 mb-3">
       <h3 class="mat-h3">Selectioner Le Produit A Vendre</h3>
-      <!-- Product list start -->
-      <div class="row mb-3">
-        <div class="col-md-5">
-          <div class="mb-2">
-            <!-- payment type selected -->
-            <form [formGroup]="paymentForm">
-              <div formGroupName="type">
-                <mat-form-field appearance="outline">
-                  <mat-label class="example-margin">Moyen De Paiyement :</mat-label>
-                  <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
-                    <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{ type.type }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </form>
-            <!-- End payment type selected -->
-            &nbsp;
-            <button (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button matBadge="{{ item }}"
-              *ngIf="!(isLoading$ | async) " [disabled]=" item === 0 || !paymentSelected" matBadgePosition="after"
-              matBadgeColor="primary">VALIDER LA VENTE</button>
-            &nbsp;
-            <button [disabled]="!item" color="warn" matTooltip="Annuler La vente" mat-raised-button type="button"
-              (click)="clear()" *ngIf="!(isLoading$ | async)">
-              <mat-icon>block</mat-icon> ANNULER LA VENTE
-            </button>
-            &nbsp;
-            <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Loading...
-            </button>
-          </div>
-        </div>
-        <div class="col-md-7">
-          <h3 class="mat-h3">Liste Des Poduits</h3>
+      <div class="row">
+        <div class="col-md-12">
           <ng-container *ngIf="appState$ | async as dataState" [ngSwitch]="dataState">
             <ng-container *ngSwitchCase="DataState.LOADING_STATE">
               <div class="">
@@ -90,6 +58,40 @@
 
           </ng-container>
           <!-- Product list end-->
+        </div>
+      </div>
+      <!-- Product list start -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <div class="mb-2">
+            <!-- payment type selected -->
+            <form [formGroup]="paymentForm">
+              <div formGroupName="type">
+                <mat-form-field appearance="outline">
+                  <mat-label class="example-margin">Moyen De Paiyement :</mat-label>
+                  <mat-select (ngModelChange)="onPaymentMethod($event)" formControlName="value">
+                    <mat-option *ngFor="let type of paymentMethods" [value]="type.type">{{ type.type }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+            <!-- End payment type selected -->
+          </div>
+        </div>
+        <div class="col-md-8">
+          <button (click)="onSaveSale()" matTooltip="Valider La Vente" mat-raised-button matBadge="{{ item }}"
+            *ngIf="!(isLoading$ | async) " [disabled]=" item === 0 || !paymentSelected" matBadgePosition="after"
+            matBadgeColor="primary">VALIDER LA VENTE</button>
+          &nbsp;
+          <button [disabled]="!item" color="warn" matTooltip="Annuler La vente" mat-raised-button type="button"
+            (click)="clear()" *ngIf="!(isLoading$ | async)">
+            <mat-icon>block</mat-icon> ANNULER LA VENTE
+          </button>
+          &nbsp;
+          <button class="btn btn-primary" type="button" disabled *ngIf="(isLoading$ | async)">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            vente en cours...
+          </button>
         </div>
       </div>
     </div>

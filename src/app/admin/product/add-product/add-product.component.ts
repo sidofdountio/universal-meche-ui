@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -12,18 +11,27 @@ import { ProductCategoryService } from 'src/app/service/product-category.service
 })
 export class AddProductComponent {
 
+
+  readonly volumes: string[] = [
+    "PETIT", "MOYEN", "GRAND"
+  ];
+
   productCategorys: ProductCategory[] = [];
   // productToSave!: FormGroup;
   productToSave = this.formBuild.group({
     id: ['', []],
     name: ['', Validators.required],
     price: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
-    code: ['', Validators.required],
+    code: [''],
     description: [''],
     color: [''],
     size: ['',],
     categoryTypeForm: this.formBuild.group({
       id: ['', Validators.required]
+    }),
+    volumeForm: this.formBuild.group({
+
+      volume: ['']
     })
   });
 
@@ -37,12 +45,11 @@ export class AddProductComponent {
     this.productCategoryService.getProductCategory().subscribe(
       (response) => {
         this.productCategorys = response;
-      },
-      (error:HttpErrorResponse)=>{
-        console.log("error %s", error.message);
       }
     )
   }
+
+ 
 
   onClose() {
     this.dialogRef.close();
@@ -52,7 +59,7 @@ export class AddProductComponent {
       id: undefined,
       name: this.productToSave.value.name as string,
       price: this.productToSave.value.price as any,
-      salePrice: 0,
+      salePrice: this.productToSave.value.price as any,
       code: this.productToSave.value.code as string,
       color: this.productToSave.value.color as string,
       length: this.productToSave.value.size as any,
@@ -60,7 +67,8 @@ export class AddProductComponent {
       productCategory: {
         id: this.productToSave.value.categoryTypeForm?.id as any,
         name: ''
-      }
+      },
+      volume: this.productToSave.value.volumeForm?.volume as any,
     };
     this.dialogRef.close(product);
   }

@@ -21,7 +21,7 @@ import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
 export class ProductListComponent implements OnInit, AfterViewInit {
 
   products: Product[] | any[] = [];
-  displayedColumns: string[] = ['id', 'name', 'price', 'salePrice', 'color', 'lenght', 'code', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'price', 'salePrice', 'color', 'lenght', 'code', 'volume','action'];
 
   dataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -53,6 +53,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         id: undefined,
         name: ''
       },
+      volume: ''
     }
     const configDialog = new MatDialogConfig();
     configDialog.autoFocus = true;
@@ -157,23 +158,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   printReportProduct() {
-    // let dataType = 'application/vnd.ms-excel.sheet.macroEnabled.12';
-    // let tableSelect = document.getElementById('product-table');
-    // let tableHtml = tableSelect?.outerHTML.replace(/ /g, '%20');
-    // let downloadLink = document.createElement('a');
-    // document.body.appendChild(downloadLink);
-    // downloadLink.href = 'data: ' + dataType + ',' + this.dataSource;
-    // downloadLink.download = 'liste-produits.xls';
-    // downloadLink.click();
-    // document.body.removeChild(downloadLink);
-
     this.export();
   }
 
   export(): void {
     /* generate worksheet */
     const ws: WorkSheet = utils.json_to_sheet(this.products);
-
     /* generate workbook and add the worksheet */
     const wb: WorkBook = utils.book_new();
     utils.book_append_sheet(wb, ws, 'Sheet1');

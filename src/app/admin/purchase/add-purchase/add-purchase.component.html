@@ -28,14 +28,27 @@
             <mat-error>Entrer Que Les Nombres positifs Superieure A 0.</mat-error>
         </mat-form-field>
     </p>
-
-    <div formGroupName="formSupplier">
-        <mat-form-field appearance="outline">
-            <mat-label>Selectioner Le Fournisseur </mat-label>
-            <mat-select formControlName="id">
-                <mat-option *ngFor="let supplier  of suppliers" [value]="supplier.id">{{ supplier.name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <div class="row">
+        <div class="col">
+            <mat-form-field appearance="outline">
+                <mat-label>Prix Vente </mat-label>
+                <input matInput formControlName="salePrice">
+                <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
+                <mat-hint>Ex 3000.00</mat-hint>
+                <span matPrefix>CFA&nbsp;</span>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <div formGroupName="formSupplier">
+                <mat-form-field appearance="outline">
+                    <mat-label>Selectioner Le Fournisseur </mat-label>
+                    <mat-select formControlName="id">
+                        <mat-option *ngFor="let supplier  of suppliers" [value]="supplier.id">{{
+                            supplier.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
 
     <div formGroupName="formProduct" hidden>
@@ -44,17 +57,6 @@
             <input matInput formControlName="id">
         </mat-form-field>
     </div>
-
-    <mat-form-field appearance="outline">
-        <mat-label>Prix Vente </mat-label>
-        <input matInput formControlName="salePrice">
-        <mat-error>Veillez Enregistrer Les Prix Positives </mat-error>
-        <mat-hint>Ex 3000.00</mat-hint>
-        <span matPrefix>CFA&nbsp;</span>
-        
-    </mat-form-field>
-
-
 </div>
 <div mat-dialog-actions>
     <button matTooltip="ANNULER" mat-raised-button color="warn" (click)="onClose()">ANNULER</button>

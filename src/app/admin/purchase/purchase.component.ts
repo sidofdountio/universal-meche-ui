@@ -107,7 +107,6 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.afterClosed()
       .subscribe(
         (response) => {
-          console.log(response);
           this.purchaseNewProduct(response);
         });
   }
@@ -116,13 +115,11 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
     this.purchaseService.addPurchase(purchaseToAdd)
       .subscribe(
         () => {
-          
           this.snacbarService.openSnackBarSuccess("Achat Enregistrer", "Fermer");
           this.onGetPurchase();
-          this.onGetProduct();
         },
         () => {
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+          this.snacbarService.openSnackBarError("Une erreure est eurvenue l'or de l'affichage de la liste des achats", "Fermer");
         }
       );
   }
