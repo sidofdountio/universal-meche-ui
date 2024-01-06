@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogService } from 'src/app/service/dialog.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SaleService } from 'src/app/service/sale.service';
 import { SnabarService } from 'src/app/service/snabar.service';
@@ -8,7 +7,6 @@ import { AddSaleComponent } from '../add-sale/add-sale.component';
 import { Sale } from 'src/app/model/sale';
 import { Product } from 'src/app/model/product';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleRequest } from 'src/app/model/sale-request';
@@ -18,7 +16,6 @@ import { DataState } from 'src/app/model/enume/data-state';
 import { FormBuilder } from '@angular/forms';
 import { PaymentMethod } from 'src/app/model/paymentMethod';
 import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
-import { WorkSheet, utils, WorkBook, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-sales',
@@ -26,6 +23,7 @@ import { WorkSheet, utils, WorkBook, writeFile } from 'xlsx';
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
+
   appState = new BehaviorSubject<DataState>(DataState.LOADING_STATE);
   appState$ = this.appState.asObservable();
   readonly DataState = DataState;
@@ -39,11 +37,14 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
   spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
 
-  displayedColumns: string[] = ['id', 'createAt', 'month','paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
+  readonly SaleStatus = SaleStatus;
+  displayedColumns: string[] = ['product', 'createAt', 'name', 'quantity', 'price', 'amount', 'saleStatus', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   // List Product
   products: Product[] = [];
+  readonly months:string[] = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","NOVEMBER","DECEMBER"]
   readonly paymentMethods: PaymentMethod[] = [
     {
       type: "LIQUIDE"
@@ -60,6 +61,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       value: [""]
     })
   });
+
+  seletMonthForm = this.fb.group({
+    month: this.fb.group({
+      monthValue: [""]
+    })
+  });
   paymentSelected: boolean = false;
   private paymentTypeValue = new BehaviorSubject<string>("LIQUIDE");
   readonly status = SaleStatus;
@@ -71,21 +78,28 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   isDisabled$ = this.disableSujet.asObservable();
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
   productInSale: Product[] = [];
-
+  month: any = "null";
+  year: any = "";
 
   constructor(private dialog: MatDialog, private productService: ProductService,
-    private snacbarService: SnabarService, private dialogService: DialogService,
+    private snacbarService: SnabarService,
     private saleService: SaleService, private fb: FormBuilder) {
+    this.year = new Date().getFullYear();
   }
 
   ngOnInit(): void {
     // fetch product
     this.getProducts();
-    this.onGetSales();
+    this.onGetSales(this.month, this.year);
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  onSelectByMonth(month:any) {
+   console.log("was selected %s",month);
+   this.onGetSales(month, this.year);
   }
 
   /** Get Product */
@@ -94,27 +108,27 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productService.getProducts().subscribe(
       (response) => {
         this.products = response;
-        this.snacbarService.openSnackBarSuccess("Produit Affiche", "Fermer");
+        this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
       },
       () => {
         this.appState.next(DataState.ERROR_STATE);
-        this.snacbarService.openSnackBarError("Error Due Loading", "Fermer");
+        this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
       }
     );
   }
 
-  onGetSales(): void {
+  onGetSales(month: any, year: any): void {
     this.state = DataState.LOADING_STATE;
-    this.saleService.getSales().subscribe(
-      (response: Sale[]) => {
+    this.saleService.getSaleByMonthAndYear(month, year).subscribe(
+      (response) => {
         this.dataSource.data = response;
         this.state = DataState.LOADED_STATE;
         this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
       },
       () => {
         this.state = DataState.ERROR_STATE;
-        this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+        this.snacbarService.openSnackBarError("Nous ne pouvons pas afficher les ventes", "Fermer");
       }
     )
   }
@@ -123,7 +137,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentSelected = true;
     this.paymentTypeValue.next(event);
     this.getPaymentType(event);
-    
   }
   /** Start sale product here
    * First Get product by id when they click on button */
@@ -137,10 +150,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     dialogRef.afterClosed()
       .subscribe(
         (response: SaleRequest) => {
+          console.log(response);
           // Call ProcessToSave. 
           this.processToSaveSale(response);
-        },()=>{
-          
         });
   }
 
@@ -184,7 +196,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: "LIQUIDE"
     };
     const quantity = saleRequest.quantity;
@@ -223,7 +235,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       createAt: '',
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: this.paymentTypeValue.value
     };
     this.saleToSaves.push(saleToSave);
@@ -243,11 +255,11 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingSubject.next(true);
     this.saleService.addSale(sales)
       .subscribe(
-        (response) => {
-          this.onGetSales();
+        () => {
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
-          this.clear();
+          this.saleToSaves.splice(0);
         },
         () => {
           this.isLoadingSubject.next(false);
@@ -287,21 +299,21 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private validSale(sale: Sale, valid: boolean) {
     if (valid) {
+      console.log("status 1 %s", valid);
       this.saleService.validSale(sale).subscribe(
         () => {
           this.saleService.validSale(sale);
           this.spinnerSaleStatusSubject.next(false);
-          this.onGetSales();
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
         },
         () => {
           this.spinnerSaleStatusSubject.next(false);
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+          this.snacbarService.openSnackBarError("Une erreure est Survenue", "Fermer");
         }
       )
     } else {
       this.snacbarService.openSnackBarError("Vous Avez Annuler Le Processus De Validation De Cette Vente", "Fermer");
-      console.log("status 2 %s", valid);
       return;
     }
   }
@@ -313,20 +325,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  printReportSale() {
-    this.export();
-  }
-  export(): void {
-    /* generate worksheet */
-    const ws: WorkSheet = utils.json_to_sheet(this.dataSource.data);
-
-    /* generate workbook and add the worksheet */
-    const wb: WorkBook = utils.book_new();
-    utils.book_append_sheet(wb, ws, 'Sheet1');
-    /* save to file */
-    writeFile(wb, "liste-des-vente.xlsx");
   }
 
   ngOnDestroy(): void {
