@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,14 +22,23 @@ import * as XLSX from 'xlsx';
 export class InvoiceListComponent implements AfterViewInit, OnInit {
   readonly DataState = DataState;
   state: DataState = DataState.LOADING_STATE;
-  displayedColumns: string[] = ['invoiceNumber', 'date', 'amount', 'action'];
+  displayedColumns: string[] = ['invoiceNumber', 'product', 'date', 'amount', 'action'];
   dataSource!: MatTableDataSource<Invoice>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   invoices: Invoice[] = [];
-  readonly SaleStatus = SaleStatus;;
+  readonly SaleStatus = SaleStatus;
+
   productOnInvoice: Product[] = [];
+  month: any = "null";
+  year: any = "";
+  readonly months:string[] = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","NOVEMBER","DECEMBER"];
+  seletMonthForm = this.fb.group({
+    month: this.fb.group({
+      monthValue: [""]
+    })
+  });
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -36,34 +46,38 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.invoices);
-    this.onGetInvoices();
+    this.onGetInvoices(this.month,this.year);
   }
 
   constructor(private invoiceService: InvoiceService,
-    private snackbarService: SnabarService, private router: Router) { }
+    private snackbarService: SnabarService, private router: Router,
+    private fb:FormBuilder) {
+      this.year = new Date().getFullYear();
+     }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  onGetInvoices(): void {
-    this.state = DataState.LOADING_STATE;
-    this.invoiceService.getInvoices().subscribe(
 
+  onSelectByMonth(month:any) {
+    this.onGetInvoices(month, this.year);
+   }
+
+  onGetInvoices(month:any,year:any): void {
+    this.state = DataState.LOADING_STATE;
+    this.invoiceService.getInvoiceByMonthAndYear(this.month,this.year).subscribe(
       (response: Invoice[]) => {
         this.dataSource.data = response;
-        this.state = DataState.LOADED_STATE;
         this.snackbarService.openSnackBarSuccess("Liste Des Factures Afichee", "Fermer");
       },
       (error: HttpErrorResponse) => {
         this.state = DataState.ERROR_STATE;
         this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
-        console.log("Error code : %s", error.status);
       }
     )
   }
@@ -73,21 +87,20 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
   }
 
   getInvoiceByInvoiceNumber(invoiceNumber: string) {
-    this.invoiceService.getInvoiceByInvoiceNumber(invoiceNumber).subscribe(
-
-    )
+    this.invoiceService.getInvoiceByInvoiceNumber(invoiceNumber).subscribe()
   }
 
   generateExcelFile(): void {
     // Create a workbook and worksheet
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
     // Generate the Excel file
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveExcelFile(excelBuffer, new Date().getMonth + 'invoice_sale_list.xlsx');
+    this.saveExcelFile(excelBuffer, new Date() + 'invoice_sale_list.xlsx');
   }
 
   saveExcelFile(buffer: any, fileName: string): void {

@@ -37,8 +37,8 @@ export class InvoiceService {
     )
   }
 
-  getInvoiceByMonthAndYear(month: any, year: any): Observable<Sale[]> {
-    return this.http.get<Sale[]>(`${this.URL}/invoice/month/${month}/${year}`,{headers: this.auth.createAuthorizationHeaders()})
+  getInvoiceByMonthAndYear(month: any, year: any): Observable<Invoice[]> {
+    return this.http.get<Invoice[]>(`${this.URL}/invoice/month/${month}/${year}`,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
