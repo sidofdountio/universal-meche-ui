@@ -33,7 +33,7 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
   productOnInvoice: Product[] = [];
   month: any = "null";
   year: any = "";
-  readonly months:string[] = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","NOVEMBER","DECEMBER"];
+  readonly months: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "NOVEMBER", "DECEMBER"];
   seletMonthForm = this.fb.group({
     month: this.fb.group({
       monthValue: [""]
@@ -46,14 +46,14 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.invoices);
-    this.onGetInvoices(this.month,this.year);
+    this.onGetInvoices(this.month, this.year);
   }
 
   constructor(private invoiceService: InvoiceService,
     private snackbarService: SnabarService, private router: Router,
-    private fb:FormBuilder) {
-      this.year = new Date().getFullYear();
-     }
+    private fb: FormBuilder) {
+    this.year = new Date().getFullYear();
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -63,14 +63,13 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
     }
   }
 
-
-  onSelectByMonth(month:any) {
+  onSelectByMonth(month: any) {
     this.onGetInvoices(month, this.year);
-   }
+  }
 
-  onGetInvoices(month:any,year:any): void {
+  onGetInvoices(month: any, year: any): void {
     this.state = DataState.LOADING_STATE;
-    this.invoiceService.getInvoiceByMonthAndYear(this.month,this.year).subscribe(
+    this.invoiceService.getInvoiceByMonthAndYear(month, year).subscribe(
       (response: Invoice[]) => {
         this.dataSource.data = response;
         this.snackbarService.openSnackBarSuccess("Liste Des Factures Afichee", "Fermer");
@@ -115,7 +114,5 @@ export class InvoiceListComponent implements AfterViewInit, OnInit {
       link.remove();
     }, 100);
   }
-
-
 }
 

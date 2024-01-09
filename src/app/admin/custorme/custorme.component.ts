@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Custormer } from 'src/app/model/custorme';
 import { CustormeService } from 'src/app/service/custorme.service';
 import { DialogService } from 'src/app/service/dialog.service';
@@ -39,13 +39,13 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
 
   private onGetCustomer() {
     this.custormeService.getCustormes().subscribe(
-      
-        (response) => {
-          this.dataSource.data = response;
-        },
-        () => {
-          this.snackbarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
-        }
+
+      (response) => {
+        this.dataSource.data = response;
+      },
+      () => {
+        this.snackbarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
+      }
     );
   }
 
@@ -79,7 +79,7 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
         }
         this.deleteCustumerById(id);
         this.dialogService.updateValue();
-       
+
       }
     )
   }
@@ -96,7 +96,6 @@ export class CustormeComponent implements OnDestroy, OnInit, AfterViewInit {
         }
       );
   }
-
   ngOnDestroy(): void {
     this.isLoadingSubject.unsubscribe();
   }

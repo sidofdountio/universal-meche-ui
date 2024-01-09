@@ -5,7 +5,6 @@
                 <div class="text-center">
                     <h2 class="text-uppercase">UNIVERSAL MECHE</h2>
                     <h3>CREER UN COMPTE</h3>
-
                 </div>
                 <form [formGroup]="registerForm" class="mb-2">
 
@@ -24,12 +23,15 @@
                         <input matInput formControlName="password">
                         <mat-error>Please provide a valid password</mat-error>
                     </mat-form-field>
-                    <button class="text-uppercase" type="button" mat-raised-button color="warn"
+                    <button  *ngIf="!(loading$ | async)" class="text-uppercase" type="button" mat-raised-button color="warn"
                         [disabled]="!registerForm.valid" (click)="onRegister()">CREER UN NOUVEAU COMPTE</button>
+                    <button class="btn btn-primary" type="button" disabled *ngIf="loading$ | async">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
                 </form>
                 <div>
-                    <button mat-raised-button color="primary" routerLink="/login" routerLinkActive="active">Se connecter
-                        si tu as un compte</button>
+                    <p><a routerLink="/login" routerLinkActive="active">Se connecter
+                        </a>si tu as deja un compte</p>
                     <hr>
                     <p class="text-center">&COPY; All right UNIVERSAL MECHE</p>
                 </div>

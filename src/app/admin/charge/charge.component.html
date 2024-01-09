@@ -3,16 +3,15 @@
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Les Charges</h1>
     <ng-container>
         <div class="row">
-            
             <!-- start list charge -->
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mat-h2">List Des Charges</h2>
-                    <div >
-                        <button *ngIf="charge.length === 0" matTooltip="Charges" mat-icon-button
-                        (click)="addCharge()"> <mat-icon>add</mat-icon></button>
+                    <div>
+                        <button *ngIf="charge.length === 0" matTooltip="Charges" mat-icon-button (click)="addCharge()">
+                            <mat-icon>add</mat-icon></button>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="table-dark">
@@ -46,10 +45,5 @@
                 </div>
             </div><!-- end list charge -->
         </div>
-    </ng-container>
-
-    <ng-container>
-    </ng-container>
-    <ng-container>
     </ng-container>
 </div>

@@ -4,7 +4,6 @@ import { SaleService } from 'src/app/service/sale.service';
 import { PurcharseService } from 'src/app/service/purcharse.service';
 import { ChargeService } from 'src/app/service/charge.service';
 import { SnabarService } from 'src/app/service/snabar.service';
-import { EmployeeService } from 'src/app/service/employee.service';
 import { BehaviorSubject } from 'rxjs';
 import Chart from 'chart.js/auto';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,136 +19,104 @@ export class BillanComponent implements OnInit {
   state: DataState = DataState.LOADING_STATE;
   totalAmountSalePerMonth: number = 0;
   totalAmountPurchasePerMonth: number = 0;
-  totalSalePerDay: number = 0;
-  totalAmuntSalePerDay: number = 0;
-  totalSalary: number = 0;
-  charges: number = 0;
-  billan: any;
-  earn: number = 0;
-  daySujet = new BehaviorSubject<number | any>(1);
-  amounDaySujet = new BehaviorSubject<number | any>(1);
+  chargeAmount: number = 0;
+  benefice: number = 0;
 
   constructor(
     private saleService: SaleService,
-    private purchaseService: PurcharseService,
-    private charserService: ChargeService,
+    private chargeService: ChargeService,
     private snabarService: SnabarService,
-    private employeeService: EmployeeService
   ) { }
 
 
   ngOnInit(): void {
-    console.log(generateMonthArray());
-    this.onCharges();
-    this.getSaleByMonth();
-    this.getSaleByDay();
     this.getSales();
-    this.getPurchasePerMonth(0);
-  }
+    this.  getSaleByMonth();
 
-  onCharges() {
-    this.charserService.getCharges().subscribe(
+    this.chargeService.monthWinner().subscribe(
       (response) => {
-        let salary: number = 0;
-        let impot: number = 0;
-        let loyer: number = 0;
-        let ration: number = 0;
-        let transport: number = 0;
-        let electricity: number = 0;
-        let anotherCharge: number = 0;
-        // let anotherCharge: AnotherCharge;
-        for (let item of response) {
-          salary = item.totalSalary;
-          impot = item.impot;
-          loyer = item.loyer;
-          ration = item.ration;
-          transport = item.transport;
-          electricity = item.electricity;
-     
-
-        }
-        this.charges = impot + loyer + ration + electricity + salary + transport;
+        this.totalAmountPurchasePerMonth = response.purchase;
+        this.totalAmountSalePerMonth = response.sale;
+        this.chargeAmount = response.charge;
+        this.benefice = response.potentialWinner;
       },
-      (error: HttpErrorResponse) => {
-        console.log("error %s", error.message);
+      () => {
+       
       }
     )
   }
 
-  employees() {
-    this.employeeService.employees().subscribe(
+  getSaleByMonth() {
+    this.state = DataState.LOADING_STATE;
+    this.saleService.getSaleMonth().subscribe(
       (response) => {
-        for (let item of response) {
-          this.totalSalary += item.salary;
-        }
+        this.state = DataState.LOADED_STATE;
       },
-      (error: HttpErrorResponse) => {
-        console.log("error %s", error.message);
+      () => {
+        this.state = DataState.ERROR_STATE;
+        this.snabarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
       }
     )
   }
+
+  
 
   getSales() {
     this.saleService.getSales().subscribe(
       (sales) => {
         let total = 0;
         let monthAmounts = [];
-        let months: string[] = [];
-        let totalSalePerMonth: number[] = [];
         for (let sale of sales) {
-          if (sale.month === "January") {
+          if (sale.month === "JANUARY") {
             total += sale.amount;
-            monthAmounts[0] = total/1000
+            monthAmounts[0] = total/3000
           }
-          if (sale.month === "February") {
+          if (sale.month === "FEBRUARY") {
             total += sale.amount;
-            monthAmounts[1] = total/1000
+            monthAmounts[1] = total/3000
           }
-          if (sale.month === "March") {
+          if (sale.month === "MARCH") {
             total += sale.amount;
-            monthAmounts[2] = total/1000
+            monthAmounts[2] = total/3000
           }
-          if (sale.month === "April") {
+          if (sale.month === "APRIL") {
             total += sale.amount;
-            monthAmounts[3] = total/1000
+            monthAmounts[3] = total/3000
           }
-          if (sale.month === "May") {
+          if (sale.month === "MAY") {
             total += sale.amount;
-            monthAmounts[4] = total/1000
+            monthAmounts[4] = total/3000
           }
-          if (sale.month === "June") {
+          if (sale.month === "JUNE") {
             total += sale.amount;
-            monthAmounts[5] = total/1000
+            monthAmounts[5] = total/3000
           }
-          if (sale.month === "July") {
+          if (sale.month === "JULY") {
             total += sale.amount;
-            monthAmounts[6] = total/1000
+            monthAmounts[6] = total/3000
           }
-          if (sale.month === "August") {
+          if (sale.month === "AUGUST") {
             total += sale.amount;
-            monthAmounts[7] = total/1000
+            monthAmounts[7] = total/3000
           }
-          if (sale.month === "September") {
+          if (sale.month === "SEPTEMBER") {
             total += sale.amount;
-            monthAmounts[8] = total/1000
+            monthAmounts[8] = total/3000
           }
-          if (sale.month === "October") {
+          if (sale.month === "OCTOBER") {
             total += sale.amount;
             monthAmounts[9] = total/1000
           }
-          if (sale.month === "November") {
+          if (sale.month === "NOVEMBER") {
             total += sale.amount;
-            monthAmounts[10] = total/1000
-
+            monthAmounts[10] = total/3000
           }
           if (sale.month === "DECEMBER") {
             total += sale.amount;
-            monthAmounts[11] = total/1000;
+            monthAmounts[11] = total/3000;
             console.log(sale.month)
           }
-
         }
-
         let monthName = generateMonthArray();
         totalSaleAmountPerMonth(monthName, monthAmounts);
       },
@@ -159,73 +126,7 @@ export class BillanComponent implements OnInit {
     )
   }
 
-  getPurchasePerMonth(n:number) {
-    this.purchaseService.getPurchasePerMonth().subscribe(
-      (response) => {
-        for (let purchase of response) {
-          this.totalAmountPurchasePerMonth += purchase.amount;
-        }
-      },
-      (error: HttpErrorResponse) => {
-        console.log("error %s", error.message);
-      }
-    )
-  }
-  // =============================================CALCULE=====================================
-  getSaleByMonth() {
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSaleMonth().subscribe(
-      (response) => {
-        for (let item of response) {
-          this.totalAmountSalePerMonth += item.amount;
-        }
-        let depenceTotal = 0;
-        depenceTotal = this.charges + this.totalAmountPurchasePerMonth
-        this.earn = this.totalAmountSalePerMonth - depenceTotal;
-        this.state = DataState.LOADED_STATE;
-      },
-      () => {
-        this.state = DataState.ERROR_STATE;
-        this.snabarService.openSnackBarError("Une Erreure Est Survenue.", "Fermer");
-
-      }
-    )
-  }
-  // =============================================CALCULE=====================================
-
-
-  getSaleByDay() {
-    this.saleService.getSaleDay().subscribe(
-      (sales) => {
-        let amountDay: any[] = [];
-        let amountDayVar: any[] = [];
-        const dayOfMonthArray = getDayOfMonthArray();
-
-        this.totalSalePerDay = sales.length;
-        for (var item of sales) {
-          this.totalAmuntSalePerDay += item.amount;
-          this.daySujet.next(item.day);
-          this.amounDaySujet.next(this.totalAmuntSalePerDay);
-        }
-
-        for (let day = 1; day < dayOfMonthArray.length; day++) {
-          if (day === this.daySujet.value) {
-            amountDayVar[day] = this.amounDaySujet.value;
-          
-          }
-        }
-        amountDay.push(amountDayVar);
-        console.log("==============-------------------------------======================");
-        console.log(amountDayVar)
-        console.log("==================----------------------------==================");
-      
-        totalSaleAmountPerDay(dayOfMonthArray, amountDay);
-      },
-      (error: HttpErrorResponse) => {
-        console.log("error %s", error.message);
-      }
-    )
-  }
+  
 }
 
 function totalSaleAmountPerDay(day: string[], amountPerday: any[]) {
@@ -274,10 +175,6 @@ function totalSaleAmountPerDay(day: string[], amountPerday: any[]) {
   return myChart;
 }
 
-export interface MonthAmount {
-  month: string;
-  amount: number;
-}
 export interface DaylySale {
   amount: number;
   day: number;
@@ -296,7 +193,7 @@ function totalSaleAmountPerMonth(months: string[], totalSalePerMonth: number[]) 
         data: totalSalePerMonth,
         backgroundColor: 'rgba(0, 123, 255, 0.2)',
         borderColor: '#007bff',
-        borderWidth: 2
+        borderWidth: 1
       }]
     },
     options: {
@@ -368,13 +265,11 @@ function calculateTotalSalePerMonth(dailySales: DaylySale[]) {
 function generateMonthArray() {
   const months = [];
   const date = new Date();
-
   for (let i = 0; i < 12; i++) {
     date.setMonth(i);
     const monthName = date.toLocaleString('default', { month: 'long' }).slice(0, 3);
     months.push(monthName);
   }
-
   return months;
 }
 
@@ -383,7 +278,6 @@ function getDayOfMonthArray() {
   const currentDay = currentDate.getDate();
   const monthLength = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const dayOfMonthArray = [];
-
   for (let i = 1; i <= monthLength; i++) {
     if (i === currentDay) {
       dayOfMonthArray.push(`[${i}]`);

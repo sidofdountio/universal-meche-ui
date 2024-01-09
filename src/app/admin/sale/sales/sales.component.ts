@@ -16,6 +16,7 @@ import { DataState } from 'src/app/model/enume/data-state';
 import { FormBuilder } from '@angular/forms';
 import { PaymentMethod } from 'src/app/model/paymentMethod';
 import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-sales',
@@ -34,14 +35,18 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$ = this.isLoadingSubject.asObservable();
   spinnerSubject = new BehaviorSubject<boolean>(false);
   spinner$ = this.spinnerSubject.asObservable();
-  spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
-  spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
-
+  spinnerSaleStatusSubject = new BehaviorSubject<string>('');
+  spinnerSaleStatus$ = this.spinnerSaleStatusSubject.asObservable();
   readonly SaleStatus = SaleStatus;
+
   displayedColumns: string[] = ['product', 'createAt', 'name', 'quantity', 'price', 'amount', 'saleStatus', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+/**Product */
+  displayedColumnsProduct: string[] = ['id', 'name', 'price','salePrice', 'code','color','action'];
+  dataSourceProduct = new  MatTableDataSource<Product>([])
+  @ViewChild(MatPaginator) paginatorProduct!: MatPaginator;
+  @ViewChild(MatSort) sortProduct!: MatSort;
   // List Product
   products: Product[] = [];
   readonly months: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "NOVEMBER", "DECEMBER"]
@@ -94,11 +99,11 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSourceProduct.paginator = this.paginatorProduct;
+    this.dataSourceProduct.sort = this.sortProduct;
   }
-
+/** List of product based on Month */
   onSelectByMonth(month: any) {
-    console.log("was selected %s", month);
     this.onGetSales(month, this.year);
   }
 
@@ -107,15 +112,24 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.appState.next(DataState.LOADING_STATE);
     this.productService.getProducts().subscribe(
       (response) => {
-        this.products = response;
-        this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
         this.appState.next(DataState.LOADED_STATE);
+        this.products = response;
+        this.dataSourceProduct.data =response
+        this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
       },
       () => {
         this.appState.next(DataState.ERROR_STATE);
         this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
       }
     );
+  }
+
+  applyFilterProduct(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceProduct.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceProduct.paginator) {
+      this.dataSourceProduct.paginator.firstPage();
+    }
   }
 
   onGetSales(month: any, year: any): void {
@@ -261,7 +275,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         () => {
           this.isLoadingSubject.next(false);
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue. Rassurez vous d'avoir achete Ce Produit ou Qu'il soit Encore Disponoble en Stock ", "Fermer");
+          this.snacbarService.openSnackBarError("Une erreure est survenue. Rassurez vous d'avoir achete Ce Produit !", "Fermer");
         }
       );
   }
@@ -296,21 +310,21 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private validSale(sale: Sale, valid: boolean) {
+    this.spinnerSaleStatusSubject.next(sale.id);
     if (valid) {
-      console.log("status 1 %s", valid);
       this.saleService.validSale(sale).subscribe(
         () => {
-          this.saleService.validSale(sale);
-          this.spinnerSaleStatusSubject.next(false);
+          this.spinnerSaleStatusSubject.next('');
           this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
         },
         () => {
-          this.spinnerSaleStatusSubject.next(false);
-          this.snacbarService.openSnackBarError("Une erreure est Survenue", "Fermer");
+          this.spinnerSaleStatusSubject.next('');
+          this.snacbarService.openSnackBarError("Une erreure est survenue", "Fermer");
         }
       )
     } else {
+      this.spinnerSaleStatusSubject.next('');
       this.snacbarService.openSnackBarError("Vous Avez Annuler Le Processus De Validation De Cette Vente", "Fermer");
       return;
     }

@@ -2,7 +2,8 @@
     <h1 class="mat-h1">
         <button routerLink="../product" routerLinkActive="active" mat-icon-button
             matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>
-        Catégorie</h1>
+        Catégorie
+    </h1>
     <div class="row">
         <!-- Product category -->
         <div class="col-md-6">
@@ -43,26 +44,20 @@
             <div class="table-responsive">
                 <h1 class="mat-h3">Liste </h1>
                 <table class="table">
-                  <thead class="table-dark">
-                    <tr>
-                      <th scope="col"># </th>
-                      <th scope="col">Nom</th>
-                     
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let category of categorys">
-                      <th scope="row">{{ category.id }}</th>
-                      <td>{{ category.name }}</td>
-                      
-                      <td>
-                       
-                      </td>
-                    </tr>
-                  </tbody>
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col"># </th>
+                            <th scope="col">Nom</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let category of categorys">
+                            <th scope="row">{{ category.id }}</th>
+                            <td>{{ category.name }}</td>
+                        </tr>
+                    </tbody>
                 </table>
-              </div>
+            </div>
         </div>
     </div>
 </div>

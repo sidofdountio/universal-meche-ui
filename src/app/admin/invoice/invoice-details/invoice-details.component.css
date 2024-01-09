@@ -2,7 +2,7 @@
     margin-left: 20px;
 }
 
-.logo{
+.logo {
     background-color: white;
     width: 300px;
     height: 200px;
@@ -10,16 +10,18 @@
     box-shadow: 5px 5px 10px #333;
     border: 1px solid #eee;
 }
-.logo img{
+
+.logo img {
     display: block;
     width: 300px;
     height: 200px;
     border-radius: 15px;
 }
 
-button{
+button {
     border: 1px solid #eee;
 }
+
 .invoice {
     background: #fff;
     border: 1px solid #eee;
@@ -129,7 +131,13 @@ button{
     margin-bottom: 20px
 }
 
-.btn.btn-white, .btn.btn-white.disabled, .btn.btn-white.disabled:focus, .btn.btn-white.disabled:hover, .btn.btn-white[disabled], .btn.btn-white[disabled]:focus, .btn.btn-white[disabled]:hover {
+.btn.btn-white,
+.btn.btn-white.disabled,
+.btn.btn-white.disabled:focus,
+.btn.btn-white.disabled:hover,
+.btn.btn-white[disabled],
+.btn.btn-white[disabled]:focus,
+.btn.btn-white[disabled]:hover {
     color: #2d353c;
     background: #fff;
     border-color: #d9dfe3;

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { AuthService } from '../auth.service';
 import { RegisterRequest } from 'src/app/model/register-request';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +13,8 @@ import { RegisterRequest } from 'src/app/model/register-request';
 })
 export class RegisterComponent {
 
+  isLoading = new BehaviorSubject<boolean>(false);
+  loading$ = this.isLoading.asObservable();
   registerForm = this.fb.group({
     username: ['', [Validators.required]],
     email: this.fb.nonNullable.control("", {
@@ -26,13 +29,16 @@ export class RegisterComponent {
     private authService: AuthService) { }
 
   onRegister() {
+    this.isLoading.next(true);
     this.authService.register$(this.registerForm.value as RegisterRequest)
-      .subscribe(
-        (response => {
-          this.snacbarService.openSnackBar("Nouveau compte cree avec success", "fermer");
-          this.router.navigate(['/login'])
-        }),
-        (() => {
+    .subscribe(
+      (response => {
+        this.isLoading.next(false);
+        this.snacbarService.openSnackBar("Nouveau compte cree avec success", "fermer");
+        this.router.navigate(['/login'])
+      }),
+      (() => {
+          this.isLoading.next(false);
           this.snacbarService.openSnackBarError("Une erreur est survenu pendant la creation du compte", "Close");
         })
       )

@@ -7,27 +7,22 @@
                 <div class="row">
                     <div class="col">
                         <div class="mb-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Achat Total Du Moi </mat-label>
-                                <mat-error>Entrer nombre valid</mat-error>
-                            </mat-form-field>
-
                             <label for="" class="form-label">Achat Total Du Moi</label>
-                            <input class="form-control number" [value]="totalAmountPurchasePerMonth" disabled>
+                            <input class="form-control number" value="{{totalAmountPurchasePerMonth | CustomCurrency  }} " disabled>
                         </div>
                         <div class="mb-3">
-                            <label for="" class="form-label">Total Des Charges Du Moi</label>
-                            <input class="form-control number" [value]="charges" disabled>
+                            <label for="" class="form-label">Charges Du Moi</label>
+                            <input class="form-control number" value="{{chargeAmount | CustomCurrency }}" disabled>
                         </div>
                     </div>
                     <div class="col">
                         <div class="mb-3">
-                            <label for="" class="form-label"> Total Des Ventes Du Moi</label>
-                            <input class="form-control number" [value]="totalAmountSalePerMonth" disabled>
+                            <label for="" class="form-label">Ventes Du Moi</label>
+                            <input class="form-control number" value="{{totalAmountSalePerMonth | CustomCurrency}}" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label"> Gain Possible Du Moi</label>
-                            <input class="form-control" [ngClass]="earn > 0 ? 'number' : 'negative'" [value]="earn" disabled>
+                            <input class="form-control" [ngClass]="benefice > 0 ? 'number' : 'negative'" value="{{benefice | CustomCurrency }}" disabled>
                         </div>
                     </div>
 
@@ -48,19 +43,8 @@
         </div>
     </ng-container>
 
-    <div class="row mb-4">
-        <div class="col day" >
-            <mat-card >
-                <mat-card-content>
-                    <canvas id="myChart"></canvas>
-                </mat-card-content>
-            </mat-card>
-        </div>
-      
-    </div>
-
     <div class="row">
-        <div class="col-md-8">
+        <div class="col">
             <mat-card>
                 <mat-card-content>
                     <canvas id="salePermonth"></canvas>

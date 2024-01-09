@@ -11,7 +11,6 @@ import { DialogMessageComponent } from 'src/app/message/dialog-message/dialog-me
 export class ValidSaleComponent {
   discase: boolean = false;
 
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: Data, private dialogRef: MatDialogRef<DialogMessageComponent>) { }
   save(): void {
     this.discase = true;

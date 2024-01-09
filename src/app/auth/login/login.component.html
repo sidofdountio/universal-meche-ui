@@ -21,8 +21,9 @@
                         <mat-error>Svp entrer un Mot De Passe valide.</mat-error>
                     </mat-form-field>
                     <div class="mb3">
-                        <button type="button" mat-raised-button color="accent" [disabled]="!form.valid"
-                            *ngIf="!(loading$ | async)" (click)="onLogIn()" class="text-uppercase">se Connecter</button>
+                       
+                        <button type="button" [disabled]="!form.valid"
+                            *ngIf="!(loading$ | async)" (click)="onLogIn()" class="btn btn-primary text-uppercase">se Connecter</button>
                        
                         <button class="btn btn-primary" type="button" disabled *ngIf="loading$ | async">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

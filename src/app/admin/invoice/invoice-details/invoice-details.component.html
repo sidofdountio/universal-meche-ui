@@ -31,7 +31,8 @@
             <div class="col-md-12">
                 <div class="invoice-company text-inverse f-w-600  mb-5">
                     <span class="pull-right hidden-print mt-2">
-                        <button mat-icon-button  matTooltip="Imprimer Cette Facture" (click)="exportToPDF(invoiceNumer)"> <mat-icon>print</mat-icon></button>
+                        <button mat-icon-button matTooltip="Imprimer Cette Facture" (click)="exportToPDF(invoiceNumer)">
+                            <mat-icon>print</mat-icon></button>
                     </span>
                 </div>
                 <div id="invoice-contents" class="invoice">
@@ -45,20 +46,20 @@
                     <!-- begin invoice-header -->
                     <div class="invoice-header">
                         <div class="invoice-from">
-                            <small>from</small>
+                            <small>De</small>
                             <address class="m-t-5 m-b-5">
                                 <strong class="text-inverse">UNIVERSAL MECHE.</strong><br>
-                               <br>
+                                <br>
                                 Ville, CDI MEFOU ET AFAMBA <br>
                                 Tele: (+237) 671309015<br>
                                 Numéro D'indentifiant Unique Des Impôt(NIU): P068518557761Y
                             </address>
                         </div>
                         <div class="invoice-to">
-                            <small>to</small>
+                            <small>A</small>
                             <address class="m-t-5 m-b-5">
                                 <strong class="text-inverse">{{ customerEmail }}</strong><br>
-                               <br>
+                                <br>
                                 Ville, {{ customerAddress }}<br>
                                 Tele: (+237) {{ customerPhone }}<br>
                             </address>
@@ -67,12 +68,10 @@
                             <small>Facture </small>
                             <div class="date text-inverse m-t-5">{{ invoiceDate | date:'short' }}</div>
                             <div class="invoice-detail">
-                                Numero De La Facture {{ invoiceNumer }}<br>
-
+                                Numero De La Facture: {{ invoiceNumer }}<br>
                             </div>
                         </div>
-                    </div>
-                    <!-- end invoice-header -->
+                    </div><!-- end invoice-header -->
                     <!-- begin invoice-content -->
                     <div class="invoice-content">
                         <!-- begin table-responsive -->
@@ -99,12 +98,9 @@
                                             }}</td>
                                         <td class="text-right">{{ invoiceSale.sale.amount | CustomCurrency }}</td>
                                     </tr>
-
-
                                 </tbody>
                             </table>
-                        </div>
-                        <!-- end table-responsive -->
+                        </div><!-- end table-responsive -->
                         <!-- begin invoice-price -->
                         <div class="invoice-price">
                             <div class="invoice-price-left">
@@ -125,15 +121,12 @@
                             <div class="invoice-price-right">
                                 <small>TOTAL</small> <span class="fw-bold">{{ invoiceTotal | CustomCurrency }}</span>
                             </div>
-                        </div>
-                        <!-- end invoice-price -->
-                    </div>
-                    <!-- end invoice-content -->
+                        </div><!-- end invoice-price -->
+                    </div><!-- end invoice-content -->
                     <!-- begin invoice-note -->
                     <div class="invoice-note">
                         * Si vous avez des questions concernant cette facture, contactez universalemeche&#64;gmail.com
-                    </div>
-                    <!-- end invoice-note -->
+                    </div> <!-- end invoice-note -->
                     <!-- begin invoice-footer -->
                     <div class="invoice-footer">
                         <p class="text-center m-b-5 f-w-600">
@@ -146,8 +139,7 @@
                             <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i>
                                 universalemeche&#64;gmail.com</span>
                         </p>
-                    </div>
-                    <!-- end invoice-footer -->
+                    </div><!-- end invoice-footer -->
                 </div>
             </div>
         </div>

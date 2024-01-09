@@ -1,8 +1,8 @@
 FROM node:20-alpine as build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --force
-RUN npx ngcc --properties es2023 browser module main --first-only --create-ivy-entry-points
+RUN npm install
+RUN npx ngcc --properties es2024 browser module main --first-only --create-ivy-entry-points
 COPY . .
 RUN npm run build
 FROM nginx:stable

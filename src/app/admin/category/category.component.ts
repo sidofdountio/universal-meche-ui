@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ProductCategory } from 'src/app/model/product-category';
 import { SnabarService } from 'src/app/service/snabar.service';
 import { ProductCategoryService } from 'src/app/service/product-category.service';
-import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-category',
@@ -22,7 +22,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       name: ['']
     })
   });
- 
+
   categorys: ProductCategory[] = [];
 
   constructor(private fb: FormBuilder, private snackBarService: SnabarService,
@@ -55,20 +55,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
       }
     )
   }
-
-
   getProductCategory() {
     this.productCategoryService.getProductCategory().subscribe(
       (response) => {
         this.categorys = response;
       },
-      (error:HttpErrorResponse)=>{
+      (error: HttpErrorResponse) => {
         console.log("error %s", error.message);
       }
     )
   }
-
-
   ngOnDestroy(): void {
     this.isLoadingSubject.unsubscribe();
   }

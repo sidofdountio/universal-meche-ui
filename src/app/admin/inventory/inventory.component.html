@@ -7,9 +7,13 @@
                 <div class="mat-elevation-z8">
                     <table mat-table [dataSource]="dataSource" matSort>
 
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                            <td mat-cell *matCellDef="let element"> {{element.id }} </td>
+                        </ng-container>
                         <!-- Up Column -->
                         <ng-container matColumnDef="up">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> #</th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Postion</th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-icon-button class="green" *ngIf="element.up"> <mat-icon class="green">upgrade</mat-icon> </button>
                                 <button mat-icon-button class="warn" *ngIf="!element.up"> <mat-icon class="warn"> vertical_align_bottom</mat-icon>
@@ -20,7 +24,7 @@
                         <!-- Position Column -->
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                            <td mat-cell *matCellDef="let element"> {{element.date | date:'short' }} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.date | date }} </td>
                         </ng-container>
 
                         <!-- Name Column -->

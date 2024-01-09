@@ -5,6 +5,7 @@ import { tap,catchError } from 'rxjs/operators';
 import { Charge } from '../model/charge';
 import { environment } from 'src/environments/environment.development';
 import { AuthService } from '../auth/auth.service';
+import { Benefice } from '../model/benefice';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,13 @@ export class ChargeService {
 
   saveCharge(charge:Charge): Observable<Charge> {
     return this.http.put<Charge>(`${this.URL}/charge`,charge,{headers: this.auth.createAuthorizationHeaders()}).pipe(
+      tap(console.log),
+      catchError(this.handlerError)
+    )
+  }
+
+  monthWinner(): Observable<Benefice> {
+    return this.http.get<Benefice>(`${this.URL}/charge/monthWinner`,{headers: this.auth.createAuthorizationHeaders()}).pipe(
       tap(console.log),
       catchError(this.handlerError)
     )

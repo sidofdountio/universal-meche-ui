@@ -11,5 +11,5 @@ export class AppComponent {
   onGo() {
     this.router.navigate(['/admin'])
   }
-  title = 'boutique-meche';
+  title = 'universal meche';
 }

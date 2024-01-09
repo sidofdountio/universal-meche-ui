@@ -19,7 +19,7 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   isUp: boolean = true;
   inventories: Inventory[] = [];
   inventorySuject = new BehaviorSubject<Inventory[]>([]);
-  displayedColumns: string[] = ['up', 'date', 'label', 'productName', 'orldQuantity', 'orldPrice', 'orldAmount', 'newQuantity', 'newPrice', 'newAmount']
+  displayedColumns: string[] = ['id', 'up', 'date', 'label', 'productName', 'orldQuantity', 'orldPrice', 'orldAmount', 'newQuantity', 'newPrice', 'newAmount']
   dataSource = new MatTableDataSource<Inventory>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -37,7 +37,7 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   }
 
   onGetInventorie(): void {
-  
+
     this.inventoryService.getInventories().subscribe(
       (response: Inventory[]) => {
         this.dataSource.data = response;
