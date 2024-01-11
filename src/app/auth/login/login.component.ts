@@ -54,7 +54,7 @@ export class LoginComponent {
         }),
         (() => {
           this.isLoading.next(false);
-          this.snackbarServie.openSnackBarError("Email ou Mot De Passe Incorrecte".toUpperCase(), "X")
+          this.snackbarServie.openSnackBarError("Email ou Mot De Passe Incorrecte".toUpperCase(), "Fermer")
         })
       )
   }

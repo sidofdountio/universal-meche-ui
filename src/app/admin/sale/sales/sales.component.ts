@@ -43,7 +43,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 /**Product */
-  displayedColumnsProduct: string[] = ['id', 'name', 'price','salePrice', 'code','color','action'];
+  displayedColumnsProduct: string[] = ['id', 'name', 'price','salePrice','action'];
   dataSourceProduct = new  MatTableDataSource<Product>([])
   @ViewChild(MatPaginator) paginatorProduct!: MatPaginator;
   @ViewChild(MatSort) sortProduct!: MatSort;
@@ -109,16 +109,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Get Product */
   getProducts() {
-    this.appState.next(DataState.LOADING_STATE);
     this.productService.getProducts().subscribe(
       (response) => {
-        this.appState.next(DataState.LOADED_STATE);
-        this.products = response;
-        this.dataSourceProduct.data =response
+        this.dataSourceProduct.data =response;
         this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
       },
       () => {
-        this.appState.next(DataState.ERROR_STATE);
         this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
       }
     );

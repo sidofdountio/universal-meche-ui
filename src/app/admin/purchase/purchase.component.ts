@@ -35,13 +35,16 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['id','purchaseAt','product','price','salePrice','quantity','amount'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  displayedColumnsProduct: string[] = ['id', 'name', 'price','salePrice','action'];
+  dataSourceProduct = new  MatTableDataSource<Product>([])
+  @ViewChild(MatPaginator) paginatorProduct!: MatPaginator;
+  @ViewChild(MatSort) sortProduct!: MatSort;
 
 
   ngOnInit(): void {
     this.onGetProduct();
     this.onGetPurchase();
   }
-
   
   constructor(private dialog: MatDialog, private productService: ProductService,
     private snacbarService: SnabarService, private dialogService: DialogService,
@@ -76,25 +79,33 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSourceProduct.paginator = this.paginatorProduct;
+    this.dataSourceProduct.sort = this.sortProduct;
   }
 
   private onGetProduct() {
-    this.state = DataState.LOADING_STATE;
+    
     this.productService.getProducts().subscribe(
       (response) => {
-        this.products = response;
+        this.dataSourceProduct.data =response
         this.snacbarService.openSnackBar("Produit Affiche", "Fermer");
-        this.state = DataState.LOADED_STATE;
       },
       () => {
-        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "close");
-        this.state = DataState.ERROR_STATE;
+        this.snacbarService.openSnackBarError("Une Erreure est survenue.\n Veillez Ressayer", "Fermer");
       });
   }
 
   filterByMonthOrAll(filter: string) {
     this.purchaseBy = filter;
     console.log("Fitre %s", this.purchaseBy);
+  }
+
+  applyFilterProduct(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceProduct.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceProduct.paginator) {
+      this.dataSourceProduct.paginator.firstPage();
+    }
   }
 
 
@@ -174,8 +185,6 @@ export class PurchaseComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
   }
-
-  
 
   ngOnDestroy(): void {
     this.appState.unsubscribe();

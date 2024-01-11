@@ -33,17 +33,6 @@
             <td mat-cell *matCellDef="let row"> {{row.salePrice}} </td>
           </ng-container>
 
-          <!-- Fruit Column -->
-          <ng-container matColumnDef="code">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
-            <td mat-cell *matCellDef="let row"> {{row.code}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="color">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Couleur</th>
-            <td mat-cell *matCellDef="let row"> {{row.color}} </td>
-          </ng-container>
-
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
             <td mat-cell *matCellDef="let row">
@@ -192,8 +181,6 @@
               <td class="mat-cell" colspan="4">Aucune donnée correspondant au filtre "{{input.value}}"</td>
             </tr>
           </table>
-
-
         </div><!-- End Table sale -->
       </div>
     </div>

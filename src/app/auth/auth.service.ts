@@ -38,7 +38,6 @@ export class AuthService {
       map(response => {
         const token = response.token;
         localStorage.setItem("username", userRequest.email);
-        console.log(response.token);
         this.setAuthToken(token as string);
         return response;
       }),
@@ -49,6 +48,7 @@ export class AuthService {
     .post<AuthenticationResponse>(`${this.baseUrl}/auth/register`, userRequest,
       {
         headers: new HttpHeaders({
+          'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': ' http://localhost:8080'
         })
       })
@@ -128,9 +128,9 @@ export class AuthService {
         "Authorization": `Bearer ${localStorage.getItem('API_TOKEN')}`,
         "Access-Control-Allow-Origin": "http://localhost:8080"
       })
-    }).pipe(
-      tap(console.log)
-    )
+    }).pipe(tap(console.log));
+
+
   logout(): void {
     this.isLoggedIn = false;
   }
