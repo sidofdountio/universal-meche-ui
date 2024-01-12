@@ -267,7 +267,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
-          this.saleToSaves.splice(0);
+         this.clear();
         },
         () => {
           this.isLoadingSubject.next(false);
