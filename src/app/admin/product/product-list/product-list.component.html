@@ -3,7 +3,7 @@
       matTooltip="Retour"><mat-icon>arrow_back</mat-icon></button>Produit</h1>
   <div class="row">
     <!-- Product list start -->
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="mb-2">
         <button matTooltip="Ajouter Un Nouveau Produit" (click)="addNewProduct()" mat-raised-button color="primary"
           class="text-uppercase"><mat-icon>add</mat-icon>Ajouter Un Nouveau Produit</button>
@@ -11,9 +11,11 @@
         <button matTooltip="Voir la liste des catégories" mat-raised-button color="primary" class="text-uppercase"
           routerLink="../category" routerLinkActive="active"><mat-icon>lists</mat-icon>voir les catégories</button>
       </div>
-      <h2 class="mat-h2">List des produits</h2>
+      <h2 class="mat-h2">Liste Des Produits</h2>
+      <button class="mb-3 excel" matTooltip="Telechrger La Liste Des Produits" (click)="printReportProduct()" mat-icon-button
+        color=""><i class="fa-solid fa-file-excel"></i></button>
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort>
+        <table mat-table [dataSource]="dataSource" matSort id="product-table">
 
           <!-- Position Column -->
           <ng-container matColumnDef="id">
@@ -48,10 +50,16 @@
             <th mat-header-cell *matHeaderCellDef> La Taille </th>
             <td mat-cell *matCellDef="let element"> {{element.length }} </td>
           </ng-container>
-           <!-- Symbol Column -->
-           <ng-container matColumnDef="code">
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef> Le Code </th>
             <td mat-cell *matCellDef="let element"> {{element.code }} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="volume">
+            <th mat-header-cell *matHeaderCellDef> Volume </th>
+            <td mat-cell *matCellDef="let element"> {{element.volume }} </td>
           </ng-container>
 
           <ng-container matColumnDef="action">
@@ -77,9 +85,9 @@
     <!-- Product list end-->
     <div class="col-md-4">
       <div class="mb-2">
-        
+
       </div>
-      
+
     </div>
   </div>
 </div>

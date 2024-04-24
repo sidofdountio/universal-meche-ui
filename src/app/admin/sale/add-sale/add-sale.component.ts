@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Product } from 'src/app/model/product';
 import { Custormer } from 'src/app/model/custorme';
@@ -36,11 +36,7 @@ export class AddSaleComponent implements OnInit {
       description: '',
       productCategory: {
         id: undefined,
-        name: '',
-        categoryType: {
-          id: undefined,
-          name: ''
-        }
+        name: ''
       }
     },
     customer: {
@@ -127,11 +123,7 @@ export class AddSaleComponent implements OnInit {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: this.customerName
-          }
+          name: ''
         }
       },
       customer: {
@@ -147,6 +139,3 @@ export class AddSaleComponent implements OnInit {
   }
 
 }
-
-
-

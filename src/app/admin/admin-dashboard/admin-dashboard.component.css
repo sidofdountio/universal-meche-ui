@@ -53,9 +53,8 @@ table {
   float: right;
 }
 
-.badge-success{
+.badge-success {
   color: white;
-  /* background-color: rgb(13, 102, 32); */
   background-color: #238636;
   font-weight: bold;
   padding: 8px;
@@ -65,7 +64,6 @@ table {
 .badge-danger {
   color: white;
   background-color: #f44336;
-  /* background-color:  #d29922; */
   font-weight: bold;
   padding: 8px;
   border-radius: 15px;
@@ -75,29 +73,21 @@ table {
   top: 50px;
 }
 
-.number {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  color: #555;
-  text-align: right;
-}
-
-.negative {
-  color: #c0392b;
-  /* Dark red */
-}
-
 .decimal {
   color: #3498db;
   /* Blue */
 }
 
-.up-comming-card {
-  border: 1px solid #ccc;
-  box-shadow: 0px 0px 0px 0px, rgba(0, 0, 0, 0.3) 0px 4px 4px 0px;
-  /* box-shadow: 0px 0px 10px #333;  */
+.recent {
+  border: 1px solid #eee;
 }
 
-.recent{
-  border: 1px solid #eee;
+.icon-purchase{
+  color: #238636;
+}
+.icon-vente{
+  color: #f00f9a;
+}
+.icon-facture{
+  color: #3498db;
 }

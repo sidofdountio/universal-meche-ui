@@ -42,11 +42,7 @@ export class UpdateProductComponent {
       description: this.productToUpdate.value.description as string,
       productCategory: {
         id: undefined,
-        name: '',
-        categoryType: {
-          name: '',
-          id: undefined
-        }
+        name: ''
       }
     };
     this.dialogRef.close(this.productToUpdate.value)

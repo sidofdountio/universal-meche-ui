@@ -1,28 +1,24 @@
 <div class="container mt-4">
-    <div class="spinner-container" *ngIf="loading$ | async ">
-        <mat-spinner class="spinner mb-3" color="primary"></mat-spinner>
-        <h3>Loading...</h3>
-        <h3>MECHE</h3>
-    </div>
-    <div class="" *ngIf="!(loading$ | async )">
-        <button mat-icon-button> <i class="fa-solid fa-file-excel"></i></button>
-        <button (click)="onGo()" mat-raised-button color="accent">START</button>
-        <button (click)="onAlert()" mat-raised-button color="accent">ALERT</button>
-        <button (click)="onDialog()" mat-raised-button color="accent">DIALOG</button>
-    </div>
-    <div *ngIf="!(loading$ | async )">
-        <h2>Origine des Mèches de Cheveux | LUDIS</h2>
-        <h3>Le savier vous</h3>
-        <div class="col-sm-4">
-            <p>
-                <i class="fa-solid fa-quote-left"></i> 
-                Selon Nazaire Gnanhoue, les mèches de cheveux naturels et synthétiques sont largement utilisées dans le
-                monde entier. Les naturels sont fabriqués à partir de vrais cheveux humains, comme leur nom l'indique.
-                L'Inde est la source de ces cheveux pour la plupart.
-                <i class="fa-solid fa-quote-right"></i>
-            </p>
-        </div>
-           
+   <div class="start-image">
+    <div class="row mt-5 ">
+        
+            <div class="start-text">
+                <div class="spinner-container" *ngIf="loading$ | async ">
+                    <mat-spinner class="spinners mb-3" color="primary"></mat-spinner>
+                    <h3>Demarage En Cours ...</h3>
+                    <h3 class="">UNIVERSAL MECHE</h3>
+                </div>
+                <div class="" *ngIf="!(loading$ | async )">
+                    <h1 class="h1 text-center text-uppercase">Bienvenu sur Universale Meche</h1>
+                    <button class="start-button" (click)="onGo()" mat-raised-button color="accent"
+                        align="center">COMMENCER</button>
+                </div>
+                <div *ngIf="!(loading$ | async )" align="center">
+                    
+                </div>
+            </div>
+       
     </div>
 
+   </div>
 </div>

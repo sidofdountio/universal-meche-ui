@@ -19,7 +19,7 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   isUp: boolean = true;
   inventories: Inventory[] = [];
   inventorySuject = new BehaviorSubject<Inventory[]>([]);
-  displayedColumns: string[] = ['up', 'date', 'label', 'productName', 'orldQuantity', 'orldPrice', 'orldAmount', 'newQuantity', 'newPrice', 'newAmount']
+  displayedColumns: string[] = ['id', 'up', 'date', 'label', 'productName', 'orldQuantity', 'orldPrice', 'orldAmount', 'newQuantity', 'newPrice', 'newAmount']
   dataSource = new MatTableDataSource<Inventory>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -37,20 +37,27 @@ export class InventoryComponent implements OnInit, AfterViewInit {
   }
 
   onGetInventorie(): void {
-    this.state = DataState.LOADING_STATE;
+
     this.inventoryService.getInventories().subscribe(
       (response: Inventory[]) => {
         this.dataSource.data = response;
         this.inventorySuject.next(response);
-        this.state = DataState.LOADED_STATE;
         this.snackbarService.openSnackBarSuccess("Etat De Stock Affiche", "Fermer");
       },
       () => {
-        this.state = DataState.ERROR_STATE;
-        this.snackbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
 
       }
     )
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 

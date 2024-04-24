@@ -27,6 +27,8 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox'; 
 import {MatRadioModule} from '@angular/material/radio';
 import {MatBadgeModule} from '@angular/material/badge';
+
+
 import {MatSlideToggleModule} from '@angular/material/slide-toggle'; 
 
 
@@ -91,6 +93,7 @@ import { ValidSaleComponent } from './sale/valid-sale/valid-sale.component';
     ValidSaleComponent
   ],
   imports: [
+  
     FormsModule,
     MatSlideToggleModule,
     MatBadgeModule,

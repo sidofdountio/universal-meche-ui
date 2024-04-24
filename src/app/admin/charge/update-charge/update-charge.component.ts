@@ -18,11 +18,7 @@ export class UpdateChargeComponent {
     ration: 0,
     transport: 0,
     electricity: 0,
-    anotherCharge: {
-      id: 0,
-      raison: '',
-      amount: 0
-    }
+   
   };
   formCharge = this.fb.group({
     totalSalaire: [this.data.totalSalary, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/), Validators.required]],
@@ -31,11 +27,6 @@ export class UpdateChargeComponent {
     electricity: [this.data.electricity, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/), Validators.required]],
     ration: [this.data.ration, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/), Validators.required]],
     transport: [this.data.transport, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/), Validators.required]],
-    anotherCharge: this.fb.group({
-      id: [this.data.anotherCharge.id],
-      raison: [this.data.anotherCharge.raison],
-      amount: [this.data.anotherCharge.amount, [Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
-    })
   });
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Charge,
@@ -52,11 +43,7 @@ export class UpdateChargeComponent {
       ration: this.formCharge.value.ration,
       transport: this.formCharge.value.transport,
       electricity: this.formCharge.value.electricity,
-      anotherCharge: {
-        id:  this.formCharge.value.anotherCharge?.id as any,
-        raison: this.formCharge.value.anotherCharge?.raison as string,
-        amount: this.formCharge.value.anotherCharge?.amount
-      }
+     
     }
   
     this.dialogRef.close(updateharge);

@@ -24,18 +24,14 @@ export class GetStartComponent implements OnInit,AfterViewInit{
   ngAfterViewInit(): void {
     this.loadindSuject.next(true);
     setTimeout(()=>{
-      this.loadindSuject.next(false)
-    },1000);
+      this.loadindSuject.next(false);
+     
+    },3000);
   }
   onGo() {
-    this.router.navigate(['/admin'])
+    this.router.navigate(['/login'])
   }
 
-  onDialog() {
-    this.dialogService.message("was clicked")
-  }
-  onAlert() {
-   this.snacbarService.openSnackBarError("hello jhhhhhhhjjjjjjjjjjjjjjjjj","close");
-  }
+  
 
 }

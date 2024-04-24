@@ -1,5 +1,25 @@
-.spinner-container{
-    display: inline;
+.spinners{
+    left: 15rem;
+}
+
+.start-button {
+    left: 15rem;
+}
+
+.start-text {
+    border: 1px solid #eee;
+    padding: 15px;
+    box-shadow: 5px 5px 10px #333;
+    background-color: white;
     position: relative;
-    left: 30rem;
+    max-width: 600px;
+    left: 20rem;
+
+
+}
+
+.start-image {
+    border-radius: 15px;
+    width: 100%;
+    display: block;
 }

@@ -9,14 +9,14 @@ import { Employee } from 'src/app/model/employee';
   styleUrls: ['./add-employee.component.css']
 })
 
-export class AddEmployeeComponent implements OnInit {
+export class AddEmployeeComponent {
   employee: Employee = {
     id: 0,
     firstName: "",
     lastName: "",
     phone: "",
     address: "",
-    birtDay: '',
+    birthDay: '',
     sexe: '',
     salary: ""
   }
@@ -26,7 +26,7 @@ export class AddEmployeeComponent implements OnInit {
     phone: ['', [Validators.required, Validators.minLength(9)]],
     address: ['', [Validators.required]],
     sexe: ['', [Validators.required]],
-    salary: ["", [Validators.required,Validators.pattern(/^[1-9]\d*$/)]],
+    salary: ["", [Validators.required, Validators.pattern(/^[1-9]\d*$/)]],
     birthDay: ["", [Validators.required]]
   })
 
@@ -34,9 +34,6 @@ export class AddEmployeeComponent implements OnInit {
     public dialogRef: MatDialogRef<AddEmployeeComponent>,
     private fb: FormBuilder) {
 
-  }
-  ngOnInit(): void {
-    
   }
 
   onClose() {
@@ -49,7 +46,7 @@ export class AddEmployeeComponent implements OnInit {
       lastName: this.formEmployee.value.lastName,
       phone: this.formEmployee.value.phone,
       address: this.formEmployee.value.address,
-      birtDay: this.formEmployee.value.birthDay,
+      birthDay: this.formEmployee.value.birthDay,
       sexe: this.formEmployee.value.sexe,
       salary: this.formEmployee.value.salary
     }

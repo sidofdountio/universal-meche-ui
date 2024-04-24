@@ -1,20 +1,24 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { AsyncPipe, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
+  username:string | null = "";
 
-  constructor(private router:Router) {
-    
+  constructor(private router: Router, private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.username =localStorage.getItem("username");
   }
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -24,7 +28,14 @@ export class SidebarComponent {
 
 
   LogOut() {
-    this.router.navigate(['/get-start'])
+    this.authService.logout$.subscribe(
+      () => {
+        this.router.navigate(['/login'])
+        localStorage.clear();
+      }
+    ),()=>{
+      
+    }
   }
 
 }

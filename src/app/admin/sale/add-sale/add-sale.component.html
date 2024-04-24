@@ -18,8 +18,12 @@
     <div class="row">
         <div class="col">
             <div class="mb-1">
-                <label class="form-label">Prix Unitaire </label>
-                <input class="form-control" [value]="data.salePrice" disabled>
+                <mat-form-field appearance="outline">
+                    <mat-label>Prix Unitaire</mat-label>
+                    <input matInput formControlName="price">
+                    <mat-error>Prix non valid</mat-error>
+                </mat-form-field>
+               
                 
             </div>
         </div>
@@ -45,10 +49,10 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Selectioner Le Client </mat-label>
                     <mat-select formControlName="id">
-                        <mat-option *ngFor="let customer  of customers" [value]="customer.id">{{
+                        <mat-option *ngFor="let customer  of customers" [value]="customer.id"  >{{
                             customer.name}}</mat-option>
                     </mat-select>
-                    <mat-hint>Peut Etre Vide Quand Le Type Est Cleint</mat-hint>
+                
                 </mat-form-field>
             </div>
 

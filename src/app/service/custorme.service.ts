@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.development';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable({
@@ -12,10 +13,10 @@ import { environment } from 'src/environments/environment.development';
 export class CustormeService {
 
   private readonly URL = environment.URL;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   getCustormes(): Observable<Custormer[]> {
-    return this.http.get<Custormer[]>(`${this.URL}/customer`)
+    return this.http.get<Custormer[]>(`${this.URL}/customer`,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -23,7 +24,7 @@ export class CustormeService {
   }
 
   getCustorme(id:number): Observable<Custormer> {
-    return this.http.get<Custormer>(`${this.URL}/customer/${id}`)
+    return this.http.get<Custormer>(`${this.URL}/customer/${id}`,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -31,7 +32,7 @@ export class CustormeService {
   }
 
   addCustomer(custormeToAdd: Custormer): Observable<Custormer> {
-    return this.http.post<Custormer>(`${this.URL}/customer`, custormeToAdd)
+    return this.http.post<Custormer>(`${this.URL}/customer`, custormeToAdd,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -40,7 +41,7 @@ export class CustormeService {
 
 
   deleteCustorme(customerId: number) {
-    return this.http.delete(`${this.URL}/customer/${customerId}`)
+    return this.http.delete(`${this.URL}/customer/${customerId}`,{headers: this.auth.createAuthorizationHeaders()})
       .pipe(
         tap(console.log)
       );

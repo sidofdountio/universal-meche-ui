@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogService } from 'src/app/service/dialog.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SaleService } from 'src/app/service/sale.service';
 import { SnabarService } from 'src/app/service/snabar.service';
@@ -8,17 +7,16 @@ import { AddSaleComponent } from '../add-sale/add-sale.component';
 import { Sale } from 'src/app/model/sale';
 import { Product } from 'src/app/model/product';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleRequest } from 'src/app/model/sale-request';
 import { BehaviorSubject } from 'rxjs';
 import { TransactionType } from 'src/app/model/enume/transaction-type';
 import { DataState } from 'src/app/model/enume/data-state';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { PaymentMethod } from 'src/app/model/paymentMethod';
-import { E } from '@angular/cdk/keycodes';
 import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-sales',
@@ -26,6 +24,7 @@ import { ValidSaleComponent } from '../valid-sale/valid-sale.component';
   styleUrls: ['./sales.component.css']
 })
 export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
+
   appState = new BehaviorSubject<DataState>(DataState.LOADING_STATE);
   appState$ = this.appState.asObservable();
   readonly DataState = DataState;
@@ -36,15 +35,21 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$ = this.isLoadingSubject.asObservable();
   spinnerSubject = new BehaviorSubject<boolean>(false);
   spinner$ = this.spinnerSubject.asObservable();
-  spinnerSaleStatusSubject = new BehaviorSubject<boolean>(false);
-  spinnerSaleStatusta$ = this.spinnerSaleStatusSubject.asObservable();
+  spinnerSaleStatusSubject = new BehaviorSubject<string>('');
+  spinnerSaleStatus$ = this.spinnerSaleStatusSubject.asObservable();
+  readonly SaleStatus = SaleStatus;
 
-  displayedColumns: string[] = ['id', 'paymentType', 'product', 'name', 'quantity','price','amount', 'status', 'action'];
+  displayedColumns: string[] = ['product', 'createAt', 'name', 'quantity', 'price', 'amount', 'saleStatus', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  /**Product */
+  displayedColumnsProduct: string[] = ['id', 'name', 'price', 'salePrice', 'action'];
+  dataSourceProduct = new MatTableDataSource<Product>([])
+  @ViewChild(MatPaginator) paginatorProduct!: MatPaginator;
+  @ViewChild(MatSort) sortProduct!: MatSort;
   // List Product
   products: Product[] = [];
+  readonly months: string[] = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "NOVEMBER", "DECEMBER"]
   readonly paymentMethods: PaymentMethod[] = [
     {
       type: "LIQUIDE"
@@ -61,6 +66,12 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       value: [""]
     })
   });
+
+  seletMonthForm = this.fb.group({
+    month: this.fb.group({
+      monthValue: [""]
+    })
+  });
   paymentSelected: boolean = false;
   private paymentTypeValue = new BehaviorSubject<string>("LIQUIDE");
   readonly status = SaleStatus;
@@ -72,51 +83,59 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   isDisabled$ = this.disableSujet.asObservable();
   saleDataSujet = new BehaviorSubject<Sale | null>(null);
   productInSale: Product[] = [];
-
+  month: any = "null";
+  year: any = "";
 
   constructor(private dialog: MatDialog, private productService: ProductService,
-    private snacbarService: SnabarService, private dialogService: DialogService,
+    private snacbarService: SnabarService,
     private saleService: SaleService, private fb: FormBuilder) {
+    this.year = new Date().getFullYear();
   }
 
   ngOnInit(): void {
     // fetch product
     this.getProducts();
-    this.onGetSales();
+    this.onGetSales(this.month, this.year);
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSourceProduct.paginator = this.paginatorProduct;
+    this.dataSourceProduct.sort = this.sortProduct;
+  }
+  /** List of product based on Month */
+  onSelectByMonth(month: any) {
+    this.onGetSales(month, this.year);
   }
 
   /** Get Product */
   getProducts() {
-    this.appState.next(DataState.LOADING_STATE);
     this.productService.getProducts().subscribe(
       (response) => {
-        this.products = response;
-        this.snacbarService.openSnackBarSuccess("Product Loading", "Fermer");
-        this.appState.next(DataState.LOADED_STATE);
+        this.dataSourceProduct.data = response;
+        this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
       },
       () => {
-        this.appState.next(DataState.ERROR_STATE);
         this.snacbarService.openSnackBar("Error Due Loading", "Fermer");
       }
     );
   }
 
-  onGetSales(): void {
-    this.state = DataState.LOADING_STATE;
-    this.saleService.getSales().subscribe(
-      (response: Sale[]) => {
+  applyFilterProduct(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceProduct.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceProduct.paginator) {
+      this.dataSourceProduct.paginator.firstPage();
+    }
+  }
+
+  onGetSales(month: any, year: any): void {
+    this.saleService.getSaleByMonthAndYear(month, year).subscribe(
+      (response) => {
         this.dataSource.data = response;
-        this.state = DataState.LOADED_STATE;
         this.snacbarService.openSnackBarSuccess("Vente Affichee", "Fermer");
       },
       () => {
-        this.state = DataState.ERROR_STATE;
-        this.snacbarService.openSnackBar("Une Erreure Est Survenue", "Fermer");
+        this.snacbarService.openSnackBarError("Nous ne pouvons pas afficher les ventes", "Fermer");
       }
     )
   }
@@ -125,7 +144,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paymentSelected = true;
     this.paymentTypeValue.next(event);
     this.getPaymentType(event);
-    console.log("type %s", event);
   }
   /** Start sale product here
    * First Get product by id when they click on button */
@@ -151,7 +169,6 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // This Method map with the output afterClosed method of saleNewSale provide.
   private processToSaveSale(saleRequest: SaleRequest) {
-
     let saleToSave: Sale = {
       product: {
         id: 1,
@@ -164,12 +181,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            id: undefined,
-            name: ''
-          }
-        }
+          name: ''
+        },
+        volume: ''
       },
       customer: {
         id: 1,
@@ -189,7 +203,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: "LIQUIDE"
     };
     const quantity = saleRequest.quantity;
@@ -207,12 +221,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
         description: '',
         productCategory: {
           id: undefined,
-          name: '',
-          categoryType: {
-            name: '',
-            id: undefined
-          }
-        }
+          name: ''
+        },
+        volume: ''
       },
       customer: {
         id: saleRequest.customer.id,
@@ -232,7 +243,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
       createAt: '',
       day: 0,
       month: undefined,
-      year: undefined,
+      year: '',
       paymentType: this.paymentTypeValue.value
     };
     this.saleToSaves.push(saleToSave);
@@ -252,15 +263,15 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingSubject.next(true);
     this.saleService.addSale(sales)
       .subscribe(
-        (response) => {
-          this.onGetSales();
+        () => {
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
           this.clear();
         },
         () => {
           this.isLoadingSubject.next(false);
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue. Rassurez vous d'avoir achete Ce Produit ou Qu'il soit Encore Disponoble en Stock ", "Fermer");
+          this.snacbarService.openSnackBarError("Une erreure est survenue. Rassurez vous d'avoir achete Ce Produit !", "Fermer");
         }
       );
   }
@@ -295,23 +306,22 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private validSale(sale: Sale, valid: boolean) {
+    this.spinnerSaleStatusSubject.next(sale.id);
     if (valid) {
-      console.log("status 1 %s", valid);
       this.saleService.validSale(sale).subscribe(
         () => {
-          this.saleService.validSale(sale);
-          this.spinnerSaleStatusSubject.next(false);
-          this.onGetSales();
+          this.spinnerSaleStatusSubject.next('');
+          this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess(" Status De La Vente Modifiee", "Fermer");
         },
         () => {
-          this.spinnerSaleStatusSubject.next(false);
-          this.snacbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+          this.spinnerSaleStatusSubject.next('');
+          this.snacbarService.openSnackBarError("Une erreure est survenue", "Fermer");
         }
       )
     } else {
+      this.spinnerSaleStatusSubject.next('');
       this.snacbarService.openSnackBarError("Vous Avez Annuler Le Processus De Validation De Cette Vente", "Fermer");
-      console.log("status 2 %s", valid);
       return;
     }
   }

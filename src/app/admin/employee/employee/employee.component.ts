@@ -21,7 +21,7 @@ export class EmployeeComponent implements OnInit{
     lastName: "Nguesson",
     phone: undefined,
     address: undefined,
-    birtDay: '',
+    birthDay: '',
     sexe: '',
     salary: undefined
   };

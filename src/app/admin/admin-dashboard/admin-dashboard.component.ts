@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Sale } from 'src/app/model/sale';
 import { DialogService } from 'src/app/service/dialog.service';
 import { SnabarService } from 'src/app/service/snabar.service';
-import { Chart } from 'chart.js/auto';
 import { SaleStatus } from 'src/app/model/enume/sale-status';
 import { SaleService } from 'src/app/service/sale.service';
 import { PurcharseService } from 'src/app/service/purcharse.service';
@@ -14,7 +13,7 @@ import { InvoiceService } from 'src/app/service/invoice.service';
 import { Inventory } from 'src/app/model/inventory';
 import { InventoryService } from 'src/app/service/imventory.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DateAdapter } from '@angular/material/core';
+import {Chart} from 'chart.js/auto';
 
 
 @Component({
@@ -23,10 +22,12 @@ import { DateAdapter } from '@angular/material/core';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+
   readonly SaleStatus = SaleStatus;
   productName: string[] = [];
   productQuantity: number[] = [];
   stockData: Inventory[] = [];
+  progresseBarPurchse:number = 0;
 
   sells: Sale[] = [];
   displayedColumns: string[] = ['product', 'createAt', 'name', 'amount', 'saleStatus'];
@@ -44,13 +45,16 @@ export class AdminDashboardComponent implements OnInit {
   // facture annuler;
   invoiceCancel: number = 1;
 
-
   data: number[] = [];
 
   private breakpointObserver = inject(BreakpointObserver);
   totalAmountSalePerDay: number = 0;
+  totalItemSalePerDay: number = 0;
+  totalAmountSalePerDayProgresseBar: number = 0;
+  
   totalSalePerDay: number = 0;
   currentDate!: string|number|Date;
+  purchaseAmountProgressBar: number = 0;
   constructor( 
     private purchaseService: PurcharseService,
     private router: Router, 
@@ -68,10 +72,11 @@ export class AdminDashboardComponent implements OnInit {
     this.saleService.getSales().subscribe(
       (response)=>{
         this.dataSource.data = response;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
-    
-   
   }
 
   ngAfterViewInit() {
@@ -89,11 +94,14 @@ export class AdminDashboardComponent implements OnInit {
     this.saleService.getSaleDay().subscribe(
       (response) => {
         this.totalSalePerDay = response.length;
-        this.totalAmountSalePerDay = response.length;
+        this.totalItemSalePerDay = response.length;
         for (const item of response) {
           this.totalAmountSalePerDay += item.amount;
         }
-      },() => {
+        this.totalAmountSalePerDayProgresseBar = this.totalAmountSalePerDay / 500000;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
       }
     )
   }
@@ -104,9 +112,12 @@ export class AdminDashboardComponent implements OnInit {
         this.purchaseAmountSize = response.length;
         for (let purchase of response) {
           this.purchaseAmount += purchase.amount;
-          this.purchaseAmount = this.purchaseAmount / 1000;
         }
-      }
+        this.progresseBarPurchse = this.purchaseAmount/2000000;
+      },
+      (error:HttpErrorResponse)=>{
+        console.log("error %s", error.message);
+      }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     )
   }
 
@@ -117,10 +128,9 @@ export class AdminDashboardComponent implements OnInit {
         for (var item of response){
           if(item.up){
             this.productName.push(item.productName);
-            this.data.push(item.newQuantity);   
+            this.productQuantity.push(item.newQuantity);   
           }
         }
-
         stockProductState(this.productName, this.productQuantity);
       },
       (error: HttpErrorResponse) => {
@@ -133,7 +143,6 @@ export class AdminDashboardComponent implements OnInit {
 
 
 function stockProductState(productName: string[], productQuantity: number[]) {
-
   const stock: any = document.getElementById("stock");
 
   var donutData = {

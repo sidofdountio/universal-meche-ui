@@ -10,4 +10,5 @@ export interface Product {
     length:number ;
     description:string;
     productCategory:ProductCategory;
+    volume?:string;
 }

@@ -6,6 +6,15 @@ table {
     width: 100%;
 }
 
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}
 
 
 .spinner {
@@ -17,7 +26,7 @@ table {
 
 
 .error {
-    background-color: #f44336;;
+    background-color: #f44336;
     color: #ffffff;
     padding: 4px 8px;
     font-weight: 600;

@@ -17,7 +17,7 @@ export class UpdateEmployeeComponent {
     lastName: "",
     phone: "",
     address: "",
-    birtDay: '',
+    birthDay: '',
     sexe: '',
     salary: ""
   }
@@ -29,7 +29,7 @@ export class UpdateEmployeeComponent {
     address: [this.data.address, [Validators.required]],
     sexe: [this.data.sexe, [Validators.required]],
     salary: [this.data.salary, [Validators.required,Validators.pattern(/^[1-9]\d*$/)]],
-    birthDay: [this.data.birtDay, [Validators.required]]
+    birthDay: [this.data.birthDay, [Validators.required]]
   })
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Employee,
@@ -48,7 +48,7 @@ export class UpdateEmployeeComponent {
       lastName: this.formEmployee.value.lastName,
       phone: this.formEmployee.value.phone,
       address: this.formEmployee.value.address,
-      birtDay: this.formEmployee.value.birthDay,
+      birthDay: this.formEmployee.value.birthDay,
       sexe: this.formEmployee.value.sexe,
       salary: this.formEmployee.value.salary
     }

@@ -1,0 +1,16 @@
+services:
+  universal_ui:
+    container_name: universal_ui
+    build: .
+    image: universal_ui:v1
+    restart: unless-stopped
+    ports:
+      - 80:80
+    expose:
+      - 80
+    networks:
+      - universalUiNetwork
+    
+networks:
+  universalUiNetwork:
+    driver: bridge

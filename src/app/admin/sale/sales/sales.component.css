@@ -1,27 +1,38 @@
 .grid-container {
   margin: 20px;
 }
-
 table {
   width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
 }
 
 .badge-success {
   color: white;
   /* background-color: rgb(13, 102, 32); */
   background-color: #238636;
-  font-weight: bold;
-  padding: 8px;
+  padding: 4px;
   border-radius: 15px;
+  font-size: 14px;
 }
 
 .badge-danger {
   color: white;
   background-color: #f44336;
-  /* background-color: #d29922; */
-  font-weight: bold;
-  padding: 8px;
+  padding: 4px;
   border-radius: 15px;
+}
+
+.excel {
+  color: #209e62;
+  border: 1px solid #209e62;
 }
 
 .spinner {
@@ -34,15 +45,6 @@ mat-form-field {
   width: 600px;
 }
 
-ul {
-  list-style: none;
-}
-
-ul li {
-  display: inline-flex;
-  margin: 4px;
-}
-
 .error {
   background-color: #f44336;
   color: #ffffff;
@@ -53,7 +55,3 @@ ul li {
 }
 
 
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}

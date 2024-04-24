@@ -44,7 +44,7 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
           this.dataSource.data = response;
         },
         () => {
-          this.snackbarService.openSnackBar("Error Du Loading", "close");
+          this.snackbarService.openSnackBarError("Une Erreur Est Survenue", "Fermer");
         }
     );
   }
@@ -64,7 +64,7 @@ export class SuppliersComponent implements OnDestroy, OnInit, AfterViewInit {
       },
       () => {
         this.isLoadingSubject.next(false);
-        this.snackbarService.openSnackBarError("Une Erreure Est Survenue", "Fermer");
+        this.snackbarService.openSnackBarError("UUne Erreure Est Survenue. Ne pas Utiliser Le Meme Numero De Telephne", "Fermer");
       }
     )
   }
