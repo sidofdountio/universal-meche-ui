@@ -60,7 +60,7 @@
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="orldPrice">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix D'achat </th>
-                        <td mat-cell *matCellDef="let element"> {{element.orldPrice }} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.orldPrice | currency }} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->

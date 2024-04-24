@@ -42,9 +42,9 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['product', 'createAt', 'name', 'quantity', 'price', 'amount', 'saleStatus', 'action'];
   dataSource = new MatTableDataSource<Sale>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-/**Product */
-  displayedColumnsProduct: string[] = ['id', 'name', 'price','salePrice','action'];
-  dataSourceProduct = new  MatTableDataSource<Product>([])
+  /**Product */
+  displayedColumnsProduct: string[] = ['id', 'name', 'price', 'salePrice', 'action'];
+  dataSourceProduct = new MatTableDataSource<Product>([])
   @ViewChild(MatPaginator) paginatorProduct!: MatPaginator;
   @ViewChild(MatSort) sortProduct!: MatSort;
   // List Product
@@ -102,7 +102,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSourceProduct.paginator = this.paginatorProduct;
     this.dataSourceProduct.sort = this.sortProduct;
   }
-/** List of product based on Month */
+  /** List of product based on Month */
   onSelectByMonth(month: any) {
     this.onGetSales(month, this.year);
   }
@@ -111,7 +111,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
   getProducts() {
     this.productService.getProducts().subscribe(
       (response) => {
-        this.dataSourceProduct.data =response;
+        this.dataSourceProduct.data = response;
         this.snacbarService.openSnackBarSuccess("Produit affiche", "Fermer");
       },
       () => {
@@ -183,7 +183,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
           id: undefined,
           name: ''
         },
-        volume:''
+        volume: ''
       },
       customer: {
         id: 1,
@@ -267,7 +267,7 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
           this.onGetSales(this.month, this.year);
           this.snacbarService.openSnackBarSuccess("Vente Enregistre", "Fermer");
           this.isLoadingSubject.next(false);
-         this.clear();
+          this.clear();
         },
         () => {
           this.isLoadingSubject.next(false);

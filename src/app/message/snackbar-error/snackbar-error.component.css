@@ -1,5 +1,6 @@
 :host {
     font-family: Roboto, "Helvetica Neue", sans-serif;
-    background-color: #f85149;
+    background-color: #d9534f;
     display: flex;
+    color: #fff;
 }
