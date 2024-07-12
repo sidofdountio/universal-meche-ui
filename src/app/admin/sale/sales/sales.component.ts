@@ -67,6 +67,10 @@ export class SalesComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   });
 
+  /** 
+   * Filter sale list by Month.
+   */
+
   seletMonthForm = this.fb.group({
     month: this.fb.group({
       monthValue: [""]

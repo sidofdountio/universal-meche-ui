@@ -10,8 +10,6 @@ import { ProductCategoryService } from 'src/app/service/product-category.service
   styleUrls: ['./add-product.component.css']
 })
 export class AddProductComponent {
-
-
   readonly volumes: string[] = [
     "PETIT", "MOYEN", "GRAND"
   ];
@@ -38,7 +36,6 @@ export class AddProductComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Product,
     public dialogRef: MatDialogRef<AddProductComponent>,
     private formBuild: FormBuilder, private productCategoryService: ProductCategoryService) {
-
   }
 
   ngOnInit(): void {

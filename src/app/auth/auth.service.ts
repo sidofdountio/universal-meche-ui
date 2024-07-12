@@ -87,14 +87,14 @@ export class AuthService {
     return httpOptions.headers;
   }
 
-  // valid token
+  /**
+   * 
+   * @param token Check wether the TOKEN is not yet expired.
+   * @returns true or false.
+   */
   isTokenExpired$ = (token: string | null) => <Observable<boolean>>
     this.http.get<boolean>(`${this.baseUrl}/auth/isTokenValid/${token}`,
-      {
-        headers: new HttpHeaders({
-          "Access-Control-Allow-Origin": "http://localhost:8080"
-        })
-      })
+      {headers: new HttpHeaders({"Access-Control-Allow-Origin": "http://localhost:8080"})})
       .pipe(
         tap(console.log),
         catchError(this.handlerError)
@@ -116,6 +116,8 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const token = this.getAuthToken();
+    let isValidToken;
+    this.tokenValid$.subscribe( (response)=>{isValidToken = response});
     if ((token === null) && (!this.tokenValid$.value)) {
       return false;
     }

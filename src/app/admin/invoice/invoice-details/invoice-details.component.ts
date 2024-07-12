@@ -56,7 +56,6 @@ export class InvoiceDetailsComponent {
               this.state = DataState.ERROR_STATE;
             },
             () => {
-
               this.state = DataState.LOADED_STATE;
             }
           ))
@@ -66,7 +65,6 @@ export class InvoiceDetailsComponent {
   exportToPDF(invoiceNumber: any) {
     const button = document.getElementById('invoice-contents');
     if (button) {
-
       html2canvas(button).then((canvas) => {
         const data = canvas.toDataURL();
         const documentDefinition = {

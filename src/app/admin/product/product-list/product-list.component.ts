@@ -67,7 +67,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
         },
         () => {
           console.log("Error due save product");
-        })
+        });
   }
 
   addProduct(productToAdd: Product) {
