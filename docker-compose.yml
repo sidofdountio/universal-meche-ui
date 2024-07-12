@@ -5,9 +5,9 @@ services:
     image: universal_ui:v1
     restart: unless-stopped
     ports:
-      - 80:80
+      - 30002:80
     expose:
-      - 80
+      - 30002
     networks:
       - universalUiNetwork
     
